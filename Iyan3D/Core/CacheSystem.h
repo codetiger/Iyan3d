@@ -49,7 +49,6 @@
 - (void)addOBJImporterColumn;
 - (void)createTablesForPrice;
 - (void)createAnimationTables;
-- (int)getNextAutoRigAssetId;
 - (BOOL)checkAndCreateGroupColumnInAssetsTable;
 
 @end

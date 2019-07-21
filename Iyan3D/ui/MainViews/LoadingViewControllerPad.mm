@@ -12,7 +12,6 @@
 #import "AppDelegate.h"
 #import "Utility.h"
 #import "Constants.h"
-#import "DownloadTask.h"
 
 #define APP_VERSION @"5.3"
 

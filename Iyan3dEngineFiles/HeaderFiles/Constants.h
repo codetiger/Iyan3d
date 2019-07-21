@@ -288,12 +288,6 @@ enum ActionType
     ACTION_CHANGE_NODE_JOINT_KEYS,
     ACTION_CHANGE_MULTI_NODE_KEYS,
     
-    //AutoRigSceneActions
-    ACTION_SWITCH_MODE,
-    ACTION_CHANGE_SKELETON_KEYS,
-    ACTION_CHANGE_ENVELOPE_SCALE,
-    ACTION_CHANGE_SGR_KEYS,
-    
     ACTION_APPLY_ANIM,
     ACTION_ADD_JOINT,
     ACTION_ADD_BONE,
@@ -360,31 +354,6 @@ enum Defaults
 	NOT_SELECTED = -1,
     SCENE_THUMBNAIL = 1,
     RENDER_IMAGE = 2
-};
-
-enum ENVELOPE_JOINT_ID
-{
-    ENVELOPE_TOP_JOINT_ID=2,
-    ENVELOPE_BOTTOM_JOINT_ID=3
-};
-
-enum AUTORIG_TYPE{
-    RIG_OBJ                         = 1<<0,
-    RIG_SKELETON                = 1<<1,
-    RIG_SGR                         = 1<<2,
-    RIG_REFERENCE              = 1<<3,
-    RIG_SKELETON_SPHERE   = 1<<4,
-    RIG_BONE                       = 1<<5,
-    RIG_ENVELOPE                = 1<<6,
-    RIG_SGR_SPHERE            = 1<<7,
-    RIG_MASK_BITS              = 8
-};
-
-enum AUTORIG_SCENE_MODE{
-    RIG_MODE_OBJVIEW,
-    RIG_MODE_MOVE_JOINTS,
-    RIG_MODE_EDIT_ENVELOPES,
-    RIG_MODE_PREVIEW
 };
 
 enum MIRROR_SWITCH_STATE{

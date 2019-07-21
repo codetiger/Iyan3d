@@ -46,8 +46,6 @@ public:
     void highlightMeshBufferAndJointSpheres();
     void selectObject(int objectId ,int selectedMeshBufferId, bool isMultiSelectionEnabled);
     void unselectObject(int objectId);
-    
-    void checkSelectionForAutoRig(Vector2 touchPosition);
 };
 
 #endif /* SGGestureManager_h */

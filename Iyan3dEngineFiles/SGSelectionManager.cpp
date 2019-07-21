@@ -571,11 +571,3 @@ void SGSelectionManager::unselectObject(int objectId)
     selectionScene->updater->updateControlsOrientaion();
     selectionScene->updater->reloadKeyFrameMap();
 }
-
-void SGSelectionManager::checkSelectionForAutoRig(Vector2 touchPosition)
-{
-    if(!selectionScene || !smgr)
-        return;
-    
-    selectionScene->updater->updateControlsOrientaion();
-}

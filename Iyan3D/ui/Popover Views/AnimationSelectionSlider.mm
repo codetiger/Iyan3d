@@ -7,7 +7,6 @@
 //
 
 #import "AnimationSelectionSlider.h"
-#import "DownloadTask.h"
 
 #define MY_ANIMATION 7
 
@@ -372,37 +371,6 @@
         [cache UpdateAnimation:animItem];
     }
     [[AppHelper getAppHelper] saveToUserDefaults:[NSDate date] withKey:@"AnimationUpdate"];
-}
-
-- (BOOL)proceedToFileVerification:(id)object {
-    NSString* filePath;
-    if ([object isKindOfClass:[DownloadTask class]])
-        filePath = ((DownloadTask*)object).outputPath;
-    else
-        filePath = object;
-
-    if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-        NSArray*  paths          = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-        NSString* cacheDirectory = [paths objectAtIndex:0];
-        NSArray*  docPaths       = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-        NSString* docDirectory   = [docPaths objectAtIndex:0];
-        NSString* animDirPath    = [docDirectory stringByAppendingPathComponent:@"Resources/Animations"];
-
-        NSString* fileName = [filePath lastPathComponent];
-
-        NSString* alternatePath = (tabValue == 7) ? cacheDirectory : animDirPath;
-        filePath                = [NSString stringWithFormat:@"%@/%@", alternatePath, fileName];
-    }
-
-    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-        NSLog(@"Download Completed");
-        return true;
-    } else {
-        [self.view endEditing:YES];
-        UIAlertView* message = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Connection Error", nil) message:NSLocalizedString(@"unable_connect_server", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-        [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
-        return false;
-    }
 }
 
 #pragma mark AppHelper delegates

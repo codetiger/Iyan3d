@@ -11,7 +11,6 @@
 #import <sys/utsname.h>
 #import "AppHelper.h"
 #import "Constants.h"
-#import "DownloadTask.h"
 
 @implementation AppHelper
 

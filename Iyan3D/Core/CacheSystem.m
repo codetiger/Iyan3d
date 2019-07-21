@@ -945,20 +945,4 @@ static const NSString* DOWNLOADED_ASSET_TYPE      = @"asset_type";
     return [date description];
 }
 
-- (int)getNextAutoRigAssetId {
-    @synchronized(dbLock) {
-        NSString*     querySQL = [NSString stringWithFormat:@"SELECT * FROM %@ where %@ >= 40000 and %@ < 60000", TABLE_DOWNLOADED_ASSET_INFO, ASSET_ID, ASSET_ID];
-        sqlite3_stmt* statement;
-        if (sqlite3_prepare_v2(_cacheSystem, [querySQL UTF8String], -1, &statement, NULL) == SQLITE_OK) {
-            int AutoRigCount = 0;
-            while (sqlite3_step(statement) == SQLITE_ROW)
-                AutoRigCount++;
-
-            sqlite3_finalize(statement);
-            return AutoRigCount;
-        }
-    }
-    return -1;
-}
-
 @end

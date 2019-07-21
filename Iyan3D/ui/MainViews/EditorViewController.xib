@@ -31,11 +31,9 @@
                 <outlet property="playBtn" destination="cen-Sr-AzL" id="vth-mc-bkv"/>
                 <outlet property="redoBtn" destination="WSd-xV-ijo" id="ug4-eC-5Ka"/>
                 <outlet property="renderView" destination="1HF-XL-EYs" id="SUb-1h-g6Q"/>
-                <outlet property="rigTitle" destination="IrV-Kk-m6o" id="T8N-FA-qjg"/>
                 <outlet property="rightView" destination="RgQ-Eo-s8S" id="auz-s6-o1K"/>
                 <outlet property="rotateBtn" destination="kdb-Pl-f7f" id="Vdr-7W-QsP"/>
                 <outlet property="scaleBtn" destination="6N0-LM-Ula" id="i1O-dg-bRl"/>
-                <outlet property="scaleBtnAutorig" destination="XNK-gI-GK5" id="Kap-yG-S4U"/>
                 <outlet property="toolTipBtn" destination="NXe-Tf-aXZ" id="UMQ-B9-QCh"/>
                 <outlet property="topView" destination="kC1-6X-WNk" id="TKS-SD-0Dl"/>
                 <outlet property="undoBtn" destination="Gxg-1c-S8x" id="FOc-xv-Tjn"/>
@@ -175,13 +173,6 @@
                                 <action selector="backToScenes:" destination="-1" eventType="touchUpInside" id="1O8-eE-8nK"/>
                             </connections>
                         </button>
-                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="RIGGING MODE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IrV-Kk-m6o">
-                            <rect key="frame" x="447" y="31" width="130" height="21"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="awG-hy-li5">
                             <rect key="frame" x="801" y="24" width="31" height="36"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
@@ -248,19 +239,6 @@
                                     <state key="normal" title="Edit"/>
                                     <connections>
                                         <action selector="editFunction:" destination="-1" eventType="touchUpInside" id="1gK-at-C7P"/>
-                                    </connections>
-                                </button>
-                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XNK-gI-GK5">
-                                    <rect key="frame" x="6" y="88" width="139" height="40"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                    <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                    <state key="normal" title="  SCALE" image="Scale_Pad.png">
-                                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </state>
-                                    <connections>
-                                        <action selector="scaleBtnAction:" destination="-1" eventType="touchUpInside" id="KV5-Fe-mzH"/>
                                     </connections>
                                 </button>
                             </subviews>

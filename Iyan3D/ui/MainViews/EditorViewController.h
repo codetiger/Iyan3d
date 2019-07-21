@@ -97,9 +97,6 @@
 @property (weak, nonatomic) IBOutlet UIButton* publishBtn;
 @property (weak, nonatomic) IBOutlet UIButton* rigCancelBtn;
 @property (weak, nonatomic) IBOutlet UIButton* rigAddToSceneBtn;
-@property (weak, nonatomic) IBOutlet UIButton* moveBtnAutorig;
-@property (weak, nonatomic) IBOutlet UIButton* scaleBtnAutorig;
-@property (weak, nonatomic) IBOutlet UIButton* rotateBtnAutorig;
 @property (weak, nonatomic) IBOutlet UIView* objTableview;
 @property (weak, nonatomic) IBOutlet UIButton* backButton;
 @property (weak, nonatomic) IBOutlet UILabel* rigTitle;
@@ -109,14 +106,10 @@
 @property (weak, nonatomic) IBOutlet UILabel* xValue;
 @property (weak, nonatomic) IBOutlet UILabel* yValue;
 @property (weak, nonatomic) IBOutlet UILabel* zValue;
-@property (weak, nonatomic) IBOutlet UISwitch* autoRigMirrorSwitch;
-@property (weak, nonatomic) IBOutlet UILabel* autorigMirrorLable;
-@property (weak, nonatomic) IBOutlet UIView* autorigMirrorBtnHolder;
 @property (weak, nonatomic) IBOutlet UILabel* sceneMirrorLable;
 @property (weak, nonatomic) IBOutlet UISwitch* sceneMirrorSwitch;
 
 @property (weak, nonatomic) IBOutlet UILabel* numberOfItems;
-@property (weak, nonatomic) IBOutlet UILabel* autoRigLbl;
 @property (weak, nonatomic) IBOutlet UIButton* helpBtn;
 @property (weak, nonatomic) IBOutlet UILabel* myObjectsLabel;
 

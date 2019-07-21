@@ -930,8 +930,6 @@
 		4E82DBF422E1E22400587210 /* MTLMaterial.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9C622E1E22400587210 /* MTLMaterial.mm */; };
 		4E82DBF522E1E22400587210 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9C922E1E22400587210 /* Material.cpp */; };
 		4E82DBF622E1E22400587210 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9C922E1E22400587210 /* Material.cpp */; };
-		4E82DBF922E1E22400587210 /* DownloadTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9D122E1E22400587210 /* DownloadTask.mm */; };
-		4E82DBFA22E1E22400587210 /* DownloadTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9D122E1E22400587210 /* DownloadTask.mm */; };
 		4E82DBFB22E1E22400587210 /* Helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9D222E1E22400587210 /* Helper.cpp */; };
 		4E82DBFC22E1E22400587210 /* Helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9D222E1E22400587210 /* Helper.cpp */; };
 		4E82DBFD22E1E22400587210 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9D422E1E22400587210 /* Logger.cpp */; };
@@ -2034,9 +2032,7 @@
 		4E82D9CA22E1E22400587210 /* MaterialManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MaterialManager.h; sourceTree = "<group>"; };
 		4E82D9CB22E1E22400587210 /* SGEngineMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGEngineMTL.h; sourceTree = "<group>"; };
 		4E82D9CC22E1E22400587210 /* SGEngineCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGEngineCommon.h; sourceTree = "<group>"; };
-		4E82D9CE22E1E22400587210 /* DownloadTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadTask.h; sourceTree = "<group>"; };
 		4E82D9CF22E1E22400587210 /* Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Helper.h; sourceTree = "<group>"; };
-		4E82D9D122E1E22400587210 /* DownloadTask.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DownloadTask.mm; sourceTree = "<group>"; };
 		4E82D9D222E1E22400587210 /* Helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Helper.cpp; sourceTree = "<group>"; };
 		4E82D9D322E1E22400587210 /* Maths.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Maths.h; sourceTree = "<group>"; };
 		4E82D9D422E1E22400587210 /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Logger.cpp; sourceTree = "<group>"; };
@@ -2058,7 +2054,6 @@
 		4E82D9ED22E1E22400587210 /* features.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = features.h; sourceTree = "<group>"; };
 		4E82D9EE22E1E22400587210 /* SGEditorScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGEditorScene.h; sourceTree = "<group>"; };
 		4E82D9EF22E1E22400587210 /* ShaderParamOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderParamOrder.h; sourceTree = "<group>"; };
-		4E82D9F022E1E22400587210 /* SGCloudRenderingHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGCloudRenderingHelper.h; sourceTree = "<group>"; };
 		4E82D9F122E1E22400587210 /* SGActionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGActionManager.h; sourceTree = "<group>"; };
 		4E82D9F222E1E22400587210 /* SGSceneUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGSceneUpdater.h; sourceTree = "<group>"; };
 		4E82D9F322E1E22400587210 /* SGPositionKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGPositionKey.h; sourceTree = "<group>"; };
@@ -3431,15 +3426,15 @@
 		4E82D97022E1E22300587210 /* RenderManager */ = {
 			isa = PBXGroup;
 			children = (
-				4E82D97122E1E22300587210 /* RenderManager.h */,
 				4E82D97222E1E22300587210 /* ImageLoaderOBJC.h */,
-				4E82D97322E1E22300587210 /* MTLNodeDataWrapper.h */,
-				4E82D97422E1E22300587210 /* MetalRenderManager.h */,
 				4E82D97522E1E22300587210 /* ImageLoaderOBJC.mm */,
+				4E82D97822E1E22300587210 /* ImageLoaderOBJCWrapper.h */,
+				4E82D97422E1E22300587210 /* MetalRenderManager.h */,
+				4E82D97922E1E22300587210 /* MetalRenderManager.mm */,
 				4E82D97622E1E22300587210 /* MetalWrapper.h */,
 				4E82D97722E1E22300587210 /* MetalWrapperForMaterial.h */,
-				4E82D97822E1E22300587210 /* ImageLoaderOBJCWrapper.h */,
-				4E82D97922E1E22300587210 /* MetalRenderManager.mm */,
+				4E82D97322E1E22300587210 /* MTLNodeDataWrapper.h */,
+				4E82D97122E1E22300587210 /* RenderManager.h */,
 			);
 			path = RenderManager;
 			sourceTree = "<group>";
@@ -3501,19 +3496,19 @@
 		4E82D99922E1E22300587210 /* Meshes */ = {
 			isa = PBXGroup;
 			children = (
-				4E82D99A22E1E22300587210 /* Mesh.cpp */,
-				4E82D99B22E1E22300587210 /* Joint.cpp */,
-				4E82D99C22E1E22300587210 /* SkinMesh.cpp */,
-				4E82D99D22E1E22300587210 /* SGCircleNode.h */,
-				4E82D99E22E1E22300587210 /* md5.h */,
-				4E82D99F22E1E22300587210 /* CubeMeshNode.h */,
-				4E82D9A022E1E22300587210 /* Joint.h */,
-				4E82D9A122E1E22300587210 /* Mesh.h */,
-				4E82D9A222E1E22300587210 /* SGCircleNode.cpp */,
 				4E82D9A322E1E22300587210 /* CubeMeshNode.cpp */,
+				4E82D99F22E1E22300587210 /* CubeMeshNode.h */,
+				4E82D99B22E1E22300587210 /* Joint.cpp */,
+				4E82D9A022E1E22300587210 /* Joint.h */,
+				4E82D99E22E1E22300587210 /* md5.h */,
+				4E82D99A22E1E22300587210 /* Mesh.cpp */,
+				4E82D9A122E1E22300587210 /* Mesh.h */,
 				4E82D9A422E1E22300587210 /* PlaneMeshNode.cpp */,
-				4E82D9A522E1E22300587210 /* SkinMesh.h */,
 				4E82D9A622E1E22300587210 /* PlaneMeshNode.h */,
+				4E82D9A222E1E22300587210 /* SGCircleNode.cpp */,
+				4E82D99D22E1E22300587210 /* SGCircleNode.h */,
+				4E82D99C22E1E22300587210 /* SkinMesh.cpp */,
+				4E82D9A522E1E22300587210 /* SkinMesh.h */,
 			);
 			path = Meshes;
 			sourceTree = "<group>";
@@ -3521,28 +3516,28 @@
 		4E82D9A722E1E22300587210 /* common */ = {
 			isa = PBXGroup;
 			children = (
-				4E82D9A822E1E22300587210 /* Mat4.h */,
-				4E82D9A922E1E22300587210 /* Vector4.cpp */,
-				4E82D9AA22E1E22300587210 /* Vector3.cpp */,
-				4E82D9AB22E1E22300587210 /* Vector2.h */,
-				4E82D9AC22E1E22300587210 /* Vector2.cpp */,
-				4E82D9AD22E1E22300587210 /* BoundingBox.h */,
-				4E82D9AE22E1E22300587210 /* Frustum.h */,
-				4E82D9AF22E1E22300587210 /* Line3D.h */,
-				4E82D9B022E1E22300587210 /* Quaternion.h */,
-				4E82D9B122E1E22300587210 /* GLKMath */,
-				4E82D9B822E1E22300587210 /* Frustum.cpp */,
 				4E82D9B922E1E22400587210 /* BoundingBox.cpp */,
+				4E82D9AD22E1E22300587210 /* BoundingBox.h */,
 				4E82D9BA22E1E22400587210 /* CollisionManager.cpp */,
-				4E82D9BB22E1E22400587210 /* common.h */,
-				4E82D9BC22E1E22400587210 /* Mat4.cpp */,
-				4E82D9BD22E1E22400587210 /* Vector4.h */,
-				4E82D9BE22E1E22400587210 /* Line3D.cpp */,
-				4E82D9BF22E1E22400587210 /* Plane3D.h */,
 				4E82D9C022E1E22400587210 /* CollisionManager.h */,
-				4E82D9C122E1E22400587210 /* Quaternion.cpp */,
+				4E82D9BB22E1E22400587210 /* common.h */,
+				4E82D9B822E1E22300587210 /* Frustum.cpp */,
+				4E82D9AE22E1E22300587210 /* Frustum.h */,
+				4E82D9B122E1E22300587210 /* GLKMath */,
+				4E82D9BE22E1E22400587210 /* Line3D.cpp */,
+				4E82D9AF22E1E22300587210 /* Line3D.h */,
+				4E82D9BC22E1E22400587210 /* Mat4.cpp */,
+				4E82D9A822E1E22300587210 /* Mat4.h */,
 				4E82D9C222E1E22400587210 /* Plane3D.cpp */,
+				4E82D9BF22E1E22400587210 /* Plane3D.h */,
+				4E82D9C122E1E22400587210 /* Quaternion.cpp */,
+				4E82D9B022E1E22300587210 /* Quaternion.h */,
+				4E82D9AC22E1E22300587210 /* Vector2.cpp */,
+				4E82D9AB22E1E22300587210 /* Vector2.h */,
+				4E82D9AA22E1E22300587210 /* Vector3.cpp */,
 				4E82D9C322E1E22400587210 /* Vector3.h */,
+				4E82D9A922E1E22300587210 /* Vector4.cpp */,
+				4E82D9BD22E1E22400587210 /* Vector4.h */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -3576,14 +3571,12 @@
 		4E82D9CD22E1E22400587210 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				4E82D9CE22E1E22400587210 /* DownloadTask.h */,
-				4E82D9CF22E1E22400587210 /* Helper.h */,
-				4E82D9D122E1E22400587210 /* DownloadTask.mm */,
 				4E82D9D222E1E22400587210 /* Helper.cpp */,
-				4E82D9D322E1E22400587210 /* Maths.h */,
+				4E82D9CF22E1E22400587210 /* Helper.h */,
 				4E82D9D422E1E22400587210 /* Logger.cpp */,
 				4E82D9D522E1E22400587210 /* Logger.h */,
 				4E82D9D622E1E22400587210 /* Maths.cpp */,
+				4E82D9D322E1E22400587210 /* Maths.h */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -3609,7 +3602,6 @@
 		4E82D9DE22E1E22400587210 /* Iyan3dEngineFiles */ = {
 			isa = PBXGroup;
 			children = (
-				4E82DD7B22E1E8C000587210 /* json */,
 				4E82DBAD22E1E22400587210 /* BoneLimitsHelper.cpp */,
 				4E82DA2222E1E22400587210 /* bullet3 */,
 				4E82D9E322E1E22400587210 /* CameraViewHelper.cpp */,
@@ -3617,6 +3609,7 @@
 				4E82DA1F22E1E22400587210 /* exportSGR.cpp */,
 				4E82D9E522E1E22400587210 /* FileHelper.cpp */,
 				4E82D9E622E1E22400587210 /* HeaderFiles */,
+				4E82DD7B22E1E8C000587210 /* json */,
 				4E82DA1922E1E22400587210 /* KeyHelper.cpp */,
 				4E82D9E222E1E22400587210 /* MaterialProperty.cpp */,
 				4E82DA1E22E1E22400587210 /* MathHelper.cpp */,
@@ -3666,7 +3659,6 @@
 				4E82DA1122E1E22400587210 /* SGAction.h */,
 				4E82D9F122E1E22400587210 /* SGActionManager.h */,
 				4E82D9E822E1E22400587210 /* SGAnimationManager.h */,
-				4E82D9F022E1E22400587210 /* SGCloudRenderingHelper.h */,
 				4E82D9EE22E1E22400587210 /* SGEditorScene.h */,
 				4E82DA0122E1E22400587210 /* SGJoint.h */,
 				4E82D9FE22E1E22400587210 /* SGMovementManager.h */,
@@ -5545,7 +5537,6 @@
 				4E82DD6722E1E22500587210 /* ShaderManager.cpp in Sources */,
 				4E82DC8B22E1E22500587210 /* btCollisionDispatcher.cpp in Sources */,
 				4E82DD4322E1E22500587210 /* btQuickprof.cpp in Sources */,
-				4E82DBF922E1E22400587210 /* DownloadTask.mm in Sources */,
 				4E82DC4D22E1E22500587210 /* btOverlappingPairCache.cpp in Sources */,
 				4E82DC8722E1E22500587210 /* btConvex2dConvex2dAlgorithm.cpp in Sources */,
 				4E82DD5722E1E22500587210 /* RenderHelper.cpp in Sources */,
@@ -5839,7 +5830,6 @@
 				4E82DD6822E1E22500587210 /* ShaderManager.cpp in Sources */,
 				4E82DC8C22E1E22500587210 /* btCollisionDispatcher.cpp in Sources */,
 				4E82DD4422E1E22500587210 /* btQuickprof.cpp in Sources */,
-				4E82DBFA22E1E22400587210 /* DownloadTask.mm in Sources */,
 				4E82DC4E22E1E22500587210 /* btOverlappingPairCache.cpp in Sources */,
 				4E82DC8822E1E22500587210 /* btConvex2dConvex2dAlgorithm.cpp in Sources */,
 				4E82DD5822E1E22500587210 /* RenderHelper.cpp in Sources */,

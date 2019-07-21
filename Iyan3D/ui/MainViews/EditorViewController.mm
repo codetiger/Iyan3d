@@ -158,8 +158,6 @@ BOOL missingAlertShown;
     [self.rigCancelBtn setTitle:NSLocalizedString(@"CANCEL", nil) forState:UIControlStateNormal];
     [self.rigAddToSceneBtn setTitle:NSLocalizedString(@"ADD TO SCENE", nil) forState:UIControlStateNormal];
 
-    [self.autorigMirrorLable setText:NSLocalizedString(@"MIRROR", nil)];
-
     isSelected = NO;
     [_center_progress setHidden:NO];
     [_center_progress startAnimating];
@@ -197,7 +195,6 @@ BOOL missingAlertShown;
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
-    [self.autoRigLbl setHidden:YES];
     NSArray*  paths              = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString* documentsDirectory = [paths objectAtIndex:0];
     NSLog(@"Document Path : %@ ", documentsDirectory);
@@ -369,10 +366,6 @@ BOOL missingAlertShown;
     [self.objTableview setHidden:false];
     [self.backButton setHidden:false];
     [self.rigTitle setHidden:true];
-    [self.scaleBtnAutorig setHidden:true];
-    [self.moveBtnAutorig setHidden:true];
-    [self.rotateBtnAutorig setHidden:true];
-    [self.autorigMirrorBtnHolder setHidden:true];
     [self.myObjectsBtn setHidden:NO];
 
     if (editorScene->isNodeSelected) {
@@ -914,8 +907,6 @@ BOOL missingAlertShown;
     self.undoBtn.accessibilityIdentifier                = (toolBarPos == TOOLBAR_LEFT) ? @"" : @"1";
     self.redoBtn.accessibilityIdentifier                = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"";
     self.addJointBtn.accessibilityIdentifier            = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
-    self.autorigMirrorBtnHolder.accessibilityIdentifier = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
-    self.rotateBtnAutorig.accessibilityIdentifier       = (toolBarPos == TOOLBAR_LEFT) ? @"3" : @"1";
     self.undoBtn.accessibilityHint                      = NSLocalizedString((toolBarPos == TOOLBAR_LEFT) ? @"" : @"Undo / Redo your actions.", nil);
     self.redoBtn.accessibilityHint                      = NSLocalizedString((toolBarPos == TOOLBAR_LEFT) ? @"Undo / Redo your actions." : @"", nil);
 }
@@ -2973,15 +2964,6 @@ void downloadFile(NSString* url, NSString* fileName) {
     }
 }
 
-- (void)autoRigViewButtonHandler:(bool)disable {
-    [self.addJointBtn setHidden:disable];
-    [self.moveLast setHidden:disable];
-    [self.moveFirst setHidden:disable];
-    [self.rigScreenLabel setHidden:disable];
-    [_rigAddToSceneBtn setHidden:disable];
-    [_rigCancelBtn setHidden:disable];
-}
-
 - (void)importObjWithIndexPath:(int)indexPath TextureName:(NSString*)textureFileName MeshColor:(Vector3)color HasTexture:(BOOL)hasTexture IsTempNode:(BOOL)isTempNode {
     [self performSelectorOnMainThread:@selector(showLoadingActivity) withObject:nil waitUntilDone:YES];
 
@@ -3068,81 +3050,6 @@ void downloadFile(NSString* url, NSString* fileName) {
     [cache UpdateAsset:sgmAsset];
     [cache AddDownloadedAsset:sgmAsset];
     return sgmAsset.assetId;
-}
-
-- (int)addrigFileToCacheDirAndDatabase:(NSString*)texturemainFileNameRig VertexColor:(Vector3)vertexColor {
-    NSString*        tempDir       = NSTemporaryDirectory();
-    NSString*        sgrFilePath   = [NSString stringWithFormat:@"%@r-%@.sgr", tempDir, @"autorig"];
-    NSDate*          currDate      = [NSDate date];
-    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"YY-MM-DD HH:mm:ss"];
-    NSString* dateString = [dateFormatter stringFromDate:currDate];
-
-    AssetItem* objAsset   = [[AssetItem alloc] init];
-    objAsset.assetId      = 40000 + [cache getNextAutoRigAssetId];
-    objAsset.type         = 1;
-    objAsset.name         = [NSString stringWithFormat:@"autorig%d", [cache getNextAutoRigAssetId]];
-    objAsset.iap          = 0;
-    objAsset.keywords     = [NSString stringWithFormat:@" %@ , %@", texturemainFileNameRig, @"autorig"];
-    objAsset.boneCount    = 0;
-    objAsset.hash         = [self getMD5ForNonReadableFile:sgrFilePath];
-    objAsset.modifiedDate = dateString;
-    objAsset.price        = @"FREE";
-
-    [cache UpdateAsset:objAsset];
-    [cache AddDownloadedAsset:objAsset];
-    [self storeRiginCachesDirectory:objAsset.name assetId:objAsset.assetId];
-    [self storeRigTextureinTexturesDirectory:texturemainFileNameRig assetId:objAsset.assetId];
-    assetAddType         = IMPORT_ASSET_ACTION;
-    objAsset.isTempAsset = NO;
-    objAsset.textureName = (vertexColor == -1) ? [NSString stringWithFormat:@"%d%@", objAsset.assetId, @"-cm"] : @"";
-    [self performSelectorOnMainThread:@selector(loadNode:) withObject:objAsset waitUntilDone:YES];
-    editorScene->animMan->copyKeysOfNode(selectedNodeId, editorScene->nodes.size() - 1);
-    editorScene->animMan->copyPropsOfNode(selectedNodeId, editorScene->nodes.size() - 1, true);
-    editorScene->updater->setDataForFrame(editorScene->currentFrame);
-}
-
-- (void)storeRiginCachesDirectory:(NSString*)desFilename assetId:(int)localAssetId {
-    NSString* tempDir     = NSTemporaryDirectory();
-    NSString* sgrFilePath = [NSString stringWithFormat:@"%@r-%@.sgr", tempDir, @"autorig"];
-    NSArray*  desDirPath  = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* docDirPath  = [desDirPath objectAtIndex:0];
-    NSString* rigDirPath  = [NSString stringWithFormat:@"%@/Resources/Rigs", docDirPath];
-    NSString* desFilePath = [NSString stringWithFormat:@"%@/%d.sgr", rigDirPath, localAssetId];
-    NSData*   objData     = [NSData dataWithContentsOfFile:sgrFilePath];
-    [objData writeToFile:desFilePath atomically:YES];
-}
-
-- (void)storeRigTextureinTexturesDirectory:(NSString*)fileName assetId:(int)localAssetId {
-    NSArray*  srcDirPath         = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString* docDirPath         = [srcDirPath objectAtIndex:0];
-    NSArray*  paths              = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString* cacheDirectory     = [paths objectAtIndex:0];
-    NSString* srcTextureFilePath = [NSString stringWithFormat:@"%@/%@", docDirPath, fileName];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath]) {
-        srcTextureFilePath = [NSString stringWithFormat:@"%@/%@", cacheDirectory, fileName];
-        if (![[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath]) {
-            srcTextureFilePath = [NSString stringWithFormat:@"%@/Resources/Sgm/%@", docDirPath, fileName];
-            if (![[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath])
-                srcTextureFilePath = [NSString stringWithFormat:@"%@/Resources/Textures/%@", docDirPath, fileName];
-            if (![[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath])
-                srcTextureFilePath = [NSString stringWithFormat:@"%@/Resources/Rigs/%@", docDirPath, fileName];
-            if (![[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath])
-                srcTextureFilePath = [NSString stringWithFormat:@"%@/Resources/Textures/White-texture.png", docDirPath];
-            if (![[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath])
-                return;
-        }
-    }
-
-    NSString* desFilePath           = [NSString stringWithFormat:@"%@/Resources/Textures/%d-cm.png", docDirPath, localAssetId];
-    NSString* desFilePathForDisplay = [NSString stringWithFormat:@"%@/Resources/Textures/%d.png", docDirPath, localAssetId];
-
-    UIImage* image               = [UIImage imageWithContentsOfFile:srcTextureFilePath];
-    NSData*  imageData           = [self convertAndScaleImage:image size:-1];
-    NSData*  imageDataforDisplay = [self convertAndScaleImage:image size:128];
-    // image File size should be exactly 128 for display.
-    [imageData writeToFile:desFilePath atomically:YES];
-    [imageDataforDisplay writeToFile:desFilePathForDisplay atomically:YES];
 }
 
 - (NSData*)convertAndScaleImage:(UIImage*)image size:(int)textureRes {
