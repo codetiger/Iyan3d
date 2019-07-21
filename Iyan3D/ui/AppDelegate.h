@@ -8,17 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "LoadingViewControllerPad.h"
-#import "GAI.h"
 #import "ZipArchive.h"
-
-#import <Firebase/Firebase.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UIAlertViewDelegate> {
     LoadingViewControllerPad* loadingViewController;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow* window;
-@property (nonatomic, strong) id<GAITracker>     tracker;
 
 + (AppDelegate*)getAppDelegate;
 - (void*)getSceneManager;

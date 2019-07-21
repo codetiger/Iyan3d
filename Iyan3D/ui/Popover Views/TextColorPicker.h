@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GAI.h"
 #import "GetPixelDemo.h"
 #import "Constants.h"
 #import "Vector3.h"
@@ -16,7 +15,7 @@
 - (void)changeVertexColor:(Vector3)vetexColor dragFinish:(BOOL)isDragFinish;
 @end
 
-@interface TextColorPicker : GAITrackedViewController <GetPixelDemoDelegate> {
+@interface TextColorPicker : UIViewController <GetPixelDemoDelegate> {
     Vector3 color;
 }
 

@@ -30,7 +30,7 @@
 #import "CommonProps.h"
 #import "ScaleForAutoRigViewController.h"
 
-@interface EditorViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate, TextSelectionDelegate, MFMailComposeViewControllerDelegate, ImageImportNewDelgate, SliderDelegate, RenderingViewControllerDelegate, RenderViewManagerDelegate, PopUpViewControllerDelegate, WEPopoverControllerDelegate, ScalePropertiesViewControllerDelegate, ObjSliderDelegate, SettingsViewControllerDelegate, AutoRigScaleViewControllerDelegate, UIGestureRecognizerDelegate, OnBoardDelegate, CommonPropDelegate> {
+@interface EditorViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, UIAlertViewDelegate, TextSelectionDelegate, MFMailComposeViewControllerDelegate, ImageImportNewDelgate, SliderDelegate, RenderingViewControllerDelegate, RenderViewManagerDelegate, PopUpViewControllerDelegate, WEPopoverControllerDelegate, ScalePropertiesViewControllerDelegate, ObjSliderDelegate, SettingsViewControllerDelegate, AutoRigScaleViewControllerDelegate, UIGestureRecognizerDelegate, OnBoardDelegate, CommonPropDelegate> {
     NSMutableArray*                assetsInScenes;
     ImportImageNew*                importImageViewVC;
     AnimationSelectionSlider*      animationsliderVC;

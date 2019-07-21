@@ -11,7 +11,6 @@
 
 #import <UIKit/UIKit.h>
 #import "AnimationSelectionCollectionViewCell.h"
-#import "GAI.h"
 #import "AppHelper.h"
 #import "Constants.h"
 #import "SGEditorScene.h"
@@ -33,7 +32,7 @@
 
 @end
 
-@interface AnimationSelectionSlider : GAITrackedViewController <UICollectionViewDataSource, UICollectionViewDelegate, AppHelperDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate, AnimationPropsDelegate, UIAlertViewDelegate> {
+@interface AnimationSelectionSlider : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, AppHelperDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate, AnimationPropsDelegate, UIAlertViewDelegate> {
     NSMutableArray* animationJsonArray;
     NSMutableArray* animationsItems;
     CacheSystem*    cache;

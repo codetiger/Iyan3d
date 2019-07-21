@@ -11,7 +11,6 @@
 #import "AppHelper.h"
 #import <ImageIO/ImageIO.h>
 #import <MobileCoreServices/MobileCoreServices.h>
-#import "GAI.h"
 #import "CacheSystem.h"
 #import "RETrimControl.h"
 #import "TextColorPicker.h"
@@ -38,7 +37,7 @@
 
 @class GADBannerView;
 
-@interface RenderingViewController : GAITrackedViewController <RETrimControlDelegate, NSURLConnectionDelegate, UICollectionViewDataSource, UICollectionViewDelegate, TextColorPickerDelegate, MediaPreviewDelegate, UIGestureRecognizerDelegate> {
+@interface RenderingViewController : UIViewController <RETrimControlDelegate, NSURLConnectionDelegate, UICollectionViewDataSource, UICollectionViewDelegate, TextColorPickerDelegate, MediaPreviewDelegate, UIGestureRecognizerDelegate> {
     int                  renderingStartFrame, renderingEndFrame, renderingFrame, finalFrame, publishId;
     bool                 isCanceled, isAppInBg;
     BOOL                 resAlertShown;

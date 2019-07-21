@@ -19,29 +19,10 @@
 #include <sys/time.h>
 
 SceneManager* scenemgr;
-@interface    AppDelegate ()
-
-@property (nonatomic, assign) BOOL okToWait;
-@property (nonatomic, copy) void (^dispatchHandler)(GAIDispatchResult result);
-
-@end
-
-static NSString* const kTrackingId    = @"UA-49819146-1";
-static NSString* const kAllowTracking = @"allowTracking";
-static NSString* const kClient        = @"328259754555-buqbocp0ehq7mtflh0lk3j2p82cc4ltm.apps.googleusercontent.com";
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions {
-    [FIRApp configure];
-
-    NSDictionary* appDefaults = @{ kAllowTracking : @(YES) };
-    [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
-    [GAI sharedInstance].optOut                  = ![[NSUserDefaults standardUserDefaults] boolForKey:kAllowTracking];
-    [GAI sharedInstance].dispatchInterval        = 20;
-    [GAI sharedInstance].trackUncaughtExceptions = YES;
-    self.tracker                                 = [[GAI sharedInstance] trackerWithTrackingId:kTrackingId];
-
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     self.window           = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     loadingViewController = [[LoadingViewControllerPad alloc] initWithNibName:@"LoadingViewControllerPad" bundle:nil];
@@ -107,39 +88,13 @@ static NSString* const kClient        = @"328259754555-buqbocp0ehq7mtflh0lk3j2p8
 }
 
 - (void)applicationDidEnterBackground:(UIApplication*)application {
-    [self sendHitsInBackground];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication*)application {
 }
 
 - (void)applicationDidBecomeActive:(UIApplication*)application {
-    [GAI sharedInstance].optOut = ![[NSUserDefaults standardUserDefaults] boolForKey:kAllowTracking];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"applicationDidBecomeActive" object:nil userInfo:nil];
-}
-
-- (void)sendHitsInBackground {
-    self.okToWait                = YES;
-    __weak AppDelegate* weakSelf = self;
-    __block UIBackgroundTaskIdentifier backgroundTaskId =
-        [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-            weakSelf.okToWait = NO;
-        }];
-
-    if (backgroundTaskId == UIBackgroundTaskInvalid) {
-        return;
-    }
-
-    self.dispatchHandler = ^(GAIDispatchResult result) {
-        // If the last dispatch succeeded, and we're still OK to stay in the background then kick off
-        // again.
-        if (result == kGAIDispatchGood && weakSelf.okToWait) {
-            [[GAI sharedInstance] dispatchWithCompletionHandler:weakSelf.dispatchHandler];
-        } else {
-            [[UIApplication sharedApplication] endBackgroundTask:backgroundTaskId];
-        }
-    };
-    [[GAI sharedInstance] dispatchWithCompletionHandler:self.dispatchHandler];
 }
 
 - (void)applicationWillTerminate:(UIApplication*)application {

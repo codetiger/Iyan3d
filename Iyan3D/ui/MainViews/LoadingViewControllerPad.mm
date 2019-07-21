@@ -206,7 +206,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.screenName = @"LoadingView iOS";
 }
 
 - (void)didReceiveMemoryWarning {

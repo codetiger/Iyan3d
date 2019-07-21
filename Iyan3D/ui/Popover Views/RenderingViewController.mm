@@ -67,7 +67,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.screenName = @"RenderingView iOS";
 
     cancelPressed = resAlertShown               = NO;
     selectedIndex                               = 0;

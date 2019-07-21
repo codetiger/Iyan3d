@@ -10,7 +10,6 @@
 #define SettingsViewController_h
 
 #import <UIKit/UIKit.h>
-#import "GAI.h"
 #import "AppHelper.h"
 
 @protocol SettingsViewControllerDelegate
@@ -21,7 +20,7 @@
 - (void)multiSelectUpdate:(BOOL)value;
 @end
 
-@interface SettingsViewController : GAITrackedViewController <UIGestureRecognizerDelegate, UIScrollViewDelegate, AppHelperDelegate> {
+@interface SettingsViewController : UIViewController <UIGestureRecognizerDelegate, UIScrollViewDelegate, AppHelperDelegate> {
     UIScrollView* myScrollView;
 }
 

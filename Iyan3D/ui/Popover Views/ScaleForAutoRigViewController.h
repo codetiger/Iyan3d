@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GAI.h"
 
 @protocol AutoRigScaleViewControllerDelegate
 - (void)scalePropertyChangedInRigView:(float)scaleValue;
@@ -15,7 +14,7 @@
 
 @end
 
-@interface ScaleForAutoRigViewController : GAITrackedViewController {
+@interface ScaleForAutoRigViewController : UIViewController {
     float scale;
 }
 

@@ -34,7 +34,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.screenName = @"SettingsViewVC iOS";
     [self setupImageTap];
     self.doneBtn.layer.cornerRadius    = CORNER_RADIUS;
     self.restoreBtn.layer.cornerRadius = CORNER_RADIUS;

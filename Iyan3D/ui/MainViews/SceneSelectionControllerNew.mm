@@ -54,7 +54,6 @@
 
     self.sceneTitleLabel.text = NSLocalizedString(@"Scenes", nil);
 
-    self.screenName   = @"SceneSelectionView iOS";
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     screenHeight      = screenRect.size.height;
     if ([Utility IsPadDevice]) {

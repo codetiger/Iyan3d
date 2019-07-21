@@ -10,11 +10,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditorViewController">
             <connections>
                 <outlet property="addFrameBtn" destination="w5e-Hu-oAW" id="ULL-KG-xTQ"/>
-                <outlet property="addJointBtn" destination="Ubt-RU-0Zf" id="CKx-fW-TXf"/>
                 <outlet property="animationBtn" destination="58f-dD-DRm" id="xhC-4N-gIj"/>
-                <outlet property="autoRigMirrorSwitch" destination="sjM-8J-tg4" id="ETK-Jo-m0y"/>
-                <outlet property="autorigMirrorBtnHolder" destination="e0e-wp-KIX" id="iev-dQ-b53"/>
-                <outlet property="autorigMirrorLable" destination="he0-im-Bzm" id="jDn-o2-Fgf"/>
                 <outlet property="backButton" destination="G8Y-1j-55x" id="zHQ-v5-7Qe"/>
                 <outlet property="center_progress" destination="Aex-sz-efG" id="Y81-tY-OEK"/>
                 <outlet property="exportBtn" destination="w8E-u6-axF" id="Atw-N0-cZl"/>
@@ -26,7 +22,6 @@
                 <outlet property="lastFrameBtn" destination="037-BU-8q5" id="RkI-Wm-3aD"/>
                 <outlet property="leftView" destination="L0B-6d-c1X" id="Pu8-ZT-SOi"/>
                 <outlet property="moveBtn" destination="6eX-px-hba" id="jIJ-DK-UgE"/>
-                <outlet property="moveBtnAutorig" destination="rRU-cR-7ay" id="J7J-zn-kma"/>
                 <outlet property="myObjectsBtn" destination="hOI-Vg-cWf" id="D1j-Xi-lxn"/>
                 <outlet property="optionsBtn" destination="vjP-Os-nSO" id="4Q7-DF-Z0P"/>
                 <outlet property="playBtn" destination="qOP-cU-h2X" id="yrL-b7-DGC"/>
@@ -35,9 +30,7 @@
                 <outlet property="rigTitle" destination="QA5-Gc-qcB" id="1j5-L4-RqT"/>
                 <outlet property="rightView" destination="85u-8e-wxJ" id="xPl-8g-ns0"/>
                 <outlet property="rotateBtn" destination="vf5-0G-U3P" id="jjq-LL-aGa"/>
-                <outlet property="rotateBtnAutorig" destination="vTn-2H-x7a" id="rAl-7x-mDU"/>
                 <outlet property="scaleBtn" destination="iUY-rU-QIk" id="Woe-eg-cgU"/>
-                <outlet property="scaleBtnAutorig" destination="8L9-7X-gH3" id="uZw-co-wtP"/>
                 <outlet property="topView" destination="Cjt-no-Q40" id="M5k-oX-i34"/>
                 <outlet property="undoBtn" destination="eqQ-LU-buM" id="HJh-7o-ySd"/>
                 <outlet property="view" destination="iN0-l3-epB" id="FBl-yy-ocb"/>
@@ -116,17 +109,6 @@
                     <rect key="frame" x="787" y="48" width="110" height="368"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                     <subviews>
-                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ubt-RU-0Zf">
-                            <rect key="frame" x="0.0" y="5" width="110" height="42"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.25882352941176467" green="0.25882352941176467" blue="0.26666666666666666" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Tap to add a joint to the selected joint in the rig" identifier="1"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                            <state key="normal" title="  ADD JOINT" image="Add-Bone-IPhone.png"/>
-                            <connections>
-                                <action selector="addJoinAction:" destination="-1" eventType="touchUpInside" id="qBf-So-5Oc"/>
-                            </connections>
-                        </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w8E-u6-axF">
                             <rect key="frame" x="0.0" y="194" width="110" height="31"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
@@ -153,54 +135,6 @@
                                 <action selector="myObjectsBtnAction:" destination="-1" eventType="touchUpInside" id="vmF-1m-3ul"/>
                             </connections>
                         </button>
-                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rRU-cR-7ay">
-                            <rect key="frame" x="0.0" y="52" width="110" height="42"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="  MOVE" image="Move_IPhone.png">
-                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <connections>
-                                <action selector="moveBtnAction:" destination="-1" eventType="touchUpInside" id="OGu-35-qHQ"/>
-                            </connections>
-                        </button>
-                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8L9-7X-gH3">
-                            <rect key="frame" x="0.0" y="144" width="110" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="  SCALE" image="Scale_IPhone.png">
-                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <connections>
-                                <action selector="scaleBtnAction:" destination="-1" eventType="touchUpInside" id="jlf-Gy-68b"/>
-                            </connections>
-                        </button>
-                        <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e0e-wp-KIX">
-                            <rect key="frame" x="0.0" y="192" width="110" height="43"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <switch hidden="YES" opaque="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="sjM-8J-tg4" userLabel="mirrorSwitch">
-                                    <rect key="frame" x="58" y="13" width="51" height="31"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                    <connections>
-                                        <action selector="autorigMirrorSwitchAction:" destination="-1" eventType="valueChanged" id="T7o-Ab-Lwu"/>
-                                    </connections>
-                                </switch>
-                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="MIRROR" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="he0-im-Bzm" userLabel="MirrorLable">
-                                    <rect key="frame" x="7" y="13" width="48" height="31"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
-                            </subviews>
-                            <color key="backgroundColor" red="0.25882352941176467" green="0.25882352941176467" blue="0.26666666666666666" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Enable mirror to move / rotate the mirror joint of the selected joint" identifier="1"/>
-                        </view>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aga-VX-vgX">
                             <rect key="frame" x="0.0" y="82" width="110" height="31"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
@@ -237,20 +171,6 @@
                             </state>
                             <connections>
                                 <action selector="moveBtnAction:" destination="-1" eventType="touchUpInside" id="qpB-tk-HUS"/>
-                            </connections>
-                        </button>
-                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vTn-2H-x7a">
-                            <rect key="frame" x="0.0" y="97" width="110" height="45"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.25882352939999997" green="0.25882352939999997" blue="0.2666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <accessibility key="accessibilityConfiguration" hint="Switch to Move / Rotate / Scale mode" identifier="1"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                            <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="  ROTATE" image="Rotate_IPhone.png">
-                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <connections>
-                                <action selector="rotateBtnAction:" destination="-1" eventType="touchUpInside" id="YNG-pv-Lwy"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vf5-0G-U3P">
@@ -429,7 +349,6 @@
         </view>
     </objects>
     <resources>
-        <image name="Add-Bone-IPhone.png" width="25" height="18"/>
         <image name="Add-Frames_IPhone.png" width="43" height="52"/>
         <image name="Animation_IPhone.png" width="25" height="18"/>
         <image name="Back_IPhone.png" width="10" height="17"/>

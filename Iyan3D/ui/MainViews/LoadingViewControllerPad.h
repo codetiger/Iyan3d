@@ -11,10 +11,9 @@
 #import "CacheSystem.h"
 #import "AssetItem.h"
 #import "Utility.h"
-#import "GAI.h"
 #import "AppHelper.h"
 
-@interface LoadingViewControllerPad : GAITrackedViewController <AppHelperDelegate> {
+@interface LoadingViewControllerPad : UIViewController <AppHelperDelegate> {
     NSArray*     jsonArr;
     CacheSystem* cache;
     BOOL         isAppFirstTime;

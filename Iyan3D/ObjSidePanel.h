@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GAI.h"
 #import "ObjCellView.h"
 #import "TextColorPicker.h"
 #import "WEPopoverController.h"
@@ -28,7 +27,7 @@
 - (void)deallocSubViews;
 @end
 
-@interface ObjSidePanel : GAITrackedViewController <UICollectionViewDataSource, UICollectionViewDelegate, TextColorPickerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, ObjCellViewDelegate> {
+@interface ObjSidePanel : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, TextColorPickerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, ObjCellViewDelegate> {
     int                  indexPathOfOBJ;
     NSString*            textureFileName;
     BOOL                 haveTexture;

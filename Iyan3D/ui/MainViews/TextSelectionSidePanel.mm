@@ -42,7 +42,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.screenName = @"TextSelection iOS";
 
     [self initializeFontListArray];
     if ([fontArray count] > 0) {

@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import <MediaPlayer/MediaPlayer.h>
-#import "GAI.h"
 
 @protocol MediaPreviewDelegate
 

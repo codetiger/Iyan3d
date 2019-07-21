@@ -139,7 +139,6 @@ BOOL missingAlertShown;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.screenName = @"EditorView iOS";
 
     [self.backButton setTitle:NSLocalizedString(@"Scenes", nil) forState:UIControlStateNormal];
     [self.myObjectsBtn setTitle:NSLocalizedString(@"My Objects", nil) forState:UIControlStateNormal];

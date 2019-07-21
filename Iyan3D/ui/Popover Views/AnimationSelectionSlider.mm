@@ -44,7 +44,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.screenName = @"AnimationSelection iOS";
     if ([Utility IsPadDevice]) {
         [self.animationCollectionView registerNib:[UINib nibWithNibName:@"AnimationSelectionCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
     } else {

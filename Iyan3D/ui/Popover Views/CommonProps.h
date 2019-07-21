@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GAI.h"
 #import "GetPixelDemo.h"
 #import "Utility.h"
 #import "Options.h"
@@ -36,7 +35,7 @@
 
 @end
 
-@interface CommonProps : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, GetPixelDemoDelegate, SwitchPropDelegate, SliderPropDelegate> {
+@interface CommonProps : UIViewController <UITableViewDelegate, UITableViewDataSource, GetPixelDemoDelegate, SwitchPropDelegate, SliderPropDelegate> {
     NSMutableArray*                    sectionHeaders;
     std::map<string, vector<Property> > groupedData;
 

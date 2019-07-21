@@ -15,13 +15,12 @@
 
 #import "Utility.h"
 #import "AppHelper.h"
-#import "GAI.h"
 #import "SceneSelectionFrameCell.h"
 #import "EditorViewController.h"
 #import "WEPopoverController.h"
 #import "SettingsViewController.h"
 
-@interface SceneSelectionControllerNew : GAITrackedViewController <UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, MFMailComposeViewControllerDelegate, ScenePropertiesDelegate, UIAlertViewDelegate, PopUpViewControllerDelegate, WEPopoverControllerDelegate, SettingsViewControllerDelegate, MFMailComposeViewControllerDelegate, OnBoardDelegate, UIDocumentInteractionControllerDelegate> {
+@interface SceneSelectionControllerNew : UIViewController <UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, MFMailComposeViewControllerDelegate, ScenePropertiesDelegate, UIAlertViewDelegate, PopUpViewControllerDelegate, WEPopoverControllerDelegate, SettingsViewControllerDelegate, MFMailComposeViewControllerDelegate, OnBoardDelegate, UIDocumentInteractionControllerDelegate> {
     NSMutableArray*         scenesArray;
     CacheSystem*            cache;
     NSDateFormatter*        dateFormatter;

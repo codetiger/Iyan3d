@@ -22,11 +22,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.screenName               = @"EnvelopeScaleView iOS";
     self.scaleSlider.minimumValue = 0.1;
     [self updateScale:scale];
     self.scaleValue.text = [NSString stringWithFormat:@"%0.2f", scale];
-    // Do any additional setup after loading the view from its nib.
 }
 
 - (void)didReceiveMemoryWarning {

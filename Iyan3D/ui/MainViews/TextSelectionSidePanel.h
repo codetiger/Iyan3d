@@ -18,7 +18,6 @@
 #import "TextColorPicker.h"
 #import "WEPopoverController.h"
 #import "PopUpViewController.h"
-#import "GAI.h"
 #import "Vector3.h"
 
 @protocol TextSelectionDelegate
@@ -33,7 +32,7 @@
 
 @end
 
-@interface TextSelectionSidePanel : GAITrackedViewController <UICollectionViewDelegate, UICollectionViewDataSource, TextColorPickerDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate> {
+@interface TextSelectionSidePanel : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource, TextColorPickerDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate> {
     NSArray*        fontListArray;
     CacheSystem*    cache;
     NSString*       docDirPath;

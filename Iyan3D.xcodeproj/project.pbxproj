@@ -47,18 +47,6 @@
 		0169C4801C33ED5A00132FF6 /* popoverBg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0169C4591C33ED5A00132FF6 /* popoverBg@2x.png */; };
 		0169C4811C33ED5A00132FF6 /* popoverBgSimple.png in Resources */ = {isa = PBXBuildFile; fileRef = 0169C45A1C33ED5A00132FF6 /* popoverBgSimple.png */; };
 		0169C4821C33ED5A00132FF6 /* popoverBgSimple.png in Resources */ = {isa = PBXBuildFile; fileRef = 0169C45A1C33ED5A00132FF6 /* popoverBgSimple.png */; };
-		0184EC6B1C350A5B006F0B57 /* Facebook_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 0184EC651C350A5B006F0B57 /* Facebook_Pad.png */; };
-		0184EC6C1C350A5B006F0B57 /* Facebook_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 0184EC651C350A5B006F0B57 /* Facebook_Pad.png */; };
-		0184EC6D1C350A5B006F0B57 /* Google_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 0184EC661C350A5B006F0B57 /* Google_Pad.png */; };
-		0184EC6E1C350A5B006F0B57 /* Google_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 0184EC661C350A5B006F0B57 /* Google_Pad.png */; };
-		0184EC6F1C350A5B006F0B57 /* iyan3d-sign-in_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 0184EC671C350A5B006F0B57 /* iyan3d-sign-in_Pad.png */; };
-		0184EC701C350A5B006F0B57 /* iyan3d-sign-in_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 0184EC671C350A5B006F0B57 /* iyan3d-sign-in_Pad.png */; };
-		0184EC711C350A5B006F0B57 /* iyan3d-text-sign-in_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 0184EC681C350A5B006F0B57 /* iyan3d-text-sign-in_Pad.png */; };
-		0184EC721C350A5B006F0B57 /* iyan3d-text-sign-in_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 0184EC681C350A5B006F0B57 /* iyan3d-text-sign-in_Pad.png */; };
-		0184EC731C350A5B006F0B57 /* Login-Img_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 0184EC691C350A5B006F0B57 /* Login-Img_Pad.png */; };
-		0184EC741C350A5B006F0B57 /* Login-Img_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 0184EC691C350A5B006F0B57 /* Login-Img_Pad.png */; };
-		0184EC751C350A5B006F0B57 /* Twitter_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 0184EC6A1C350A5B006F0B57 /* Twitter_Pad.png */; };
-		0184EC761C350A5B006F0B57 /* Twitter_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 0184EC6A1C350A5B006F0B57 /* Twitter_Pad.png */; };
 		018501DC1C2BDA730090FA65 /* EditorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 018501DB1C2BDA730090FA65 /* EditorViewController.mm */; };
 		018501DD1C2BDA730090FA65 /* EditorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 018501DB1C2BDA730090FA65 /* EditorViewController.mm */; };
 		01A395361C40E8EC007531DB /* SettingsViewControllerPhone2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01A395351C40E8EC007531DB /* SettingsViewControllerPhone2x.xib */; };
@@ -127,18 +115,6 @@
 		01ACD0F11C3D3AE20096AD14 /* Tool-Bar_Left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01ACD0DE1C3D3AE20096AD14 /* Tool-Bar_Left@2x.png */; };
 		01ACD0F21C3D3AE20096AD14 /* Tool-Bar_Right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01ACD0DF1C3D3AE20096AD14 /* Tool-Bar_Right@2x.png */; };
 		01ACD0F31C3D3AE20096AD14 /* Tool-Bar_Right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01ACD0DF1C3D3AE20096AD14 /* Tool-Bar_Right@2x.png */; };
-		01ACD0FA1C3D44930096AD14 /* Facebook_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01ACD0F41C3D44930096AD14 /* Facebook_Pad@2x.png */; };
-		01ACD0FB1C3D44930096AD14 /* Facebook_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01ACD0F41C3D44930096AD14 /* Facebook_Pad@2x.png */; };
-		01ACD0FC1C3D44930096AD14 /* Google_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01ACD0F51C3D44930096AD14 /* Google_Pad@2x.png */; };
-		01ACD0FD1C3D44930096AD14 /* Google_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01ACD0F51C3D44930096AD14 /* Google_Pad@2x.png */; };
-		01ACD0FE1C3D44930096AD14 /* iyan3d-sign-in_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01ACD0F61C3D44930096AD14 /* iyan3d-sign-in_Pad@2x.png */; };
-		01ACD0FF1C3D44930096AD14 /* iyan3d-sign-in_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01ACD0F61C3D44930096AD14 /* iyan3d-sign-in_Pad@2x.png */; };
-		01ACD1001C3D44930096AD14 /* iyan3d-text-sign-in_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01ACD0F71C3D44930096AD14 /* iyan3d-text-sign-in_Pad@2x.png */; };
-		01ACD1011C3D44930096AD14 /* iyan3d-text-sign-in_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01ACD0F71C3D44930096AD14 /* iyan3d-text-sign-in_Pad@2x.png */; };
-		01ACD1021C3D44930096AD14 /* Login-Img_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01ACD0F81C3D44930096AD14 /* Login-Img_Pad@2x.png */; };
-		01ACD1031C3D44930096AD14 /* Login-Img_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01ACD0F81C3D44930096AD14 /* Login-Img_Pad@2x.png */; };
-		01ACD1041C3D44930096AD14 /* Twitter_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01ACD0F91C3D44930096AD14 /* Twitter_Pad@2x.png */; };
-		01ACD1051C3D44930096AD14 /* Twitter_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01ACD0F91C3D44930096AD14 /* Twitter_Pad@2x.png */; };
 		01B02CAA1C61CAB400C9102A /* Add-Bones_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02C871C61CAB400C9102A /* Add-Bones_IPhone@3x.png */; };
 		01B02CAB1C61CAB400C9102A /* Add-Bones_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02C871C61CAB400C9102A /* Add-Bones_IPhone@3x.png */; };
 		01B02CAC1C61CAB400C9102A /* Add-Frames_IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B02C881C61CAB400C9102A /* Add-Frames_IPhone@3x.png */; };
@@ -367,12 +343,8 @@
 		01BA324F1C5CC292000A5F3E /* popover-delete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01BA324A1C5CC292000A5F3E /* popover-delete@2x.png */; };
 		01BA32501C5CC292000A5F3E /* popover-skin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01BA324B1C5CC292000A5F3E /* popover-skin@2x.png */; };
 		01BA32511C5CC292000A5F3E /* popover-skin@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01BA324B1C5CC292000A5F3E /* popover-skin@2x.png */; };
-		01BA32531C5CEC84000A5F3E /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01BA32521C5CEC84000A5F3E /* AssetsLibrary.framework */; };
-		01BA32541C5CEC8C000A5F3E /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01BA32521C5CEC84000A5F3E /* AssetsLibrary.framework */; };
-		01C2B77E1C462CFB00384370 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B77D1C462CFB00384370 /* Social.framework */; };
 		01C2B79B1C46543200384370 /* color@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01C2B79A1C46543200384370 /* color@2x.png */; };
 		01C2B79C1C46543200384370 /* color@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01C2B79A1C46543200384370 /* color@2x.png */; };
-		01C2B79D1C46553500384370 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01C2B77D1C462CFB00384370 /* Social.framework */; };
 		01CCD1C31C3F927D00565664 /* ObjSidePanel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 01CCD1C11C3F927D00565664 /* ObjSidePanel.mm */; };
 		01CCD1C41C3F927D00565664 /* ObjSidePanel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 01CCD1C11C3F927D00565664 /* ObjSidePanel.mm */; };
 		01CCD1C51C3F927D00565664 /* ObjSidePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01CCD1C21C3F927D00565664 /* ObjSidePanel.xib */; };
@@ -499,26 +471,6 @@
 		01F873131C3A6C4E009AA31E /* undo_IPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F872D41C3A6C4E009AA31E /* undo_IPhone@2x.png */; };
 		01F8731D1C3A7500009AA31E /* PopUpViewControllerPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01F8731C1C3A7500009AA31E /* PopUpViewControllerPhone.xib */; };
 		01F8731E1C3A7500009AA31E /* PopUpViewControllerPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01F8731C1C3A7500009AA31E /* PopUpViewControllerPhone.xib */; };
-		01F873281C3A78B4009AA31E /* Facebook_IPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873231C3A78B4009AA31E /* Facebook_IPhone.png */; };
-		01F873291C3A78B4009AA31E /* Facebook_IPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873231C3A78B4009AA31E /* Facebook_IPhone.png */; };
-		01F8732A1C3A78B4009AA31E /* Google_IPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873241C3A78B4009AA31E /* Google_IPhone.png */; };
-		01F8732B1C3A78B4009AA31E /* Google_IPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873241C3A78B4009AA31E /* Google_IPhone.png */; };
-		01F8732C1C3A78B4009AA31E /* iyan3d-sign-in_IPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873251C3A78B4009AA31E /* iyan3d-sign-in_IPhone.png */; };
-		01F8732D1C3A78B4009AA31E /* iyan3d-sign-in_IPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873251C3A78B4009AA31E /* iyan3d-sign-in_IPhone.png */; };
-		01F8732E1C3A78B4009AA31E /* iyan3d-text-sign-in_IPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873261C3A78B4009AA31E /* iyan3d-text-sign-in_IPhone.png */; };
-		01F8732F1C3A78B4009AA31E /* iyan3d-text-sign-in_IPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873261C3A78B4009AA31E /* iyan3d-text-sign-in_IPhone.png */; };
-		01F873301C3A78B4009AA31E /* Twitter_IPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873271C3A78B4009AA31E /* Twitter_IPhone.png */; };
-		01F873311C3A78B4009AA31E /* Twitter_IPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873271C3A78B4009AA31E /* Twitter_IPhone.png */; };
-		01F873381C3A7DE4009AA31E /* Facebook_IPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873331C3A7DE4009AA31E /* Facebook_IPhone@2x.png */; };
-		01F873391C3A7DE4009AA31E /* Facebook_IPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873331C3A7DE4009AA31E /* Facebook_IPhone@2x.png */; };
-		01F8733A1C3A7DE4009AA31E /* Google_IPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873341C3A7DE4009AA31E /* Google_IPhone@2x.png */; };
-		01F8733B1C3A7DE4009AA31E /* Google_IPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873341C3A7DE4009AA31E /* Google_IPhone@2x.png */; };
-		01F8733C1C3A7DE4009AA31E /* iyan3d-sign-in_IPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873351C3A7DE4009AA31E /* iyan3d-sign-in_IPhone@2x.png */; };
-		01F8733D1C3A7DE4009AA31E /* iyan3d-sign-in_IPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873351C3A7DE4009AA31E /* iyan3d-sign-in_IPhone@2x.png */; };
-		01F8733E1C3A7DE4009AA31E /* iyan3d-text-sign-in_IPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873361C3A7DE4009AA31E /* iyan3d-text-sign-in_IPhone@2x.png */; };
-		01F8733F1C3A7DE4009AA31E /* iyan3d-text-sign-in_IPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873361C3A7DE4009AA31E /* iyan3d-text-sign-in_IPhone@2x.png */; };
-		01F873401C3A7DE4009AA31E /* Twitter_IPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873371C3A7DE4009AA31E /* Twitter_IPhone@2x.png */; };
-		01F873411C3A7DE4009AA31E /* Twitter_IPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873371C3A7DE4009AA31E /* Twitter_IPhone@2x.png */; };
 		01F873441C3A84BF009AA31E /* Next-frame_IPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873421C3A84BF009AA31E /* Next-frame_IPhone.png */; };
 		01F873451C3A84BF009AA31E /* Next-frame_IPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873421C3A84BF009AA31E /* Next-frame_IPhone.png */; };
 		25034FDE1D24F9960036F201 /* BeginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25034FD31D24F9960036F201 /* BeginView.xib */; };
@@ -545,8 +497,6 @@
 		25069F5C1D2BD81E00DBAE44 /* CommonProps.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25069F5A1D2BD81E00DBAE44 /* CommonProps.xib */; };
 		25069F5F1D2BDAC900DBAE44 /* CommonProps.mm in Sources */ = {isa = PBXBuildFile; fileRef = 25069F5E1D2BDAC900DBAE44 /* CommonProps.mm */; };
 		25069F601D2BDAC900DBAE44 /* CommonProps.mm in Sources */ = {isa = PBXBuildFile; fileRef = 25069F5E1D2BDAC900DBAE44 /* CommonProps.mm */; };
-		25095F391C5B631900CF7C68 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25095F381C5B631900CF7C68 /* AVFoundation.framework */; };
-		25095F3A1C5B632700CF7C68 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25095F381C5B631900CF7C68 /* AVFoundation.framework */; };
 		250991AD1D27CD2E005327E6 /* MediaPreviewVCPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 250991AB1D27CD2E005327E6 /* MediaPreviewVCPhone.xib */; };
 		250991AE1D27CD2E005327E6 /* MediaPreviewVCPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 250991AB1D27CD2E005327E6 /* MediaPreviewVCPhone.xib */; };
 		250991AF1D27CD2E005327E6 /* MediaPreviewVCPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 250991AC1D27CD2E005327E6 /* MediaPreviewVCPhone@2x.xib */; };
@@ -621,15 +571,6 @@
 		250FEC8D1D1EA8B2000C8A2C /* Step-4_-img_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC801D1EA8B2000C8A2C /* Step-4_-img_phone@3x.png */; };
 		250FEC8E1D1EA8B2000C8A2C /* Welcome-Img_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC811D1EA8B2000C8A2C /* Welcome-Img_phone@3x.png */; };
 		250FEC8F1D1EA8B2000C8A2C /* Welcome-Img_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 250FEC811D1EA8B2000C8A2C /* Welcome-Img_phone@3x.png */; };
-		2512BFD51CB24581006E19A3 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2512BFD41CB24581006E19A3 /* SafariServices.framework */; };
-		2512BFD61CB2458C006E19A3 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2512BFD41CB24581006E19A3 /* SafariServices.framework */; };
-		2512BFD81CB247AE006E19A3 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2512BFD71CB247AD006E19A3 /* libz.tbd */; };
-		2512BFDA1CB24E0B006E19A3 /* GoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2512BFD91CB24E0B006E19A3 /* GoogleAnalytics.a */; };
-		2512BFDB1CB24E0B006E19A3 /* GoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2512BFD91CB24E0B006E19A3 /* GoogleAnalytics.a */; };
-		2512BFDE1CB2708E006E19A3 /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2512BFDC1CB2708E006E19A3 /* GoogleSignIn.bundle */; };
-		2512BFDF1CB2708E006E19A3 /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2512BFDC1CB2708E006E19A3 /* GoogleSignIn.bundle */; };
-		2512BFE01CB2708E006E19A3 /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2512BFDD1CB2708E006E19A3 /* GoogleSignIn.framework */; };
-		2512BFE11CB2708E006E19A3 /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2512BFDD1CB2708E006E19A3 /* GoogleSignIn.framework */; };
 		2515C36B1DA8D12000B4F622 /* launch.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2515C36A1DA8D12000B4F622 /* launch.xib */; };
 		2515C36C1DA8D12000B4F622 /* launch.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2515C36A1DA8D12000B4F622 /* launch.xib */; };
 		2515C36E1DA8D1D100B4F622 /* iconlarge.png in Resources */ = {isa = PBXBuildFile; fileRef = 2515C36D1DA8D1D100B4F622 /* iconlarge.png */; };
@@ -670,7 +611,6 @@
 		254A4B341D34F82B00D23D6D /* SwitchPropCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 254A4B301D34F82B00D23D6D /* SwitchPropCell.xib */; };
 		254BA1A51B08377100F248A6 /* Iyan3Dcopy-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 254BA1A41B08377100F248A6 /* Iyan3Dcopy-Info.plist */; };
 		254F7DB11A94CC52004D63A8 /* AppHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 254F7DB01A94CC52004D63A8 /* AppHelper.mm */; };
-		2553F8DC1DA3B2DF003D6D4A /* libz.1.2.8.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2553F8DB1DA3B2DF003D6D4A /* libz.1.2.8.tbd */; };
 		25651D141B3C91570058706E /* helpStatements.json in Resources */ = {isa = PBXBuildFile; fileRef = 25651D131B3C91570058706E /* helpStatements.json */; };
 		25651D151B3C91570058706E /* helpStatements.json in Resources */ = {isa = PBXBuildFile; fileRef = 25651D131B3C91570058706E /* helpStatements.json */; };
 		256ACDAB1CABAEF60080014E /* indicator.sgm in Resources */ = {isa = PBXBuildFile; fileRef = 256ACDAA1CABAEF60080014E /* indicator.sgm */; };
@@ -692,13 +632,8 @@
 		257564C51AE6E3D400B66113 /* RenderingViewControllerPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 257564C01AE6E3D400B66113 /* RenderingViewControllerPhone.xib */; };
 		25895B781B4F056700E833F8 /* AnimationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 25895B771B4F056700E833F8 /* AnimationItem.m */; };
 		25895B791B4F056700E833F8 /* AnimationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 25895B771B4F056700E833F8 /* AnimationItem.m */; };
-		2593C41C1CB27A2300703DDE /* libFreetype2_sim.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2593C41A1CB27A2300703DDE /* libFreetype2_sim.a */; };
-		2593C41D1CB27A2300703DDE /* libFreetype2_sim.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2593C41A1CB27A2300703DDE /* libFreetype2_sim.a */; };
-		2593C41E1CB27A2300703DDE /* libFreetype2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2593C41B1CB27A2300703DDE /* libFreetype2.a */; };
-		2593C41F1CB27A2300703DDE /* libFreetype2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2593C41B1CB27A2300703DDE /* libFreetype2.a */; };
 		259EE1531BDE342800C99784 /* dummy.png in Resources */ = {isa = PBXBuildFile; fileRef = 259EE1521BDE342800C99784 /* dummy.png */; };
 		259EE1541BDE342800C99784 /* dummy.png in Resources */ = {isa = PBXBuildFile; fileRef = 259EE1521BDE342800C99784 /* dummy.png */; };
-		25AD150C1B8E8CD70081505F /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F7D5A121B8C40F200E6BA86 /* AddressBook.framework */; };
 		25B5B1681BE33EFB00AC2525 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 25B5B15E1BE33EFB00AC2525 /* ioapi.c */; };
 		25B5B1691BE33EFB00AC2525 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 25B5B15E1BE33EFB00AC2525 /* ioapi.c */; };
 		25B5B16A1BE33EFB00AC2525 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 25B5B1601BE33EFB00AC2525 /* mztools.c */; };
@@ -739,10 +674,6 @@
 		25EBB2A81D1173B50031F18D /* MediaPreviewVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EBB2A61D1173B50031F18D /* MediaPreviewVC.m */; };
 		25EBB2AA1D1174050031F18D /* MediaPreviewVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25EBB2A91D1174050031F18D /* MediaPreviewVC.xib */; };
 		25EBB2AB1D1174050031F18D /* MediaPreviewVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25EBB2A91D1174050031F18D /* MediaPreviewVC.xib */; };
-		25EC3D141D360CFF006AE211 /* Feeds_iphone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D0C1D360CFF006AE211 /* Feeds_iphone@2x.png */; };
-		25EC3D151D360CFF006AE211 /* Feeds_iphone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D0C1D360CFF006AE211 /* Feeds_iphone@2x.png */; };
-		25EC3D161D360CFF006AE211 /* Feeds_iphone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D0D1D360CFF006AE211 /* Feeds_iphone@3x.png */; };
-		25EC3D171D360CFF006AE211 /* Feeds_iphone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D0D1D360CFF006AE211 /* Feeds_iphone@3x.png */; };
 		25EC3D181D360CFF006AE211 /* Help_iphone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D0E1D360CFF006AE211 /* Help_iphone@2x.png */; };
 		25EC3D191D360CFF006AE211 /* Help_iphone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D0E1D360CFF006AE211 /* Help_iphone@2x.png */; };
 		25EC3D1A1D360CFF006AE211 /* Help_iphone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D0F1D360CFF006AE211 /* Help_iphone@3x.png */; };
@@ -751,22 +682,10 @@
 		25EC3D1D1D360CFF006AE211 /* info-icon_phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D101D360CFF006AE211 /* info-icon_phone@2x.png */; };
 		25EC3D1E1D360CFF006AE211 /* info-icon_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D111D360CFF006AE211 /* info-icon_phone@3x.png */; };
 		25EC3D1F1D360CFF006AE211 /* info-icon_phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D111D360CFF006AE211 /* info-icon_phone@3x.png */; };
-		25EC3D201D360CFF006AE211 /* Login-IPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D121D360CFF006AE211 /* Login-IPhone@2x.png */; };
-		25EC3D211D360CFF006AE211 /* Login-IPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D121D360CFF006AE211 /* Login-IPhone@2x.png */; };
-		25EC3D221D360CFF006AE211 /* Login-IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D131D360CFF006AE211 /* Login-IPhone@3x.png */; };
-		25EC3D231D360CFF006AE211 /* Login-IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D131D360CFF006AE211 /* Login-IPhone@3x.png */; };
-		25EC3D281D3612D6006AE211 /* Feeds_iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D241D3612D6006AE211 /* Feeds_iphone.png */; };
-		25EC3D291D3612D6006AE211 /* Feeds_iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D241D3612D6006AE211 /* Feeds_iphone.png */; };
 		25EC3D2A1D3612D6006AE211 /* Help_iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D251D3612D6006AE211 /* Help_iphone.png */; };
 		25EC3D2B1D3612D6006AE211 /* Help_iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D251D3612D6006AE211 /* Help_iphone.png */; };
 		25EC3D2C1D3612D6006AE211 /* info-icon_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D261D3612D6006AE211 /* info-icon_phone.png */; };
 		25EC3D2D1D3612D6006AE211 /* info-icon_phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D261D3612D6006AE211 /* info-icon_phone.png */; };
-		25EC3D2E1D3612D6006AE211 /* Login-IPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D271D3612D6006AE211 /* Login-IPhone.png */; };
-		25EC3D2F1D3612D6006AE211 /* Login-IPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D271D3612D6006AE211 /* Login-IPhone.png */; };
-		25EC3D321D36139B006AE211 /* Login-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D301D36139B006AE211 /* Login-icon.png */; };
-		25EC3D331D36139B006AE211 /* Login-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D301D36139B006AE211 /* Login-icon.png */; };
-		25EC3D341D36139B006AE211 /* Login-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D311D36139B006AE211 /* Login-icon@2x.png */; };
-		25EC3D351D36139B006AE211 /* Login-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D311D36139B006AE211 /* Login-icon@2x.png */; };
 		25EC3D381D3613B8006AE211 /* info-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D361D3613B8006AE211 /* info-icon.png */; };
 		25EC3D391D3613B8006AE211 /* info-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D361D3613B8006AE211 /* info-icon.png */; };
 		25EC3D3A1D3613B8006AE211 /* info-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D371D3613B8006AE211 /* info-icon@2x.png */; };
@@ -775,10 +694,6 @@
 		25EC3D3F1D36143D006AE211 /* Help.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D3C1D36143D006AE211 /* Help.png */; };
 		25EC3D401D36143D006AE211 /* Help@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D3D1D36143D006AE211 /* Help@2x.png */; };
 		25EC3D411D36143D006AE211 /* Help@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D3D1D36143D006AE211 /* Help@2x.png */; };
-		25EC3D441D361453006AE211 /* Feeds.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D421D361453006AE211 /* Feeds.png */; };
-		25EC3D451D361453006AE211 /* Feeds.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D421D361453006AE211 /* Feeds.png */; };
-		25EC3D461D361453006AE211 /* Feeds@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D431D361453006AE211 /* Feeds@2x.png */; };
-		25EC3D471D361453006AE211 /* Feeds@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D431D361453006AE211 /* Feeds@2x.png */; };
 		25EC3D491D365847006AE211 /* SegmentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D481D365847006AE211 /* SegmentCell.xib */; };
 		25EC3D4A1D365847006AE211 /* SegmentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25EC3D481D365847006AE211 /* SegmentCell.xib */; };
 		25EC3D4D1D365862006AE211 /* SegmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EC3D4C1D365862006AE211 /* SegmentCell.m */; };
@@ -795,32 +710,6 @@
 		25EFBEB51BE25CA700DB300C /* RETrimControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EFBEA91BE25CA700DB300C /* RETrimControl.m */; };
 		25EFBEB61BE25CA700DB300C /* RETrimPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EFBEAB1BE25CA700DB300C /* RETrimPopover.m */; };
 		25EFBEB71BE25CA700DB300C /* RETrimPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EFBEAB1BE25CA700DB300C /* RETrimPopover.m */; };
-		25EFBEB91BE25CB400DB300C /* RETrimControl.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 25EFBEB81BE25CB400DB300C /* RETrimControl.bundle */; };
-		25EFBEBA1BE25CB400DB300C /* RETrimControl.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 25EFBEB81BE25CB400DB300C /* RETrimControl.bundle */; };
-		25F748C51D08085400FB0AFD /* fb_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748B91D08085400FB0AFD /* fb_Pad.png */; };
-		25F748C61D08085400FB0AFD /* fb_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748B91D08085400FB0AFD /* fb_Pad.png */; };
-		25F748C71D08085400FB0AFD /* fb_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748BA1D08085400FB0AFD /* fb_Pad@2x.png */; };
-		25F748C81D08085400FB0AFD /* fb_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748BA1D08085400FB0AFD /* fb_Pad@2x.png */; };
-		25F748C91D08085400FB0AFD /* fb_Phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748BB1D08085400FB0AFD /* fb_Phone.png */; };
-		25F748CA1D08085400FB0AFD /* fb_Phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748BB1D08085400FB0AFD /* fb_Phone.png */; };
-		25F748CB1D08085400FB0AFD /* fb_Phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748BC1D08085400FB0AFD /* fb_Phone@2x.png */; };
-		25F748CC1D08085400FB0AFD /* fb_Phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748BC1D08085400FB0AFD /* fb_Phone@2x.png */; };
-		25F748CD1D08085400FB0AFD /* gPlus_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748BD1D08085400FB0AFD /* gPlus_Pad.png */; };
-		25F748CE1D08085400FB0AFD /* gPlus_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748BD1D08085400FB0AFD /* gPlus_Pad.png */; };
-		25F748CF1D08085400FB0AFD /* gPlus_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748BE1D08085400FB0AFD /* gPlus_Pad@2x.png */; };
-		25F748D01D08085400FB0AFD /* gPlus_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748BE1D08085400FB0AFD /* gPlus_Pad@2x.png */; };
-		25F748D11D08085400FB0AFD /* gPlus_Phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748BF1D08085400FB0AFD /* gPlus_Phone.png */; };
-		25F748D21D08085400FB0AFD /* gPlus_Phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748BF1D08085400FB0AFD /* gPlus_Phone.png */; };
-		25F748D31D08085400FB0AFD /* gPlus_Phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748C01D08085400FB0AFD /* gPlus_Phone@2x.png */; };
-		25F748D41D08085400FB0AFD /* gPlus_Phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748C01D08085400FB0AFD /* gPlus_Phone@2x.png */; };
-		25F748E11D08175200FB0AFD /* twit_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748DD1D08175200FB0AFD /* twit_Pad.png */; };
-		25F748E21D08175200FB0AFD /* twit_Pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748DD1D08175200FB0AFD /* twit_Pad.png */; };
-		25F748E31D08175200FB0AFD /* twit_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748DE1D08175200FB0AFD /* twit_Pad@2x.png */; };
-		25F748E41D08175200FB0AFD /* twit_Pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748DE1D08175200FB0AFD /* twit_Pad@2x.png */; };
-		25F748E51D08175200FB0AFD /* twit_Phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748DF1D08175200FB0AFD /* twit_Phone.png */; };
-		25F748E61D08175200FB0AFD /* twit_Phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748DF1D08175200FB0AFD /* twit_Phone.png */; };
-		25F748E71D08175200FB0AFD /* twit_Phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748E01D08175200FB0AFD /* twit_Phone@2x.png */; };
-		25F748E81D08175200FB0AFD /* twit_Phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F748E01D08175200FB0AFD /* twit_Phone@2x.png */; };
 		25F7C44E1B68093600C4183F /* deviceCodes.json in Resources */ = {isa = PBXBuildFile; fileRef = 25F7C44D1B68093600C4183F /* deviceCodes.json */; };
 		25F7C44F1B68093600C4183F /* deviceCodes.json in Resources */ = {isa = PBXBuildFile; fileRef = 25F7C44D1B68093600C4183F /* deviceCodes.json */; };
 		25FA148E1D3CE57600A95DA3 /* Icon0.png in Resources */ = {isa = PBXBuildFile; fileRef = 25FA148C1D3CE57600A95DA3 /* Icon0.png */; };
@@ -851,8 +740,6 @@
 		3D3F591D1C2801C600713C79 /* TextFrameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D3F59191C2801C600713C79 /* TextFrameCell.xib */; };
 		3D45B7C11C5A151D0060A72B /* White-texture.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D45B7C01C5A151D0060A72B /* White-texture.png */; };
 		3D45B7C21C5A151D0060A72B /* White-texture.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D45B7C01C5A151D0060A72B /* White-texture.png */; };
-		3D57C7F21D38BBA000713D66 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D57C7F11D38BBA000713D66 /* Accelerate.framework */; };
-		3D57C7F31D38DD1F00713D66 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D57C7F11D38BBA000713D66 /* Accelerate.framework */; };
 		3D58CD471C3D0D3D006371DE /* TextColorPicker.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD451C3D0D3D006371DE /* TextColorPicker.mm */; };
 		3D58CD481C3D0D3D006371DE /* TextColorPicker.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D58CD451C3D0D3D006371DE /* TextColorPicker.mm */; };
 		3D58CD491C3D0D3D006371DE /* TextColorPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D58CD461C3D0D3D006371DE /* TextColorPicker.xib */; };
@@ -915,8 +802,6 @@
 		3D71B0741C2930E30038C4BD /* AssetFrameCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D71B0711C2930E30038C4BD /* AssetFrameCell.mm */; };
 		3D71B0751C2930E30038C4BD /* AssetFrameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D71B0721C2930E30038C4BD /* AssetFrameCell.xib */; };
 		3D71B0761C2930E30038C4BD /* AssetFrameCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D71B0721C2930E30038C4BD /* AssetFrameCell.xib */; };
-		3D79E4551D48D4EB0089FFE5 /* libassimp_sim.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D79E4541D48D4EB0089FFE5 /* libassimp_sim.a */; };
-		3DA6F2D11D48C3CE00C842C6 /* libassimp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DA6F2D01D48C3CE00C842C6 /* libassimp.a */; };
 		3DAC8C3A1C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C391C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib */; };
 		3DAC8C3B1C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C391C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib */; };
 		3DAC8C401C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DAC8C3F1C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib */; };
@@ -925,16 +810,6 @@
 		3DAEFFF11C6A27F5008AAD81 /* My-objects-Particles-Phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DAEFFEF1C6A27F5008AAD81 /* My-objects-Particles-Phone.png */; };
 		3DAEFFF31C6A2827008AAD81 /* My-objects-Particles-Phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DAEFFF21C6A2827008AAD81 /* My-objects-Particles-Phone@3x.png */; };
 		3DAEFFF41C6A2827008AAD81 /* My-objects-Particles-Phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DAEFFF21C6A2827008AAD81 /* My-objects-Particles-Phone@3x.png */; };
-		3DB4AB9C1C75DA9400C89B5C /* Add-Bone-IPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DB4AB971C75DA9400C89B5C /* Add-Bone-IPhone.png */; };
-		3DB4AB9D1C75DA9400C89B5C /* Add-Bone-IPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DB4AB971C75DA9400C89B5C /* Add-Bone-IPhone.png */; };
-		3DB4AB9E1C75DA9400C89B5C /* Add-Bone-IPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DB4AB981C75DA9400C89B5C /* Add-Bone-IPhone@2x.png */; };
-		3DB4AB9F1C75DA9400C89B5C /* Add-Bone-IPhone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DB4AB981C75DA9400C89B5C /* Add-Bone-IPhone@2x.png */; };
-		3DB4ABA01C75DA9400C89B5C /* Add-Bone-IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DB4AB991C75DA9400C89B5C /* Add-Bone-IPhone@3x.png */; };
-		3DB4ABA11C75DA9400C89B5C /* Add-Bone-IPhone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DB4AB991C75DA9400C89B5C /* Add-Bone-IPhone@3x.png */; };
-		3DB4ABA21C75DA9400C89B5C /* Add-Bone-pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DB4AB9A1C75DA9400C89B5C /* Add-Bone-pad.png */; };
-		3DB4ABA31C75DA9400C89B5C /* Add-Bone-pad.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DB4AB9A1C75DA9400C89B5C /* Add-Bone-pad.png */; };
-		3DB4ABA41C75DA9400C89B5C /* Add-Bone-pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DB4AB9B1C75DA9400C89B5C /* Add-Bone-pad@2x.png */; };
-		3DB4ABA51C75DA9400C89B5C /* Add-Bone-pad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DB4AB9B1C75DA9400C89B5C /* Add-Bone-pad@2x.png */; };
 		3DB4ABA71C75F92000C89B5C /* Options_IPhone-@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DB4ABA61C75F92000C89B5C /* Options_IPhone-@2X.png */; };
 		3DB4ABA81C75F92000C89B5C /* Options_IPhone-@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DB4ABA61C75F92000C89B5C /* Options_IPhone-@2X.png */; };
 		3DBC85E31C2BC11B00B512AB /* selected_mark.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DBC85E11C2BC11B00B512AB /* selected_mark.png */; };
@@ -979,8 +854,6 @@
 		3DE065391C7C28B600CB7158 /* My-objects-Particles.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DE065371C7C28B600CB7158 /* My-objects-Particles.png */; };
 		3DE0653B1C7C76E400CB7158 /* LightAndVideoProperties.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DE0653A1C7C76E400CB7158 /* LightAndVideoProperties.xib */; };
 		3DE0653C1C7C76E400CB7158 /* LightAndVideoProperties.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3DE0653A1C7C76E400CB7158 /* LightAndVideoProperties.xib */; };
-		4E0DB29A22DAFAF300911CAA /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E27E71C41AD27A8200B5DE77 /* Metal.framework */; };
-		4E0DB29C22DAFB3E00911CAA /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E0DB29B22DAFB3E00911CAA /* MetalKit.framework */; };
 		4E0DB29D22DB252500911CAA /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = E211247C1AF20A0D00C23624 /* Shaders.metal */; };
 		4E1A2C5F22C85FCF007827E3 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = E211247C1AF20A0D00C23624 /* Shaders.metal */; };
 		4E37A43C22E18D76003A91DC /* properties-img-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E37A43722E18D75003A91DC /* properties-img-phone@3x.png */; };
@@ -1061,8 +934,6 @@
 		4E82DBF422E1E22400587210 /* MTLMaterial.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9C622E1E22400587210 /* MTLMaterial.mm */; };
 		4E82DBF522E1E22400587210 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9C922E1E22400587210 /* Material.cpp */; };
 		4E82DBF622E1E22400587210 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9C922E1E22400587210 /* Material.cpp */; };
-		4E82DBF722E1E22400587210 /* Android.mk in Resources */ = {isa = PBXBuildFile; fileRef = 4E82D9D022E1E22400587210 /* Android.mk */; };
-		4E82DBF822E1E22400587210 /* Android.mk in Resources */ = {isa = PBXBuildFile; fileRef = 4E82D9D022E1E22400587210 /* Android.mk */; };
 		4E82DBF922E1E22400587210 /* DownloadTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9D122E1E22400587210 /* DownloadTask.mm */; };
 		4E82DBFA22E1E22400587210 /* DownloadTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9D122E1E22400587210 /* DownloadTask.mm */; };
 		4E82DBFB22E1E22400587210 /* Helper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4E82D9D222E1E22400587210 /* Helper.cpp */; };
@@ -1431,6 +1302,16 @@
 		4E82DD9922E2B72800587210 /* round83.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E82DD9222E2B72800587210 /* round83.png */; };
 		4E82DD9A22E2B72800587210 /* whiteborder.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E82DD9322E2B72800587210 /* whiteborder.png */; };
 		4E82DD9B22E2B72800587210 /* whiteborder.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E82DD9322E2B72800587210 /* whiteborder.png */; };
+		4E8B1D7E22E3FDB500AFB715 /* libFreetype2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D7B22E3FD6500AFB715 /* libFreetype2.a */; };
+		4E8B1D8022E3FE6000AFB715 /* libassimp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D7F22E3FE6000AFB715 /* libassimp.a */; };
+		4E8B1D8222E4027700AFB715 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8122E4027700AFB715 /* MessageUI.framework */; };
+		4E8B1D8322E4027F00AFB715 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8122E4027700AFB715 /* MessageUI.framework */; };
+		4E8B1D8522E4029F00AFB715 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8422E4029F00AFB715 /* MetalKit.framework */; };
+		4E8B1D8622E402A200AFB715 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8422E4029F00AFB715 /* MetalKit.framework */; };
+		4E8B1D8822E402E400AFB715 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8722E402E400AFB715 /* MobileCoreServices.framework */; };
+		4E8B1D8922E402E700AFB715 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8722E402E400AFB715 /* MobileCoreServices.framework */; };
+		4E8B1D8B22E4031800AFB715 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8A22E4031800AFB715 /* Accelerate.framework */; };
+		4E8B1D8C22E4031A00AFB715 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8A22E4031800AFB715 /* Accelerate.framework */; };
 		4E9A56D322E3833200575D98 /* render_image-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56C322E3833100575D98 /* render_image-phone@3x.png */; };
 		4E9A56D422E3833200575D98 /* render_image-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56C322E3833100575D98 /* render_image-phone@3x.png */; };
 		4E9A56D522E3833200575D98 /* render_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56CF22E3833200575D98 /* render_image.png */; };
@@ -1441,33 +1322,11 @@
 		4E9A56DA22E3833200575D98 /* render_image-phone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56D122E3833200575D98 /* render_image-phone@2x.png */; };
 		4E9A56DB22E3833200575D98 /* render_image-phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56D222E3833200575D98 /* render_image-phone.png */; };
 		4E9A56DC22E3833200575D98 /* render_image-phone.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56D222E3833200575D98 /* render_image-phone.png */; };
-		4EA064E822B3738A00E1DCF0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EA064E722B3738900E1DCF0 /* GoogleService-Info.plist */; };
-		4EA064E922B3738A00E1DCF0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EA064E722B3738900E1DCF0 /* GoogleService-Info.plist */; };
-		62F3385C196C1508007694C5 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62F3385B196C1508007694C5 /* MessageUI.framework */; };
-		7F7D5A131B8C40F200E6BA86 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F7D5A121B8C40F200E6BA86 /* AddressBook.framework */; };
 		8A32F160197D5D4000FA8984 /* boneLimits45.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A32F15F197D5D4000FA8984 /* boneLimits45.json */; };
 		8A9DE20E197FEFF10079727D /* mirrorJoints.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A9DE20D197FEFF10079727D /* mirrorJoints.json */; };
 		8ADEFEA9197425E8001E159D /* bonelimits.json in Resources */ = {isa = PBXBuildFile; fileRef = 8ADEFEA7197425E8001E159D /* bonelimits.json */; };
 		8ADEFEAA197425E8001E159D /* humanTPoseBoneLimits.json in Resources */ = {isa = PBXBuildFile; fileRef = 8ADEFEA8197425E8001E159D /* humanTPoseBoneLimits.json */; };
 		8AED29BB198A29AD004FC1E5 /* viewCameraModes.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AED29BA198A29AD004FC1E5 /* viewCameraModes.json */; };
-		C4BEFB031D23F99E006D8DBE /* GoogleAppUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BEFAFE1D23F99E006D8DBE /* GoogleAppUtilities.framework */; };
-		C4BEFB041D23F99E006D8DBE /* GoogleAppUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BEFAFE1D23F99E006D8DBE /* GoogleAppUtilities.framework */; };
-		C4BEFB051D23F99E006D8DBE /* GoogleAuthUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BEFAFF1D23F99E006D8DBE /* GoogleAuthUtilities.framework */; };
-		C4BEFB061D23F99E006D8DBE /* GoogleAuthUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BEFAFF1D23F99E006D8DBE /* GoogleAuthUtilities.framework */; };
-		C4BEFB071D23F99E006D8DBE /* GoogleNetworkingUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BEFB001D23F99E006D8DBE /* GoogleNetworkingUtilities.framework */; };
-		C4BEFB081D23F99E006D8DBE /* GoogleNetworkingUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BEFB001D23F99E006D8DBE /* GoogleNetworkingUtilities.framework */; };
-		C4BEFB091D23F99E006D8DBE /* GoogleSymbolUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BEFB011D23F99E006D8DBE /* GoogleSymbolUtilities.framework */; };
-		C4BEFB0A1D23F99E006D8DBE /* GoogleSymbolUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BEFB011D23F99E006D8DBE /* GoogleSymbolUtilities.framework */; };
-		C4BEFB0B1D23F99F006D8DBE /* GoogleUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BEFB021D23F99E006D8DBE /* GoogleUtilities.framework */; };
-		C4BEFB0C1D23F99F006D8DBE /* GoogleUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4BEFB021D23F99E006D8DBE /* GoogleUtilities.framework */; };
-		C825377518EA881B00F49E91 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C825377418EA881B00F49E91 /* StoreKit.framework */; };
-		C82EA4BB187E869F00A8468A /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C82EA4BA187E869F00A8468A /* CoreMotion.framework */; };
-		C831F1B21876E0AC00966179 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C831F1B11876E0AC00966179 /* Security.framework */; };
-		C87EBFE218F3DAD800EB656E /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C87EBFE118F3DAD800EB656E /* CoreData.framework */; };
-		C87EBFE418F3DAE900EB656E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C87EBFE318F3DAE900EB656E /* SystemConfiguration.framework */; };
-		C885D77F1876BE6100A45D71 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C885D77E1876BE6100A45D71 /* Foundation.framework */; };
-		C885D7811876BE6100A45D71 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C885D7801876BE6100A45D71 /* CoreGraphics.framework */; };
-		C885D7831876BE6100A45D71 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C885D7821876BE6100A45D71 /* UIKit.framework */; };
 		C885D78B1876BE6100A45D71 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C885D78A1876BE6100A45D71 /* main.m */; };
 		C8AA46EC1C227CED00C4AB53 /* SceneSelectionFrameCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = C8AA46EA1C227CED00C4AB53 /* SceneSelectionFrameCell.mm */; };
 		C8AA46ED1C227CED00C4AB53 /* SceneSelectionFrameCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = C8AA46EA1C227CED00C4AB53 /* SceneSelectionFrameCell.mm */; };
@@ -1523,19 +1382,6 @@
 		E20671C01B049AA6006DD2F7 /* LoadingViewControllerPad.mm in Sources */ = {isa = PBXBuildFile; fileRef = E2497683196BE0310025D442 /* LoadingViewControllerPad.mm */; };
 		E20671C21B049AA6006DD2F7 /* CGContextCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 25730E521AFD3C7B0042F81A /* CGContextCreator.m */; };
 		E20671C81B049AA6006DD2F7 /* FPTouchView.m in Sources */ = {isa = PBXBuildFile; fileRef = C8E6173618C5DD7100BC5342 /* FPTouchView.m */; };
-		E20671FD1B049AA6006DD2F7 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2A343B019F123F8000EF7C2 /* MobileCoreServices.framework */; };
-		E20671FE1B049AA6006DD2F7 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C831F1B31876EF8900966179 /* libsqlite3.dylib */; };
-		E20671FF1B049AA6006DD2F7 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E262744319234C890036F8E3 /* GameKit.framework */; };
-		E20672001B049AA6006DD2F7 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62F3385B196C1508007694C5 /* MessageUI.framework */; };
-		E20672021B049AA6006DD2F7 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E262744119234C540036F8E3 /* OpenGLES.framework */; };
-		E20672031B049AA6006DD2F7 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C87EBFE318F3DAE900EB656E /* SystemConfiguration.framework */; };
-		E20672051B049AA6006DD2F7 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C87EBFE118F3DAD800EB656E /* CoreData.framework */; };
-		E20672071B049AA6006DD2F7 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C825377418EA881B00F49E91 /* StoreKit.framework */; };
-		E20672081B049AA6006DD2F7 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C82EA4BA187E869F00A8468A /* CoreMotion.framework */; };
-		E20672091B049AA6006DD2F7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C831F1B11876E0AC00966179 /* Security.framework */; };
-		E206720A1B049AA6006DD2F7 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C885D7801876BE6100A45D71 /* CoreGraphics.framework */; };
-		E206720B1B049AA6006DD2F7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C885D7821876BE6100A45D71 /* UIKit.framework */; };
-		E206720D1B049AA6006DD2F7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C885D77E1876BE6100A45D71 /* Foundation.framework */; };
 		E20672161B049AA6006DD2F7 /* RenderingViewControllerPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 257564C01AE6E3D400B66113 /* RenderingViewControllerPhone.xib */; };
 		E20672191B049AA6006DD2F7 /* boneLimits45.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A32F15F197D5D4000FA8984 /* boneLimits45.json */; };
 		E20672491B049AA6006DD2F7 /* camera.sgm in Resources */ = {isa = PBXBuildFile; fileRef = E24974A9196BDC650025D442 /* camera.sgm */; };
@@ -1590,60 +1436,8 @@
 		E2497672196BE0190025D442 /* ScaleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E249764F196BE0190025D442 /* ScaleViewController.xib */; };
 		E249769A196BE0310025D442 /* LoadingViewControllerPad.mm in Sources */ = {isa = PBXBuildFile; fileRef = E2497683196BE0310025D442 /* LoadingViewControllerPad.mm */; };
 		E249769B196BE0310025D442 /* LoadingViewControllerPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = E2497684196BE0310025D442 /* LoadingViewControllerPad.xib */; };
-		E262744219234C540036F8E3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E262744119234C540036F8E3 /* OpenGLES.framework */; };
-		E262744419234C890036F8E3 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E262744319234C890036F8E3 /* GameKit.framework */; };
-		E27E71C51AD27A8200B5DE77 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E27E71C41AD27A8200B5DE77 /* Metal.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		E2A343B119F123F8000EF7C2 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2A343B019F123F8000EF7C2 /* MobileCoreServices.framework */; };
-		E2AEAE651924D2DE00D487D7 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C831F1B31876EF8900966179 /* libsqlite3.dylib */; };
 		E2C4DB5A1A9F5FFC00F0AD12 /* light.sgm in Resources */ = {isa = PBXBuildFile; fileRef = E2C4DB591A9F5FFC00F0AD12 /* light.sgm */; };
-		EC6558AEBD06CFEFBD18CACD /* Pods_Iyan3D.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F2451E05FAD8199031EEB3C /* Pods_Iyan3D.framework */; };
-		ED30F0C681FD76D88F88FE2E /* Pods_Iyan3D_Simulator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C622659A484A36E4452B924F /* Pods_Iyan3D_Simulator.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		4EA064F622B385B000E1DCF0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = E2B63D462DB7F827C4B11FD51E4F8E2D;
-			remoteInfo = FirebaseCore;
-		};
-		4EA064F822B385B000E1DCF0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 2DA0D814DFCB860D31D7BCD63D795858;
-			remoteInfo = FirebaseInstanceID;
-		};
-		4EA064FA22B385B000E1DCF0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = B43874C6CBB50E7134FBEC24BABFE14F;
-			remoteInfo = GoogleUtilities;
-		};
-		4EA064FC22B385B000E1DCF0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 06FC5C9CF96D60C50FCD47D339C91951;
-			remoteInfo = nanopb;
-		};
-		4EA064FE22B385B000E1DCF0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D9C713CF906E3CA1CCFFEFF4BE68E8F8;
-			remoteInfo = "Pods-Iyan3D";
-		};
-		4EA0650022B385B000E1DCF0 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = DEFD5D13099461BDCA94FE5FA5C91C54;
-			remoteInfo = "Pods-Iyan3D-Simulator";
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0169C4471C33ED5A00132FF6 /* popoverArrowDown-white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "popoverArrowDown-white@2x.png"; sourceTree = "<group>"; };
@@ -1666,12 +1460,6 @@
 		0169C4581C33ED5A00132FF6 /* popoverBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = popoverBg.png; sourceTree = "<group>"; };
 		0169C4591C33ED5A00132FF6 /* popoverBg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "popoverBg@2x.png"; sourceTree = "<group>"; };
 		0169C45A1C33ED5A00132FF6 /* popoverBgSimple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = popoverBgSimple.png; sourceTree = "<group>"; };
-		0184EC651C350A5B006F0B57 /* Facebook_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Facebook_Pad.png; sourceTree = "<group>"; };
-		0184EC661C350A5B006F0B57 /* Google_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Google_Pad.png; sourceTree = "<group>"; };
-		0184EC671C350A5B006F0B57 /* iyan3d-sign-in_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iyan3d-sign-in_Pad.png"; sourceTree = "<group>"; };
-		0184EC681C350A5B006F0B57 /* iyan3d-text-sign-in_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iyan3d-text-sign-in_Pad.png"; sourceTree = "<group>"; };
-		0184EC691C350A5B006F0B57 /* Login-Img_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Login-Img_Pad.png"; sourceTree = "<group>"; };
-		0184EC6A1C350A5B006F0B57 /* Twitter_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Twitter_Pad.png; sourceTree = "<group>"; };
 		018501DB1C2BDA730090FA65 /* EditorViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = EditorViewController.mm; path = ui/MainViews/EditorViewController.mm; sourceTree = "<group>"; };
 		01A395351C40E8EC007531DB /* SettingsViewControllerPhone2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingsViewControllerPhone2x.xib; sourceTree = "<group>"; };
 		01AAE29A1C43DA7B00B194E0 /* Mail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Mail@2x.png"; sourceTree = "<group>"; };
@@ -1707,12 +1495,6 @@
 		01ACD0DD1C3D3AE20096AD14 /* Render-Preview-size_Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Render-Preview-size_Small@2x.png"; sourceTree = "<group>"; };
 		01ACD0DE1C3D3AE20096AD14 /* Tool-Bar_Left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Tool-Bar_Left@2x.png"; sourceTree = "<group>"; };
 		01ACD0DF1C3D3AE20096AD14 /* Tool-Bar_Right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Tool-Bar_Right@2x.png"; sourceTree = "<group>"; };
-		01ACD0F41C3D44930096AD14 /* Facebook_Pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Facebook_Pad@2x.png"; sourceTree = "<group>"; };
-		01ACD0F51C3D44930096AD14 /* Google_Pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Google_Pad@2x.png"; sourceTree = "<group>"; };
-		01ACD0F61C3D44930096AD14 /* iyan3d-sign-in_Pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iyan3d-sign-in_Pad@2x.png"; sourceTree = "<group>"; };
-		01ACD0F71C3D44930096AD14 /* iyan3d-text-sign-in_Pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iyan3d-text-sign-in_Pad@2x.png"; sourceTree = "<group>"; };
-		01ACD0F81C3D44930096AD14 /* Login-Img_Pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Login-Img_Pad@2x.png"; sourceTree = "<group>"; };
-		01ACD0F91C3D44930096AD14 /* Twitter_Pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Twitter_Pad@2x.png"; sourceTree = "<group>"; };
 		01B02C871C61CAB400C9102A /* Add-Bones_IPhone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Add-Bones_IPhone@3x.png"; sourceTree = "<group>"; };
 		01B02C881C61CAB400C9102A /* Add-Frames_IPhone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Add-Frames_IPhone@3x.png"; sourceTree = "<group>"; };
 		01B02C891C61CAB400C9102A /* Animation_IPhone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Animation_IPhone@3x.png"; sourceTree = "<group>"; };
@@ -1834,8 +1616,6 @@
 		01BA32491C5CC292000A5F3E /* popover-clone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "popover-clone@2x.png"; sourceTree = "<group>"; };
 		01BA324A1C5CC292000A5F3E /* popover-delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "popover-delete@2x.png"; sourceTree = "<group>"; };
 		01BA324B1C5CC292000A5F3E /* popover-skin@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "popover-skin@2x.png"; sourceTree = "<group>"; };
-		01BA32521C5CEC84000A5F3E /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
-		01C2B77D1C462CFB00384370 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		01C2B79A1C46543200384370 /* color@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "color@2x.png"; sourceTree = "<group>"; };
 		01CCD1C01C3F927D00565664 /* ObjSidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjSidePanel.h; sourceTree = "<group>"; };
 		01CCD1C11C3F927D00565664 /* ObjSidePanel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ObjSidePanel.mm; sourceTree = "<group>"; };
@@ -1902,19 +1682,8 @@
 		01F872D31C3A6C4E009AA31E /* Scale_IPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Scale_IPhone@2x.png"; sourceTree = "<group>"; };
 		01F872D41C3A6C4E009AA31E /* undo_IPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "undo_IPhone@2x.png"; sourceTree = "<group>"; };
 		01F8731C1C3A7500009AA31E /* PopUpViewControllerPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PopUpViewControllerPhone.xib; sourceTree = "<group>"; };
-		01F873231C3A78B4009AA31E /* Facebook_IPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Facebook_IPhone.png; sourceTree = "<group>"; };
-		01F873241C3A78B4009AA31E /* Google_IPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Google_IPhone.png; sourceTree = "<group>"; };
-		01F873251C3A78B4009AA31E /* iyan3d-sign-in_IPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iyan3d-sign-in_IPhone.png"; sourceTree = "<group>"; };
-		01F873261C3A78B4009AA31E /* iyan3d-text-sign-in_IPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iyan3d-text-sign-in_IPhone.png"; sourceTree = "<group>"; };
-		01F873271C3A78B4009AA31E /* Twitter_IPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Twitter_IPhone.png; sourceTree = "<group>"; };
-		01F873331C3A7DE4009AA31E /* Facebook_IPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Facebook_IPhone@2x.png"; sourceTree = "<group>"; };
-		01F873341C3A7DE4009AA31E /* Google_IPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Google_IPhone@2x.png"; sourceTree = "<group>"; };
-		01F873351C3A7DE4009AA31E /* iyan3d-sign-in_IPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iyan3d-sign-in_IPhone@2x.png"; sourceTree = "<group>"; };
-		01F873361C3A7DE4009AA31E /* iyan3d-text-sign-in_IPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iyan3d-text-sign-in_IPhone@2x.png"; sourceTree = "<group>"; };
-		01F873371C3A7DE4009AA31E /* Twitter_IPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Twitter_IPhone@2x.png"; sourceTree = "<group>"; };
 		01F873421C3A84BF009AA31E /* Next-frame_IPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Next-frame_IPhone.png"; sourceTree = "<group>"; };
 		01F873431C3A84BF009AA31E /* Previous-frame_IPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Previous-frame_IPhone.png"; sourceTree = "<group>"; };
-		16C0499CA70CE2CA87914930 /* Pods-Iyan3D-Simulator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Iyan3D-Simulator.release.xcconfig"; path = "Target Support Files/Pods-Iyan3D-Simulator/Pods-Iyan3D-Simulator.release.xcconfig"; sourceTree = "<group>"; };
 		25034FD31D24F9960036F201 /* BeginView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BeginView.xib; path = "ui/Popover Views/OnBoarding/BeginView.xib"; sourceTree = "<group>"; };
 		25034FD41D24F9960036F201 /* BeginViewPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BeginViewPhone.xib; path = "ui/Popover Views/OnBoarding/BeginViewPhone.xib"; sourceTree = "<group>"; };
 		25034FD51D24F9960036F201 /* BeginViewPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "BeginViewPhone@2x.xib"; path = "ui/Popover Views/OnBoarding/BeginViewPhone@2x.xib"; sourceTree = "<group>"; };
@@ -1930,7 +1699,6 @@
 		25069F5A1D2BD81E00DBAE44 /* CommonProps.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CommonProps.xib; path = "ui/Popover Views/CommonProps.xib"; sourceTree = "<group>"; };
 		25069F5D1D2BDAC900DBAE44 /* CommonProps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommonProps.h; path = "ui/Popover Views/CommonProps.h"; sourceTree = "<group>"; };
 		25069F5E1D2BDAC900DBAE44 /* CommonProps.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CommonProps.mm; path = "ui/Popover Views/CommonProps.mm"; sourceTree = "<group>"; };
-		25095F381C5B631900CF7C68 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		250991AB1D27CD2E005327E6 /* MediaPreviewVCPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MediaPreviewVCPhone.xib; path = "ui/Popover Views/MediaPreviewVCPhone.xib"; sourceTree = "<group>"; };
 		250991AC1D27CD2E005327E6 /* MediaPreviewVCPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "MediaPreviewVCPhone@2x.xib"; path = "ui/Popover Views/MediaPreviewVCPhone@2x.xib"; sourceTree = "<group>"; };
 		250E54A71D3E07C40081A7CB /* Icon0@2x - Copy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon0@2x - Copy.png"; sourceTree = "<group>"; };
@@ -1968,11 +1736,6 @@
 		250FEC7F1D1EA8B2000C8A2C /* Step-3_-img_phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-3_-img_phone@3x.png"; sourceTree = "<group>"; };
 		250FEC801D1EA8B2000C8A2C /* Step-4_-img_phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-4_-img_phone@3x.png"; sourceTree = "<group>"; };
 		250FEC811D1EA8B2000C8A2C /* Welcome-Img_phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Welcome-Img_phone@3x.png"; sourceTree = "<group>"; };
-		2512BFD41CB24581006E19A3 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
-		2512BFD71CB247AD006E19A3 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		2512BFD91CB24E0B006E19A3 /* GoogleAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = GoogleAnalytics.a; path = FrameWorks/GoogleAnalytics.a; sourceTree = "<group>"; };
-		2512BFDC1CB2708E006E19A3 /* GoogleSignIn.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleSignIn.bundle; path = FrameWorks/GoogleSignIn.bundle; sourceTree = "<group>"; };
-		2512BFDD1CB2708E006E19A3 /* GoogleSignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleSignIn.framework; path = FrameWorks/GoogleSignIn.framework; sourceTree = "<group>"; };
 		2515C36A1DA8D12000B4F622 /* launch.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = launch.xib; sourceTree = "<group>"; };
 		2515C36D1DA8D1D100B4F622 /* iconlarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iconlarge.png; sourceTree = "<group>"; };
 		251815821D1D4924009F68A8 /* Step-1_-img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Step-1_-img.png"; sourceTree = "<group>"; };
@@ -1998,7 +1761,6 @@
 		254BA1A41B08377100F248A6 /* Iyan3Dcopy-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Iyan3Dcopy-Info.plist"; sourceTree = SOURCE_ROOT; };
 		254F7DAF1A94CC52004D63A8 /* AppHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppHelper.h; sourceTree = "<group>"; };
 		254F7DB01A94CC52004D63A8 /* AppHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppHelper.mm; sourceTree = "<group>"; };
-		2553F8DB1DA3B2DF003D6D4A /* libz.1.2.8.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.1.2.8.tbd; path = usr/lib/libz.1.2.8.tbd; sourceTree = SDKROOT; };
 		25651D131B3C91570058706E /* helpStatements.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = helpStatements.json; path = Resources/jsonFiles/helpStatements.json; sourceTree = "<group>"; };
 		256ACDAA1CABAEF60080014E /* indicator.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; name = indicator.sgm; path = Resources/mesh/indicator.sgm; sourceTree = "<group>"; };
 		25730E451AFD3C7B0042F81A /* ANImageBitmapRep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANImageBitmapRep.h; sourceTree = "<group>"; };
@@ -2030,8 +1792,6 @@
 		257564BF1AE6E3D400B66113 /* RenderingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RenderingViewController.xib; path = "ui/Popover Views/RenderingViewController.xib"; sourceTree = "<group>"; };
 		257564C01AE6E3D400B66113 /* RenderingViewControllerPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RenderingViewControllerPhone.xib; path = "ui/Popover Views/RenderingViewControllerPhone.xib"; sourceTree = "<group>"; };
 		25895B771B4F056700E833F8 /* AnimationItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnimationItem.m; path = Core/AnimationItem.m; sourceTree = "<group>"; };
-		2593C41A1CB27A2300703DDE /* libFreetype2_sim.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFreetype2_sim.a; path = FrameWorks/libFreetype2_sim.a; sourceTree = "<group>"; };
-		2593C41B1CB27A2300703DDE /* libFreetype2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFreetype2.a; path = FrameWorks/libFreetype2.a; sourceTree = "<group>"; };
 		259EE1521BDE342800C99784 /* dummy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dummy.png; path = Resources/images/dummy.png; sourceTree = "<group>"; };
 		25B5B15D1BE33EFB00AC2525 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
 		25B5B15E1BE33EFB00AC2525 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
@@ -2067,26 +1827,16 @@
 		25EBB2A51D1173B50031F18D /* MediaPreviewVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MediaPreviewVC.h; path = "ui/Popover Views/MediaPreviewVC.h"; sourceTree = "<group>"; };
 		25EBB2A61D1173B50031F18D /* MediaPreviewVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MediaPreviewVC.m; path = "ui/Popover Views/MediaPreviewVC.m"; sourceTree = "<group>"; };
 		25EBB2A91D1174050031F18D /* MediaPreviewVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MediaPreviewVC.xib; path = "ui/Popover Views/MediaPreviewVC.xib"; sourceTree = "<group>"; };
-		25EC3D0C1D360CFF006AE211 /* Feeds_iphone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Feeds_iphone@2x.png"; sourceTree = "<group>"; };
-		25EC3D0D1D360CFF006AE211 /* Feeds_iphone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Feeds_iphone@3x.png"; sourceTree = "<group>"; };
 		25EC3D0E1D360CFF006AE211 /* Help_iphone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Help_iphone@2x.png"; sourceTree = "<group>"; };
 		25EC3D0F1D360CFF006AE211 /* Help_iphone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Help_iphone@3x.png"; sourceTree = "<group>"; };
 		25EC3D101D360CFF006AE211 /* info-icon_phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "info-icon_phone@2x.png"; sourceTree = "<group>"; };
 		25EC3D111D360CFF006AE211 /* info-icon_phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "info-icon_phone@3x.png"; sourceTree = "<group>"; };
-		25EC3D121D360CFF006AE211 /* Login-IPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Login-IPhone@2x.png"; sourceTree = "<group>"; };
-		25EC3D131D360CFF006AE211 /* Login-IPhone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Login-IPhone@3x.png"; sourceTree = "<group>"; };
-		25EC3D241D3612D6006AE211 /* Feeds_iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Feeds_iphone.png; sourceTree = "<group>"; };
 		25EC3D251D3612D6006AE211 /* Help_iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Help_iphone.png; sourceTree = "<group>"; };
 		25EC3D261D3612D6006AE211 /* info-icon_phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "info-icon_phone.png"; sourceTree = "<group>"; };
-		25EC3D271D3612D6006AE211 /* Login-IPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Login-IPhone.png"; sourceTree = "<group>"; };
-		25EC3D301D36139B006AE211 /* Login-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Login-icon.png"; sourceTree = "<group>"; };
-		25EC3D311D36139B006AE211 /* Login-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Login-icon@2x.png"; sourceTree = "<group>"; };
 		25EC3D361D3613B8006AE211 /* info-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "info-icon.png"; sourceTree = "<group>"; };
 		25EC3D371D3613B8006AE211 /* info-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "info-icon@2x.png"; sourceTree = "<group>"; };
 		25EC3D3C1D36143D006AE211 /* Help.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Help.png; sourceTree = "<group>"; };
 		25EC3D3D1D36143D006AE211 /* Help@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Help@2x.png"; sourceTree = "<group>"; };
-		25EC3D421D361453006AE211 /* Feeds.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Feeds.png; sourceTree = "<group>"; };
-		25EC3D431D361453006AE211 /* Feeds@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Feeds@2x.png"; sourceTree = "<group>"; };
 		25EC3D481D365847006AE211 /* SegmentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SegmentCell.xib; path = "ui/Popover Views/SegmentCell.xib"; sourceTree = "<group>"; };
 		25EC3D4B1D365862006AE211 /* SegmentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SegmentCell.h; path = "ui/Popover Views/SegmentCell.h"; sourceTree = "<group>"; };
 		25EC3D4C1D365862006AE211 /* SegmentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SegmentCell.m; path = "ui/Popover Views/SegmentCell.m"; sourceTree = "<group>"; };
@@ -2098,30 +1848,7 @@
 		25EFBEA91BE25CA700DB300C /* RETrimControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RETrimControl.m; sourceTree = "<group>"; };
 		25EFBEAA1BE25CA700DB300C /* RETrimPopover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RETrimPopover.h; sourceTree = "<group>"; };
 		25EFBEAB1BE25CA700DB300C /* RETrimPopover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RETrimPopover.m; sourceTree = "<group>"; };
-		25EFBEB81BE25CB400DB300C /* RETrimControl.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = RETrimControl.bundle; path = Iyan3D/RETrimControl.bundle; sourceTree = "<group>"; };
-		25F748B91D08085400FB0AFD /* fb_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fb_Pad.png; sourceTree = "<group>"; };
-		25F748BA1D08085400FB0AFD /* fb_Pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fb_Pad@2x.png"; sourceTree = "<group>"; };
-		25F748BB1D08085400FB0AFD /* fb_Phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fb_Phone.png; sourceTree = "<group>"; };
-		25F748BC1D08085400FB0AFD /* fb_Phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fb_Phone@2x.png"; sourceTree = "<group>"; };
-		25F748BD1D08085400FB0AFD /* gPlus_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gPlus_Pad.png; sourceTree = "<group>"; };
-		25F748BE1D08085400FB0AFD /* gPlus_Pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gPlus_Pad@2x.png"; sourceTree = "<group>"; };
-		25F748BF1D08085400FB0AFD /* gPlus_Phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gPlus_Phone.png; sourceTree = "<group>"; };
-		25F748C01D08085400FB0AFD /* gPlus_Phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gPlus_Phone@2x.png"; sourceTree = "<group>"; };
-		25F748DD1D08175200FB0AFD /* twit_Pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = twit_Pad.png; sourceTree = "<group>"; };
-		25F748DE1D08175200FB0AFD /* twit_Pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "twit_Pad@2x.png"; sourceTree = "<group>"; };
-		25F748DF1D08175200FB0AFD /* twit_Phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = twit_Phone.png; sourceTree = "<group>"; };
-		25F748E01D08175200FB0AFD /* twit_Phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "twit_Phone@2x.png"; sourceTree = "<group>"; };
 		25F7C44D1B68093600C4183F /* deviceCodes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = deviceCodes.json; path = Resources/jsonFiles/deviceCodes.json; sourceTree = "<group>"; };
-		25F7C4571B682CA700C4183F /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAI.h; path = 3rdParty/Analytics/GAI.h; sourceTree = "<group>"; };
-		25F7C4581B682CA700C4183F /* GAIDictionaryBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAIDictionaryBuilder.h; path = 3rdParty/Analytics/GAIDictionaryBuilder.h; sourceTree = "<group>"; };
-		25F7C4591B682CA700C4183F /* GAIEcommerceFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAIEcommerceFields.h; path = 3rdParty/Analytics/GAIEcommerceFields.h; sourceTree = "<group>"; };
-		25F7C45A1B682CA700C4183F /* GAIEcommerceProduct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAIEcommerceProduct.h; path = 3rdParty/Analytics/GAIEcommerceProduct.h; sourceTree = "<group>"; };
-		25F7C45B1B682CA700C4183F /* GAIEcommerceProductAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAIEcommerceProductAction.h; path = 3rdParty/Analytics/GAIEcommerceProductAction.h; sourceTree = "<group>"; };
-		25F7C45C1B682CA700C4183F /* GAIEcommercePromotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAIEcommercePromotion.h; path = 3rdParty/Analytics/GAIEcommercePromotion.h; sourceTree = "<group>"; };
-		25F7C45D1B682CA700C4183F /* GAIFields.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAIFields.h; path = 3rdParty/Analytics/GAIFields.h; sourceTree = "<group>"; };
-		25F7C45E1B682CA700C4183F /* GAILogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAILogger.h; path = 3rdParty/Analytics/GAILogger.h; sourceTree = "<group>"; };
-		25F7C45F1B682CA700C4183F /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAITrackedViewController.h; path = 3rdParty/Analytics/GAITrackedViewController.h; sourceTree = "<group>"; };
-		25F7C4601B682CA700C4183F /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GAITracker.h; path = 3rdParty/Analytics/GAITracker.h; sourceTree = "<group>"; };
 		25FA148C1D3CE57600A95DA3 /* Icon0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon0.png; sourceTree = "<group>"; };
 		25FA148D1D3CE57600A95DA3 /* Icon1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon1.png; sourceTree = "<group>"; };
 		25FA14981D3CED9D00A95DA3 /* tick.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tick.png; sourceTree = "<group>"; };
@@ -2140,7 +1867,6 @@
 		3D3F59181C2801C600713C79 /* TextFrameCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TextFrameCell.m; path = "ui/Popover Views/TextFrameCell.m"; sourceTree = "<group>"; };
 		3D3F59191C2801C600713C79 /* TextFrameCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TextFrameCell.xib; path = "ui/Popover Views/TextFrameCell.xib"; sourceTree = "<group>"; };
 		3D45B7C01C5A151D0060A72B /* White-texture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "White-texture.png"; path = "Resources/images/White-texture.png"; sourceTree = "<group>"; };
-		3D57C7F11D38BBA000713D66 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		3D58CD441C3D0D3D006371DE /* TextColorPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextColorPicker.h; path = "ui/Popover Views/TextColorPicker.h"; sourceTree = "<group>"; };
 		3D58CD451C3D0D3D006371DE /* TextColorPicker.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = TextColorPicker.mm; path = "ui/Popover Views/TextColorPicker.mm"; sourceTree = "<group>"; };
 		3D58CD461C3D0D3D006371DE /* TextColorPicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TextColorPicker.xib; path = "ui/Popover Views/TextColorPicker.xib"; sourceTree = "<group>"; };
@@ -2184,17 +1910,10 @@
 		3D71B0701C2930E30038C4BD /* AssetFrameCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssetFrameCell.h; path = "ui/Popover Views/AssetFrameCell.h"; sourceTree = "<group>"; };
 		3D71B0711C2930E30038C4BD /* AssetFrameCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AssetFrameCell.mm; path = "ui/Popover Views/AssetFrameCell.mm"; sourceTree = "<group>"; };
 		3D71B0721C2930E30038C4BD /* AssetFrameCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AssetFrameCell.xib; path = "ui/Popover Views/AssetFrameCell.xib"; sourceTree = "<group>"; };
-		3D79E4541D48D4EB0089FFE5 /* libassimp_sim.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libassimp_sim.a; path = Iyan3D/3rdParty/assimp/libassimp_sim.a; sourceTree = "<group>"; };
-		3DA6F2D01D48C3CE00C842C6 /* libassimp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libassimp.a; path = Iyan3D/3rdParty/assimp/libassimp.a; sourceTree = "<group>"; };
 		3DAC8C391C6C5F350020C31D /* SceneSelectionControllerNewPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "SceneSelectionControllerNewPhone@2x.xib"; sourceTree = "<group>"; };
 		3DAC8C3F1C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "RenderingViewControllerPhone@2x.xib"; path = "ui/Popover Views/RenderingViewControllerPhone@2x.xib"; sourceTree = "<group>"; };
 		3DAEFFEF1C6A27F5008AAD81 /* My-objects-Particles-Phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My-objects-Particles-Phone.png"; sourceTree = "<group>"; };
 		3DAEFFF21C6A2827008AAD81 /* My-objects-Particles-Phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My-objects-Particles-Phone@3x.png"; sourceTree = "<group>"; };
-		3DB4AB971C75DA9400C89B5C /* Add-Bone-IPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Add-Bone-IPhone.png"; sourceTree = "<group>"; };
-		3DB4AB981C75DA9400C89B5C /* Add-Bone-IPhone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Add-Bone-IPhone@2x.png"; sourceTree = "<group>"; };
-		3DB4AB991C75DA9400C89B5C /* Add-Bone-IPhone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Add-Bone-IPhone@3x.png"; sourceTree = "<group>"; };
-		3DB4AB9A1C75DA9400C89B5C /* Add-Bone-pad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Add-Bone-pad.png"; sourceTree = "<group>"; };
-		3DB4AB9B1C75DA9400C89B5C /* Add-Bone-pad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Add-Bone-pad@2x.png"; sourceTree = "<group>"; };
 		3DB4ABA61C75F92000C89B5C /* Options_IPhone-@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Options_IPhone-@2X.png"; sourceTree = "<group>"; };
 		3DBC85E11C2BC11B00B512AB /* selected_mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = selected_mark.png; sourceTree = "<group>"; };
 		3DBC85E71C2BCBDC00B512AB /* Delete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Delete@2x.png"; sourceTree = "<group>"; };
@@ -2218,13 +1937,11 @@
 		3DE065341C7C287800CB7158 /* My-objects-Particles@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My-objects-Particles@2x.png"; sourceTree = "<group>"; };
 		3DE065371C7C28B600CB7158 /* My-objects-Particles.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "My-objects-Particles.png"; sourceTree = "<group>"; };
 		3DE0653A1C7C76E400CB7158 /* LightAndVideoProperties.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LightAndVideoProperties.xib; path = "ui/Popover Views/LightAndVideoProperties.xib"; sourceTree = "<group>"; };
-		45C6C1F67AB758D3309FA446 /* Pods-Iyan3D.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Iyan3D.debug.xcconfig"; path = "Target Support Files/Pods-Iyan3D/Pods-Iyan3D.debug.xcconfig"; sourceTree = "<group>"; };
 		4E0323661D7560D8007688B0 /* zh-Hans */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		4E0323671D7560E0007688B0 /* vi */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4E0323681D7560E6007688B0 /* th */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4E0323691D7560EF007688B0 /* tr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4E03236A1D756102007688B0 /* nl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
-		4E0DB29B22DAFB3E00911CAA /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		4E27B5141D755FF8002C00D2 /* da */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4E27B5151D75600F002C00D2 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4E27B5161D756017002C00D2 /* el */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -2334,7 +2051,6 @@
 		4E82D9CC22E1E22400587210 /* SGEngineCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGEngineCommon.h; sourceTree = "<group>"; };
 		4E82D9CE22E1E22400587210 /* DownloadTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadTask.h; sourceTree = "<group>"; };
 		4E82D9CF22E1E22400587210 /* Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Helper.h; sourceTree = "<group>"; };
-		4E82D9D022E1E22400587210 /* Android.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Android.mk; sourceTree = "<group>"; };
 		4E82D9D122E1E22400587210 /* DownloadTask.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DownloadTask.mm; sourceTree = "<group>"; };
 		4E82D9D222E1E22400587210 /* Helper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Helper.cpp; sourceTree = "<group>"; };
 		4E82D9D322E1E22400587210 /* Maths.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Maths.h; sourceTree = "<group>"; };
@@ -2799,39 +2515,23 @@
 		4E82DD9122E2B72700587210 /* randNoise.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = randNoise.png; path = Resources/images/randNoise.png; sourceTree = "<group>"; };
 		4E82DD9222E2B72800587210 /* round83.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = round83.png; path = Resources/images/round83.png; sourceTree = "<group>"; };
 		4E82DD9322E2B72800587210 /* whiteborder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whiteborder.png; path = Resources/images/whiteborder.png; sourceTree = "<group>"; };
+		4E8B1D7B22E3FD6500AFB715 /* libFreetype2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFreetype2.a; path = "../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/FrameWorks/libFreetype2.a"; sourceTree = "<group>"; };
+		4E8B1D7F22E3FE6000AFB715 /* libassimp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libassimp.a; path = FrameWorks/libassimp.a; sourceTree = "<group>"; };
+		4E8B1D8122E4027700AFB715 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		4E8B1D8422E4029F00AFB715 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
+		4E8B1D8722E402E400AFB715 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		4E8B1D8A22E4031800AFB715 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		4E9A56C322E3833100575D98 /* render_image-phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "render_image-phone@3x.png"; path = "../../../../../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/Iyan3D/Resources/images/editorViewController/render_image-phone@3x.png"; sourceTree = "<group>"; };
 		4E9A56CF22E3833200575D98 /* render_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = render_image.png; path = "../../../../../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/Iyan3D/Resources/images/editorViewController/render_image.png"; sourceTree = "<group>"; };
 		4E9A56D022E3833200575D98 /* render_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "render_image@2x.png"; path = "../../../../../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/Iyan3D/Resources/images/editorViewController/render_image@2x.png"; sourceTree = "<group>"; };
 		4E9A56D122E3833200575D98 /* render_image-phone@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "render_image-phone@2x.png"; path = "../../../../../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/Iyan3D/Resources/images/editorViewController/render_image-phone@2x.png"; sourceTree = "<group>"; };
 		4E9A56D222E3833200575D98 /* render_image-phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "render_image-phone.png"; path = "../../../../../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/Iyan3D/Resources/images/editorViewController/render_image-phone.png"; sourceTree = "<group>"; };
-		4EA064E722B3738900E1DCF0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Pods.xcodeproj; path = Pods/Pods.xcodeproj; sourceTree = "<group>"; };
-		62F3385B196C1508007694C5 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		7F7D5A121B8C40F200E6BA86 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		8A32F15F197D5D4000FA8984 /* boneLimits45.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = boneLimits45.json; path = Resources/jsonFiles/boneLimits45.json; sourceTree = "<group>"; };
 		8A9DE20D197FEFF10079727D /* mirrorJoints.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = mirrorJoints.json; path = Resources/jsonFiles/mirrorJoints.json; sourceTree = "<group>"; };
 		8ADEFEA7197425E8001E159D /* bonelimits.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = bonelimits.json; path = Resources/jsonFiles/bonelimits.json; sourceTree = "<group>"; };
 		8ADEFEA8197425E8001E159D /* humanTPoseBoneLimits.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = humanTPoseBoneLimits.json; path = Resources/jsonFiles/humanTPoseBoneLimits.json; sourceTree = "<group>"; };
 		8AED29BA198A29AD004FC1E5 /* viewCameraModes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = viewCameraModes.json; path = Resources/jsonFiles/viewCameraModes.json; sourceTree = "<group>"; };
-		8D6B3ECBDA6C891A3AEF71BF /* Pods-Iyan3D-Simulator.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Iyan3D-Simulator.debug.xcconfig"; path = "Target Support Files/Pods-Iyan3D-Simulator/Pods-Iyan3D-Simulator.debug.xcconfig"; sourceTree = "<group>"; };
-		8F2451E05FAD8199031EEB3C /* Pods_Iyan3D.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Iyan3D.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C4B5BBE6FEEBF4475ECD9ED8 /* Pods-Iyan3D.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Iyan3D.release.xcconfig"; path = "Target Support Files/Pods-Iyan3D/Pods-Iyan3D.release.xcconfig"; sourceTree = "<group>"; };
-		C4BEFAFE1D23F99E006D8DBE /* GoogleAppUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleAppUtilities.framework; path = FrameWorks/GoogleAppUtilities.framework; sourceTree = "<group>"; };
-		C4BEFAFF1D23F99E006D8DBE /* GoogleAuthUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleAuthUtilities.framework; path = FrameWorks/GoogleAuthUtilities.framework; sourceTree = "<group>"; };
-		C4BEFB001D23F99E006D8DBE /* GoogleNetworkingUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleNetworkingUtilities.framework; path = FrameWorks/GoogleNetworkingUtilities.framework; sourceTree = "<group>"; };
-		C4BEFB011D23F99E006D8DBE /* GoogleSymbolUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleSymbolUtilities.framework; path = FrameWorks/GoogleSymbolUtilities.framework; sourceTree = "<group>"; };
-		C4BEFB021D23F99E006D8DBE /* GoogleUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleUtilities.framework; path = FrameWorks/GoogleUtilities.framework; sourceTree = "<group>"; };
-		C622659A484A36E4452B924F /* Pods_Iyan3D_Simulator.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Iyan3D_Simulator.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C825377418EA881B00F49E91 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
-		C82EA4BA187E869F00A8468A /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
-		C831F1B11876E0AC00966179 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		C831F1B31876EF8900966179 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
-		C87EBFE118F3DAD800EB656E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		C87EBFE318F3DAE900EB656E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		C885D77B1876BE6100A45D71 /* Iyan3D.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Iyan3D.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C885D77E1876BE6100A45D71 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		C885D7801876BE6100A45D71 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		C885D7821876BE6100A45D71 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C885D7861876BE6100A45D71 /* Iyan3D-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Iyan3D-Info.plist"; sourceTree = "<group>"; };
 		C885D78A1876BE6100A45D71 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C885D78C1876BE6100A45D71 /* Iyan3D-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Iyan3D-Prefix.pch"; sourceTree = "<group>"; };
@@ -2892,10 +2592,6 @@
 		E2497682196BE0310025D442 /* LoadingViewControllerPad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoadingViewControllerPad.h; path = ui/MainViews/LoadingViewControllerPad.h; sourceTree = "<group>"; };
 		E2497683196BE0310025D442 /* LoadingViewControllerPad.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = LoadingViewControllerPad.mm; path = ui/MainViews/LoadingViewControllerPad.mm; sourceTree = "<group>"; };
 		E2497684196BE0310025D442 /* LoadingViewControllerPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LoadingViewControllerPad.xib; path = ui/MainViews/LoadingViewControllerPad.xib; sourceTree = "<group>"; };
-		E262744119234C540036F8E3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
-		E262744319234C890036F8E3 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
-		E27E71C41AD27A8200B5DE77 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
-		E2A343B019F123F8000EF7C2 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		E2C4DB591A9F5FFC00F0AD12 /* light.sgm */ = {isa = PBXFileReference; lastKnownFileType = file; name = light.sgm; path = Resources/mesh/light.sgm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2904,38 +2600,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2553F8DC1DA3B2DF003D6D4A /* libz.1.2.8.tbd in Frameworks */,
-				3DA6F2D11D48C3CE00C842C6 /* libassimp.a in Frameworks */,
-				3D57C7F31D38DD1F00713D66 /* Accelerate.framework in Frameworks */,
-				2512BFD51CB24581006E19A3 /* SafariServices.framework in Frameworks */,
-				01BA32531C5CEC84000A5F3E /* AssetsLibrary.framework in Frameworks */,
-				2593C41E1CB27A2300703DDE /* libFreetype2.a in Frameworks */,
-				25095F391C5B631900CF7C68 /* AVFoundation.framework in Frameworks */,
-				01C2B77E1C462CFB00384370 /* Social.framework in Frameworks */,
-				C4BEFB031D23F99E006D8DBE /* GoogleAppUtilities.framework in Frameworks */,
-				25AD150C1B8E8CD70081505F /* AddressBook.framework in Frameworks */,
-				E262744419234C890036F8E3 /* GameKit.framework in Frameworks */,
-				E27E71C51AD27A8200B5DE77 /* Metal.framework in Frameworks */,
-				2512BFE01CB2708E006E19A3 /* GoogleSignIn.framework in Frameworks */,
-				2593C41C1CB27A2300703DDE /* libFreetype2_sim.a in Frameworks */,
-				E2A343B119F123F8000EF7C2 /* MobileCoreServices.framework in Frameworks */,
-				E2AEAE651924D2DE00D487D7 /* libsqlite3.dylib in Frameworks */,
-				62F3385C196C1508007694C5 /* MessageUI.framework in Frameworks */,
-				E262744219234C540036F8E3 /* OpenGLES.framework in Frameworks */,
-				C87EBFE418F3DAE900EB656E /* SystemConfiguration.framework in Frameworks */,
-				C4BEFB0B1D23F99F006D8DBE /* GoogleUtilities.framework in Frameworks */,
-				C4BEFB051D23F99E006D8DBE /* GoogleAuthUtilities.framework in Frameworks */,
-				C87EBFE218F3DAD800EB656E /* CoreData.framework in Frameworks */,
-				C825377518EA881B00F49E91 /* StoreKit.framework in Frameworks */,
-				C4BEFB071D23F99E006D8DBE /* GoogleNetworkingUtilities.framework in Frameworks */,
-				C82EA4BB187E869F00A8468A /* CoreMotion.framework in Frameworks */,
-				C4BEFB091D23F99E006D8DBE /* GoogleSymbolUtilities.framework in Frameworks */,
-				C831F1B21876E0AC00966179 /* Security.framework in Frameworks */,
-				C885D7811876BE6100A45D71 /* CoreGraphics.framework in Frameworks */,
-				C885D7831876BE6100A45D71 /* UIKit.framework in Frameworks */,
-				C885D77F1876BE6100A45D71 /* Foundation.framework in Frameworks */,
-				2512BFDA1CB24E0B006E19A3 /* GoogleAnalytics.a in Frameworks */,
-				EC6558AEBD06CFEFBD18CACD /* Pods_Iyan3D.framework in Frameworks */,
+				4E8B1D8022E3FE6000AFB715 /* libassimp.a in Frameworks */,
+				4E8B1D8522E4029F00AFB715 /* MetalKit.framework in Frameworks */,
+				4E8B1D7E22E3FDB500AFB715 /* libFreetype2.a in Frameworks */,
+				4E8B1D8B22E4031800AFB715 /* Accelerate.framework in Frameworks */,
+				4E8B1D8822E402E400AFB715 /* MobileCoreServices.framework in Frameworks */,
+				4E8B1D8222E4027700AFB715 /* MessageUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2943,39 +2613,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3D79E4551D48D4EB0089FFE5 /* libassimp_sim.a in Frameworks */,
-				3D57C7F21D38BBA000713D66 /* Accelerate.framework in Frameworks */,
-				2512BFD81CB247AE006E19A3 /* libz.tbd in Frameworks */,
-				2512BFD61CB2458C006E19A3 /* SafariServices.framework in Frameworks */,
-				2593C41F1CB27A2300703DDE /* libFreetype2.a in Frameworks */,
-				01BA32541C5CEC8C000A5F3E /* AssetsLibrary.framework in Frameworks */,
-				25095F3A1C5B632700CF7C68 /* AVFoundation.framework in Frameworks */,
-				C4BEFB041D23F99E006D8DBE /* GoogleAppUtilities.framework in Frameworks */,
-				01C2B79D1C46553500384370 /* Social.framework in Frameworks */,
-				7F7D5A131B8C40F200E6BA86 /* AddressBook.framework in Frameworks */,
-				E20671FD1B049AA6006DD2F7 /* MobileCoreServices.framework in Frameworks */,
-				2512BFE11CB2708E006E19A3 /* GoogleSignIn.framework in Frameworks */,
-				2593C41D1CB27A2300703DDE /* libFreetype2_sim.a in Frameworks */,
-				E20671FE1B049AA6006DD2F7 /* libsqlite3.dylib in Frameworks */,
-				E20671FF1B049AA6006DD2F7 /* GameKit.framework in Frameworks */,
-				E20672001B049AA6006DD2F7 /* MessageUI.framework in Frameworks */,
-				E20672021B049AA6006DD2F7 /* OpenGLES.framework in Frameworks */,
-				E20672031B049AA6006DD2F7 /* SystemConfiguration.framework in Frameworks */,
-				C4BEFB0C1D23F99F006D8DBE /* GoogleUtilities.framework in Frameworks */,
-				C4BEFB061D23F99E006D8DBE /* GoogleAuthUtilities.framework in Frameworks */,
-				E20672051B049AA6006DD2F7 /* CoreData.framework in Frameworks */,
-				C4BEFB081D23F99E006D8DBE /* GoogleNetworkingUtilities.framework in Frameworks */,
-				E20672071B049AA6006DD2F7 /* StoreKit.framework in Frameworks */,
-				E20672081B049AA6006DD2F7 /* CoreMotion.framework in Frameworks */,
-				4E0DB29C22DAFB3E00911CAA /* MetalKit.framework in Frameworks */,
-				C4BEFB0A1D23F99E006D8DBE /* GoogleSymbolUtilities.framework in Frameworks */,
-				E20672091B049AA6006DD2F7 /* Security.framework in Frameworks */,
-				E206720A1B049AA6006DD2F7 /* CoreGraphics.framework in Frameworks */,
-				E206720B1B049AA6006DD2F7 /* UIKit.framework in Frameworks */,
-				E206720D1B049AA6006DD2F7 /* Foundation.framework in Frameworks */,
-				2512BFDB1CB24E0B006E19A3 /* GoogleAnalytics.a in Frameworks */,
-				4E0DB29A22DAFAF300911CAA /* Metal.framework in Frameworks */,
-				ED30F0C681FD76D88F88FE2E /* Pods_Iyan3D_Simulator.framework in Frameworks */,
+				4E8B1D8922E402E700AFB715 /* MobileCoreServices.framework in Frameworks */,
+				4E8B1D8C22E4031A00AFB715 /* Accelerate.framework in Frameworks */,
+				4E8B1D8322E4027F00AFB715 /* MessageUI.framework in Frameworks */,
+				4E8B1D8622E402A200AFB715 /* MetalKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3035,26 +2676,6 @@
 			);
 			name = Popover;
 			path = Resources/images/Popover;
-			sourceTree = "<group>";
-		};
-		0184EC641C350A5B006F0B57 /* login */ = {
-			isa = PBXGroup;
-			children = (
-				01F873221C3A78B4009AA31E /* iphone */,
-				0184EC651C350A5B006F0B57 /* Facebook_Pad.png */,
-				01ACD0F41C3D44930096AD14 /* Facebook_Pad@2x.png */,
-				01ACD0F51C3D44930096AD14 /* Google_Pad@2x.png */,
-				01ACD0F61C3D44930096AD14 /* iyan3d-sign-in_Pad@2x.png */,
-				01ACD0F71C3D44930096AD14 /* iyan3d-text-sign-in_Pad@2x.png */,
-				01ACD0F81C3D44930096AD14 /* Login-Img_Pad@2x.png */,
-				01ACD0F91C3D44930096AD14 /* Twitter_Pad@2x.png */,
-				0184EC661C350A5B006F0B57 /* Google_Pad.png */,
-				0184EC671C350A5B006F0B57 /* iyan3d-sign-in_Pad.png */,
-				0184EC681C350A5B006F0B57 /* iyan3d-text-sign-in_Pad.png */,
-				0184EC691C350A5B006F0B57 /* Login-Img_Pad.png */,
-				0184EC6A1C350A5B006F0B57 /* Twitter_Pad.png */,
-			);
-			path = login;
 			sourceTree = "<group>";
 		};
 		01ACD0B31C3D1AAA0096AD14 /* settings */ = {
@@ -3131,7 +2752,6 @@
 			isa = PBXGroup;
 			children = (
 				01F872421C3A42EF009AA31E /* IPhone */,
-				0184EC641C350A5B006F0B57 /* login */,
 				01B4CF931C29219A0091E19B /* rightview */,
 				01B4CFAE1C29219A0091E19B /* topview */,
 			);
@@ -3309,31 +2929,6 @@
 				01F872D41C3A6C4E009AA31E /* undo_IPhone@2x.png */,
 			);
 			path = "Iphone 2x";
-			sourceTree = "<group>";
-		};
-		01F873221C3A78B4009AA31E /* iphone */ = {
-			isa = PBXGroup;
-			children = (
-				01F873321C3A7DE4009AA31E /* iphone2x */,
-				01F873231C3A78B4009AA31E /* Facebook_IPhone.png */,
-				01F873241C3A78B4009AA31E /* Google_IPhone.png */,
-				01F873251C3A78B4009AA31E /* iyan3d-sign-in_IPhone.png */,
-				01F873261C3A78B4009AA31E /* iyan3d-text-sign-in_IPhone.png */,
-				01F873271C3A78B4009AA31E /* Twitter_IPhone.png */,
-			);
-			path = iphone;
-			sourceTree = "<group>";
-		};
-		01F873321C3A7DE4009AA31E /* iphone2x */ = {
-			isa = PBXGroup;
-			children = (
-				01F873331C3A7DE4009AA31E /* Facebook_IPhone@2x.png */,
-				01F873341C3A7DE4009AA31E /* Google_IPhone@2x.png */,
-				01F873351C3A7DE4009AA31E /* iyan3d-sign-in_IPhone@2x.png */,
-				01F873361C3A7DE4009AA31E /* iyan3d-text-sign-in_IPhone@2x.png */,
-				01F873371C3A7DE4009AA31E /* Twitter_IPhone@2x.png */,
-			);
-			path = iphone2x;
 			sourceTree = "<group>";
 		};
 		2518156F1D1D1C69009F68A8 /* OnBoard */ = {
@@ -3530,66 +3125,19 @@
 				25EC3D4F1D366882006AE211 /* View_IPhone.png */,
 				25EC3D501D366882006AE211 /* View_IPhone@2x.png */,
 				25EC3D511D366882006AE211 /* View_IPhone@3x.png */,
-				25EC3D421D361453006AE211 /* Feeds.png */,
-				25EC3D431D361453006AE211 /* Feeds@2x.png */,
 				25EC3D3C1D36143D006AE211 /* Help.png */,
 				25EC3D3D1D36143D006AE211 /* Help@2x.png */,
 				25EC3D361D3613B8006AE211 /* info-icon.png */,
 				25EC3D371D3613B8006AE211 /* info-icon@2x.png */,
-				25EC3D301D36139B006AE211 /* Login-icon.png */,
-				25EC3D311D36139B006AE211 /* Login-icon@2x.png */,
-				25EC3D241D3612D6006AE211 /* Feeds_iphone.png */,
 				25EC3D251D3612D6006AE211 /* Help_iphone.png */,
 				25EC3D261D3612D6006AE211 /* info-icon_phone.png */,
-				25EC3D271D3612D6006AE211 /* Login-IPhone.png */,
-				25EC3D0C1D360CFF006AE211 /* Feeds_iphone@2x.png */,
-				25EC3D0D1D360CFF006AE211 /* Feeds_iphone@3x.png */,
 				25EC3D0E1D360CFF006AE211 /* Help_iphone@2x.png */,
 				25EC3D0F1D360CFF006AE211 /* Help_iphone@3x.png */,
 				25EC3D101D360CFF006AE211 /* info-icon_phone@2x.png */,
 				25EC3D111D360CFF006AE211 /* info-icon_phone@3x.png */,
-				25EC3D121D360CFF006AE211 /* Login-IPhone@2x.png */,
-				25EC3D131D360CFF006AE211 /* Login-IPhone@3x.png */,
 			);
 			name = TopView;
 			path = Resources/images/TopView;
-			sourceTree = "<group>";
-		};
-		25F748B81D08085400FB0AFD /* LoginTypeImages */ = {
-			isa = PBXGroup;
-			children = (
-				25F748DD1D08175200FB0AFD /* twit_Pad.png */,
-				25F748DE1D08175200FB0AFD /* twit_Pad@2x.png */,
-				25F748DF1D08175200FB0AFD /* twit_Phone.png */,
-				25F748E01D08175200FB0AFD /* twit_Phone@2x.png */,
-				25F748B91D08085400FB0AFD /* fb_Pad.png */,
-				25F748BA1D08085400FB0AFD /* fb_Pad@2x.png */,
-				25F748BB1D08085400FB0AFD /* fb_Phone.png */,
-				25F748BC1D08085400FB0AFD /* fb_Phone@2x.png */,
-				25F748BD1D08085400FB0AFD /* gPlus_Pad.png */,
-				25F748BE1D08085400FB0AFD /* gPlus_Pad@2x.png */,
-				25F748BF1D08085400FB0AFD /* gPlus_Phone.png */,
-				25F748C01D08085400FB0AFD /* gPlus_Phone@2x.png */,
-			);
-			name = LoginTypeImages;
-			path = Resources/images/LoginTypeImages;
-			sourceTree = "<group>";
-		};
-		25F7C4561B682C9000C4183F /* Analytics */ = {
-			isa = PBXGroup;
-			children = (
-				25F7C4571B682CA700C4183F /* GAI.h */,
-				25F7C4581B682CA700C4183F /* GAIDictionaryBuilder.h */,
-				25F7C4591B682CA700C4183F /* GAIEcommerceFields.h */,
-				25F7C45A1B682CA700C4183F /* GAIEcommerceProduct.h */,
-				25F7C45B1B682CA700C4183F /* GAIEcommerceProductAction.h */,
-				25F7C45C1B682CA700C4183F /* GAIEcommercePromotion.h */,
-				25F7C45D1B682CA700C4183F /* GAIFields.h */,
-				25F7C45E1B682CA700C4183F /* GAILogger.h */,
-				25F7C45F1B682CA700C4183F /* GAITrackedViewController.h */,
-				25F7C4601B682CA700C4183F /* GAITracker.h */,
-			);
-			name = Analytics;
 			sourceTree = "<group>";
 		};
 		25F80AB71CFDAF1600CF331B /* AnimationSelection */ = {
@@ -3882,19 +3430,6 @@
 			path = Resources/images/ImportObj;
 			sourceTree = "<group>";
 		};
-		3DB4AB961C75DA9400C89B5C /* autorig */ = {
-			isa = PBXGroup;
-			children = (
-				3DB4AB971C75DA9400C89B5C /* Add-Bone-IPhone.png */,
-				3DB4AB981C75DA9400C89B5C /* Add-Bone-IPhone@2x.png */,
-				3DB4AB991C75DA9400C89B5C /* Add-Bone-IPhone@3x.png */,
-				3DB4AB9A1C75DA9400C89B5C /* Add-Bone-pad.png */,
-				3DB4AB9B1C75DA9400C89B5C /* Add-Bone-pad@2x.png */,
-			);
-			name = autorig;
-			path = Resources/images/autorig;
-			sourceTree = "<group>";
-		};
 		3DBC85D41C2BC06600B512AB /* assetSelection */ = {
 			isa = PBXGroup;
 			children = (
@@ -3903,17 +3438,6 @@
 			);
 			name = assetSelection;
 			path = Resources/images/assetSelection;
-			sourceTree = "<group>";
-		};
-		40C0CB788B261612FCF3E9F9 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				45C6C1F67AB758D3309FA446 /* Pods-Iyan3D.debug.xcconfig */,
-				C4B5BBE6FEEBF4475ECD9ED8 /* Pods-Iyan3D.release.xcconfig */,
-				8D6B3ECBDA6C891A3AEF71BF /* Pods-Iyan3D-Simulator.debug.xcconfig */,
-				16C0499CA70CE2CA87914930 /* Pods-Iyan3D-Simulator.release.xcconfig */,
-			);
-			path = Pods;
 			sourceTree = "<group>";
 		};
 		4E82D96E22E1E22300587210 /* SGEngine2 */ = {
@@ -4082,7 +3606,6 @@
 			children = (
 				4E82D9CE22E1E22400587210 /* DownloadTask.h */,
 				4E82D9CF22E1E22400587210 /* Helper.h */,
-				4E82D9D022E1E22400587210 /* Android.mk */,
 				4E82D9D122E1E22400587210 /* DownloadTask.mm */,
 				4E82D9D222E1E22400587210 /* Helper.cpp */,
 				4E82D9D322E1E22400587210 /* Maths.h */,
@@ -4713,17 +4236,17 @@
 			path = json;
 			sourceTree = "<group>";
 		};
-		4EA064EB22B385B000E1DCF0 /* Products */ = {
+		4E8B1D7A22E3FD6500AFB715 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4EA064F722B385B000E1DCF0 /* FirebaseCore.framework */,
-				4EA064F922B385B000E1DCF0 /* FirebaseInstanceID.framework */,
-				4EA064FB22B385B000E1DCF0 /* GoogleUtilities.framework */,
-				4EA064FD22B385B000E1DCF0 /* nanopb.framework */,
-				4EA064FF22B385B000E1DCF0 /* Pods_Iyan3D.framework */,
-				4EA0650122B385B000E1DCF0 /* Pods_Iyan3D_Simulator.framework */,
+				4E8B1D8A22E4031800AFB715 /* Accelerate.framework */,
+				4E8B1D8722E402E400AFB715 /* MobileCoreServices.framework */,
+				4E8B1D8422E4029F00AFB715 /* MetalKit.framework */,
+				4E8B1D8122E4027700AFB715 /* MessageUI.framework */,
+				4E8B1D7F22E3FE6000AFB715 /* libassimp.a */,
+				4E8B1D7B22E3FD6500AFB715 /* libFreetype2.a */,
 			);
-			name = Products;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		C813E57B1888005B00247AE9 /* Popover Views */ = {
@@ -4790,7 +4313,6 @@
 				25D7DA561D06F6DC00E84D2F /* JDFToolTip */,
 				0169C41C1C33DA2700132FF6 /* Popover */,
 				25B5B15B1BE33EFB00AC2525 /* zip */,
-				25F7C4561B682C9000C4183F /* Analytics */,
 				25730E441AFD3C7B0042F81A /* ANImageBitmapRep */,
 				C8E6172F18C5DD2300BC5342 /* FPPopOver */,
 			);
@@ -4802,14 +4324,12 @@
 			children = (
 				25EA75531C60C70A007E17CA /* alpha.png */,
 				3DBC85D41C2BC06600B512AB /* assetSelection */,
-				3DB4AB961C75DA9400C89B5C /* autorig */,
 				25FA148B1D3CE57600A95DA3 /* CommonProps */,
 				259EE1521BDE342800C99784 /* dummy.png */,
 				01B4CF921C29219A0091E19B /* editorViewController */,
 				3D63A2CA1D27B44000611F2E /* envmap.png */,
 				2515C36D1DA8D1D100B4F622 /* iconlarge.png */,
 				3D5F99051C4D04EB00DD47F5 /* ImportObj */,
-				25F748B81D08085400FB0AFD /* LoginTypeImages */,
 				2518156F1D1D1C69009F68A8 /* OnBoard */,
 				0169C4461C33ED5A00132FF6 /* Popover */,
 				4E82DD9122E2B72700587210 /* randNoise.png */,
@@ -4851,11 +4371,9 @@
 		C885D7721876BE6100A45D71 = {
 			isa = PBXGroup;
 			children = (
-				4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */,
 				C885D7841876BE6100A45D71 /* Iyan3D */,
-				C885D77D1876BE6100A45D71 /* Frameworks */,
 				C885D77C1876BE6100A45D71 /* Products */,
-				40C0CB788B261612FCF3E9F9 /* Pods */,
+				4E8B1D7A22E3FD6500AFB715 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -4866,51 +4384,6 @@
 				E20674061B049AA6006DD2F7 /* Iyan3D-Simulator.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		C885D77D1876BE6100A45D71 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				4E0DB29B22DAFB3E00911CAA /* MetalKit.framework */,
-				2553F8DB1DA3B2DF003D6D4A /* libz.1.2.8.tbd */,
-				3D79E4541D48D4EB0089FFE5 /* libassimp_sim.a */,
-				3DA6F2D01D48C3CE00C842C6 /* libassimp.a */,
-				3D57C7F11D38BBA000713D66 /* Accelerate.framework */,
-				C4BEFAFE1D23F99E006D8DBE /* GoogleAppUtilities.framework */,
-				C4BEFAFF1D23F99E006D8DBE /* GoogleAuthUtilities.framework */,
-				C4BEFB001D23F99E006D8DBE /* GoogleNetworkingUtilities.framework */,
-				C4BEFB011D23F99E006D8DBE /* GoogleSymbolUtilities.framework */,
-				C4BEFB021D23F99E006D8DBE /* GoogleUtilities.framework */,
-				2593C41A1CB27A2300703DDE /* libFreetype2_sim.a */,
-				2593C41B1CB27A2300703DDE /* libFreetype2.a */,
-				2512BFDC1CB2708E006E19A3 /* GoogleSignIn.bundle */,
-				2512BFDD1CB2708E006E19A3 /* GoogleSignIn.framework */,
-				2512BFD91CB24E0B006E19A3 /* GoogleAnalytics.a */,
-				2512BFD71CB247AD006E19A3 /* libz.tbd */,
-				2512BFD41CB24581006E19A3 /* SafariServices.framework */,
-				01BA32521C5CEC84000A5F3E /* AssetsLibrary.framework */,
-				25095F381C5B631900CF7C68 /* AVFoundation.framework */,
-				01C2B77D1C462CFB00384370 /* Social.framework */,
-				25EFBEB81BE25CB400DB300C /* RETrimControl.bundle */,
-				7F7D5A121B8C40F200E6BA86 /* AddressBook.framework */,
-				E27E71C41AD27A8200B5DE77 /* Metal.framework */,
-				E2A343B019F123F8000EF7C2 /* MobileCoreServices.framework */,
-				C831F1B31876EF8900966179 /* libsqlite3.dylib */,
-				62F3385B196C1508007694C5 /* MessageUI.framework */,
-				E262744319234C890036F8E3 /* GameKit.framework */,
-				E262744119234C540036F8E3 /* OpenGLES.framework */,
-				C87EBFE318F3DAE900EB656E /* SystemConfiguration.framework */,
-				C87EBFE118F3DAD800EB656E /* CoreData.framework */,
-				C825377418EA881B00F49E91 /* StoreKit.framework */,
-				C82EA4BA187E869F00A8468A /* CoreMotion.framework */,
-				C831F1B11876E0AC00966179 /* Security.framework */,
-				C885D77E1876BE6100A45D71 /* Foundation.framework */,
-				C885D7801876BE6100A45D71 /* CoreGraphics.framework */,
-				C885D7821876BE6100A45D71 /* UIKit.framework */,
-				8F2451E05FAD8199031EEB3C /* Pods_Iyan3D.framework */,
-				C622659A484A36E4452B924F /* Pods_Iyan3D_Simulator.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		C885D7841876BE6100A45D71 /* Iyan3D */ = {
@@ -4934,7 +4407,6 @@
 			children = (
 				254BA1A41B08377100F248A6 /* Iyan3Dcopy-Info.plist */,
 				C885D7861876BE6100A45D71 /* Iyan3D-Info.plist */,
-				4EA064E722B3738900E1DCF0 /* GoogleService-Info.plist */,
 				C885D78A1876BE6100A45D71 /* main.m */,
 				C885D78C1876BE6100A45D71 /* Iyan3D-Prefix.pch */,
 				3D3E32341D40DD700067F933 /* Localizable.strings */,
@@ -5024,12 +4496,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C885D7B01876BE6200A45D71 /* Build configuration list for PBXNativeTarget "Iyan3D" */;
 			buildPhases = (
-				030EC959997B74CFF5C8DD0C /* [CP] Check Pods Manifest.lock */,
 				C885D7771876BE6100A45D71 /* Sources */,
 				C885D7781876BE6100A45D71 /* Frameworks */,
 				C885D7791876BE6100A45D71 /* Resources */,
-				733EAC34D9B8DA355F986592 /* [CP] Embed Pods Frameworks */,
-				4EA0650322B389FE00E1DCF0 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -5044,11 +4513,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E20674031B049AA6006DD2F7 /* Build configuration list for PBXNativeTarget "Iyan3D-Simulator" */;
 			buildPhases = (
-				6DE0B58DDE87D3271B4695B6 /* [CP] Check Pods Manifest.lock */,
 				E20670DD1B049AA6006DD2F7 /* Sources */,
 				E20671FB1B049AA6006DD2F7 /* Frameworks */,
 				E206720E1B049AA6006DD2F7 /* Resources */,
-				33E21E0BEB9E83B09E1EF9DB /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -5107,12 +4574,6 @@
 			mainGroup = C885D7721876BE6100A45D71;
 			productRefGroup = C885D77C1876BE6100A45D71 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 4EA064EB22B385B000E1DCF0 /* Products */;
-					ProjectRef = 4EA064EA22B385B000E1DCF0 /* Pods.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				C885D77A1876BE6100A45D71 /* Iyan3D */,
@@ -5120,51 +4581,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		4EA064F722B385B000E1DCF0 /* FirebaseCore.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = FirebaseCore.framework;
-			remoteRef = 4EA064F622B385B000E1DCF0 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4EA064F922B385B000E1DCF0 /* FirebaseInstanceID.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = FirebaseInstanceID.framework;
-			remoteRef = 4EA064F822B385B000E1DCF0 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4EA064FB22B385B000E1DCF0 /* GoogleUtilities.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = GoogleUtilities.framework;
-			remoteRef = 4EA064FA22B385B000E1DCF0 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4EA064FD22B385B000E1DCF0 /* nanopb.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = nanopb.framework;
-			remoteRef = 4EA064FC22B385B000E1DCF0 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4EA064FF22B385B000E1DCF0 /* Pods_Iyan3D.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Pods_Iyan3D.framework;
-			remoteRef = 4EA064FE22B385B000E1DCF0 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4EA0650122B385B000E1DCF0 /* Pods_Iyan3D_Simulator.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Pods_Iyan3D_Simulator.framework;
-			remoteRef = 4EA0650022B385B000E1DCF0 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		C885D7791876BE6100A45D71 /* Resources */ = {
@@ -5190,14 +4606,12 @@
 				250FEC1B1D1E52D2000C8A2C /* Divider-1@2x.png in Resources */,
 				25034FEA1D24F9960036F201 /* OnBoardVCPhone@2x.xib in Resources */,
 				250FEC641D1E5506000C8A2C /* Welcome-Img_phone@2x.png in Resources */,
-				25EC3D461D361453006AE211 /* Feeds@2x.png in Resources */,
 				251815971D1D5C51009F68A8 /* Step-3_-img.png in Resources */,
 				01F872FA1C3A6C4E009AA31E /* My-objects-Light_IPhone@2x.png in Resources */,
 				01ACD0A51C3CEF360096AD14 /* color_IPhone.png in Resources */,
 				3DD47BFA1C60A43500E7CCFD /* 60006.sgm in Resources */,
 				3DE065381C7C28B600CB7158 /* My-objects-Particles.png in Resources */,
 				250FEC581D1E5506000C8A2C /* Step-3_-img_phone@2x.png in Resources */,
-				01F8732C1C3A78B4009AA31E /* iyan3d-sign-in_IPhone.png in Resources */,
 				3DB4ABA71C75F92000C89B5C /* Options_IPhone-@2X.png in Resources */,
 				01B02CD01C61CAB400C9102A /* My-objects-Image_IPhone@3x.png in Resources */,
 				0169C4731C33ED5A00132FF6 /* popoverArrowUp-white@2x.png in Resources */,
@@ -5211,7 +4625,6 @@
 				01B02CE21C61CAB400C9102A /* Previous-frame_IPhone@3x.png in Resources */,
 				25D6719A1C46930900BE685D /* controls8.sgm in Resources */,
 				01B4D0591C2937000091E19B /* My-objects-Models_Pad@2x.png in Resources */,
-				25EC3D321D36139B006AE211 /* Login-icon.png in Resources */,
 				01B395391C37AB90003955C6 /* My-objects-Image_Pad@2x.png in Resources */,
 				4E9A56D322E3833200575D98 /* render_image-phone@3x.png in Resources */,
 				01F872A71C3A689B009AA31E /* Add-Bones_IPhone.png in Resources */,
@@ -5224,12 +4637,10 @@
 				01BA32501C5CC292000A5F3E /* popover-skin@2x.png in Resources */,
 				01C2B79B1C46543200384370 /* color@2x.png in Resources */,
 				01F872811C3A42EF009AA31E /* My-objects-Light_IPhone.png in Resources */,
-				01F8732A1C3A78B4009AA31E /* Google_IPhone.png in Resources */,
 				01B4D05F1C2937000091E19B /* Options_Pad.png in Resources */,
 				01B02CAA1C61CAB400C9102A /* Add-Bones_IPhone@3x.png in Resources */,
 				E24974BF196BDC650025D442 /* camera.sgm in Resources */,
 				01ACD0F21C3D3AE20096AD14 /* Tool-Bar_Right@2x.png in Resources */,
-				25F748D31D08085400FB0AFD /* gPlus_Phone@2x.png in Resources */,
 				251815951D1D5C51009F68A8 /* Step-2_-img.png in Resources */,
 				25EC3D521D366882006AE211 /* View_IPhone.png in Resources */,
 				01B4D0671C2937000091E19B /* Rotate_Pad.png in Resources */,
@@ -5237,7 +4648,6 @@
 				01B395271C37AA3A003955C6 /* Export-video_Pad@2x.png in Resources */,
 				25243D151DA2891400BA517B /* Bernstein Regular.ttf in Resources */,
 				01B4CFEA1C29219A0091E19B /* Add-Frames.png in Resources */,
-				4E82DBF722E1E22400587210 /* Android.mk in Resources */,
 				01F872EA1C3A6C4E009AA31E /* Import-models_IPhone@2x.png in Resources */,
 				01ACD0EC1C3D3AE20096AD14 /* Render-Preview-size_Large@2x.png in Resources */,
 				01D2F09E1C44CDD9000E41C7 /* Play_Pad@2x.png in Resources */,
@@ -5249,13 +4659,10 @@
 				2518159B1D1D5C51009F68A8 /* Welcome-Img.png in Resources */,
 				01B4D06F1C2937000091E19B /* Undo_Pad.png in Resources */,
 				01F872FE1C3A6C4E009AA31E /* My-objects-Text_IPhone@2x.png in Resources */,
-				01F873401C3A7DE4009AA31E /* Twitter_IPhone@2x.png in Resources */,
 				01B6C8B91C3B94590050D2F9 /* AnimationSelectionCollectionViewCellPhone.xib in Resources */,
 				01B4D0511C2937000091E19B /* My-objects-Camera_Pad@2x.png in Resources */,
-				25F748D11D08085400FB0AFD /* gPlus_Phone.png in Resources */,
 				C8AA47031C227D3600C4AB53 /* New-scene.png in Resources */,
 				01B02CEC1C61CAB400C9102A /* undo_IPhone@3x.png in Resources */,
-				3DB4AB9E1C75DA9400C89B5C /* Add-Bone-IPhone@2x.png in Resources */,
 				25EC46221D33D67E004DC02C /* SliderPropCell.xib in Resources */,
 				250FEC821D1EA8B2000C8A2C /* Divider-1_phone@3x.png in Resources */,
 				250FEC441D1E5506000C8A2C /* round-close_phone.png in Resources */,
@@ -5276,7 +4683,6 @@
 				01B02CCC1C61CAB400C9102A /* Move_IPhone@3x.png in Resources */,
 				01B4D0451C2937000091E19B /* Export_Pad@2x.png in Resources */,
 				C8AA46FD1C227D3600C4AB53 /* Clone.png in Resources */,
-				01F873281C3A78B4009AA31E /* Facebook_IPhone.png in Resources */,
 				01B4D0411C2937000091E19B /* Back.png in Resources */,
 				01ACD0CA1C3D1AAA0096AD14 /* Render-Preview-size_Large.png in Resources */,
 				3D3E32311D40DD700067F933 /* Localizable.strings in Resources */,
@@ -5286,7 +4692,6 @@
 				0169C45F1C33ED5A00132FF6 /* popoverArrowDown@2x.png in Resources */,
 				01ACD0E61C3D3AE20096AD14 /* Render-Preview-position_Left-Top@2x.png in Resources */,
 				0169C4611C33ED5A00132FF6 /* popoverArrowDownSimple.png in Resources */,
-				01ACD0FA1C3D44930096AD14 /* Facebook_Pad@2x.png in Resources */,
 				25EC3D401D36143D006AE211 /* Help@2x.png in Resources */,
 				01F8728D1C3A42EF009AA31E /* pause_IPhone.png in Resources */,
 				C8AA47011C227D3600C4AB53 /* Mail.png in Resources */,
@@ -5299,19 +4704,15 @@
 				3DD47BF21C60A43500E7CCFD /* 60002.sgm in Resources */,
 				01B02CC21C61CAB400C9102A /* Import-models_IPhone@3x.png in Resources */,
 				250FEC8E1D1EA8B2000C8A2C /* Welcome-Img_phone@3x.png in Resources */,
-				2512BFDE1CB2708E006E19A3 /* GoogleSignIn.bundle in Resources */,
 				01B4D03F1C2937000091E19B /* Animation_Pad@2x.png in Resources */,
 				4E82DD9422E2B72800587210 /* wheel2.png in Resources */,
 				01B02CAE1C61CAB400C9102A /* Animation_IPhone@3x.png in Resources */,
 				01F8726D1C3A42EF009AA31E /* Import-image_IPhone.png in Resources */,
 				01B02CB21C61CAB400C9102A /* Export-image_IPhone@3x.png in Resources */,
-				25EC3D441D361453006AE211 /* Feeds.png in Resources */,
 				01ACD0951C3CE93D0096AD14 /* TextSelectionSidePanelPhone.xib in Resources */,
 				250FEC1F1D1E52D2000C8A2C /* Step-1_-img@2x.png in Resources */,
 				01F872851C3A42EF009AA31E /* My-objects-Text_IPhone.png in Resources */,
 				3D04EAF31C25830F00C18E1A /* Bevel-pad.png in Resources */,
-				01ACD1041C3D44930096AD14 /* Twitter_Pad@2x.png in Resources */,
-				3DB4ABA01C75DA9400C89B5C /* Add-Bone-IPhone@3x.png in Resources */,
 				25FA14901D3CE57600A95DA3 /* Icon1.png in Resources */,
 				25EC3D2A1D3612D6006AE211 /* Help_iphone.png in Resources */,
 				01F872611C3A42EF009AA31E /* Add-Frames_IPhone.png in Resources */,
@@ -5323,7 +4724,6 @@
 				01B395091C37A42C003955C6 /* Import-text_Pad.png in Resources */,
 				250FEC8C1D1EA8B2000C8A2C /* Step-4_-img_phone@3x.png in Resources */,
 				01B4D04B1C2937000091E19B /* Move_Pad.png in Resources */,
-				01F8733E1C3A7DE4009AA31E /* iyan3d-text-sign-in_IPhone@2x.png in Resources */,
 				01B02CB61C61CAB400C9102A /* EXPORT@3x.png in Resources */,
 				3D5F991C1C4D04EB00DD47F5 /* shape3@2x.png in Resources */,
 				01B02CC41C61CAB400C9102A /* Import-text_IPhone@3x.png in Resources */,
@@ -5333,7 +4733,6 @@
 				2515C36B1DA8D12000B4F622 /* launch.xib in Resources */,
 				01F8728B1C3A42EF009AA31E /* Options_IPhone.png in Resources */,
 				01F8727F1C3A42EF009AA31E /* My-objects-Image_IPhone.png in Resources */,
-				25F748CD1D08085400FB0AFD /* gPlus_Pad.png in Resources */,
 				01B394F41C37A282003955C6 /* Play_Pad.png in Resources */,
 				01B395071C37A42C003955C6 /* Import-models_Pad.png in Resources */,
 				0169C45B1C33ED5A00132FF6 /* popoverArrowDown-white@2x.png in Resources */,
@@ -5352,21 +4751,16 @@
 				01BA32471C5CC086000A5F3E /* popover-skin.png in Resources */,
 				E24974C4196BDC650025D442 /* controls5.sgm in Resources */,
 				E24974C1196BDC650025D442 /* controls2.sgm in Resources */,
-				25F748E51D08175200FB0AFD /* twit_Phone.png in Resources */,
 				01F8731D1C3A7500009AA31E /* PopUpViewControllerPhone.xib in Resources */,
-				0184EC6F1C350A5B006F0B57 /* iyan3d-sign-in_Pad.png in Resources */,
 				8ADEFEA9197425E8001E159D /* bonelimits.json in Resources */,
 				E24974C9196BDC650025D442 /* Envelop.sgr in Resources */,
-				25EC3D141D360CFF006AE211 /* Feeds_iphone@2x.png in Resources */,
 				01F873441C3A84BF009AA31E /* Next-frame_IPhone.png in Resources */,
 				254BA1A51B08377100F248A6 /* Iyan3Dcopy-Info.plist in Resources */,
 				250FEC861D1EA8B2000C8A2C /* Step-1_-img_phone@3x.png in Resources */,
-				01ACD1001C3D44930096AD14 /* iyan3d-text-sign-in_Pad@2x.png in Resources */,
 				250E54B81D3E092C0081A7CB /* Icon0@3x.png in Resources */,
 				01B4D0711C2937000091E19B /* Undo_Pad@2x.png in Resources */,
 				01B4CF841C291EFD0091E19B /* AnimationSelectionCollectionViewCell.xib in Resources */,
 				01F872A21C3A5A06009AA31E /* Play_IPhone.png in Resources */,
-				0184EC711C350A5B006F0B57 /* iyan3d-text-sign-in_Pad.png in Resources */,
 				01B395011C37A42C003955C6 /* Import-image_Pad.png in Resources */,
 				4E37A44022E18D76003A91DC /* properties-img@2x.png in Resources */,
 				01ACD0A71C3CEF360096AD14 /* color_IPhone@2x.png in Resources */,
@@ -5386,7 +4780,6 @@
 				01F873081C3A6C4E009AA31E /* Play_IPhone@2x.png in Resources */,
 				4E37A44222E18D76003A91DC /* properties-img-phone.png in Resources */,
 				25034FEE1D24F9960036F201 /* StepView.xib in Resources */,
-				0184EC731C350A5B006F0B57 /* Login-Img_Pad.png in Resources */,
 				25EC3D381D3613B8006AE211 /* info-icon.png in Resources */,
 				01B4CF8C1C291EFD0091E19B /* FrameCellNew.xib in Resources */,
 				01F8726F1C3A42EF009AA31E /* Import-Light_IPhone.png in Resources */,
@@ -5401,7 +4794,6 @@
 				25069F5B1D2BD81E00DBAE44 /* CommonProps.xib in Resources */,
 				250FEC461D1E5506000C8A2C /* round-close_phone@2x.png in Resources */,
 				3D5D0F401C632864006B987E /* Particles@2x.png in Resources */,
-				25F748C51D08085400FB0AFD /* fb_Pad.png in Resources */,
 				01F872731C3A42EF009AA31E /* Import-models_IPhone.png in Resources */,
 				25EBB2AA1D1174050031F18D /* MediaPreviewVC.xib in Resources */,
 				250E54BA1D3E092C0081A7CB /* Icon1@3x.png in Resources */,
@@ -5413,7 +4805,6 @@
 				25EC3D181D360CFF006AE211 /* Help_iphone@2x.png in Resources */,
 				250FEC881D1EA8B2000C8A2C /* Step-2_-img_phone@3x.png in Resources */,
 				01B4D05B1C2937000091E19B /* My-objects-Text_Pad.png in Resources */,
-				25F748C71D08085400FB0AFD /* fb_Pad@2x.png in Resources */,
 				01F872971C3A42EF009AA31E /* Scale_IPhone.png in Resources */,
 				01B395301C37AACE003955C6 /* Import-Light_Pad@2x.png in Resources */,
 				01B395171C37A8DD003955C6 /* Next-Frame@2x.png in Resources */,
@@ -5429,7 +4820,6 @@
 				250FEC4C1D1E5506000C8A2C /* Step-1_-img_phone@2x.png in Resources */,
 				01F8730E1C3A6C4E009AA31E /* Rotate_IPhone@2x.png in Resources */,
 				01B4D06D1C2937000091E19B /* Scale_Pad@2x.png in Resources */,
-				3DB4AB9C1C75DA9400C89B5C /* Add-Bone-IPhone.png in Resources */,
 				250E54B01D3E09060081A7CB /* BackBtn.png in Resources */,
 				01B3951B1C37A8DD003955C6 /* View@2x.png in Resources */,
 				25243D1B1DA2891400BA517B /* Idigital Bold.otf in Resources */,
@@ -5463,28 +4853,21 @@
 				3DE065351C7C287800CB7158 /* My-objects-Particles@2x.png in Resources */,
 				01F873121C3A6C4E009AA31E /* undo_IPhone@2x.png in Resources */,
 				E2497666196BE0190025D442 /* ObjCellViewPhone.xib in Resources */,
-				01F873301C3A78B4009AA31E /* Twitter_IPhone.png in Resources */,
 				250FEC8A1D1EA8B2000C8A2C /* Step-3_-img_phone@3x.png in Resources */,
 				E2497654196BE0190025D442 /* AssetCellView.xib in Resources */,
 				01F872831C3A42EF009AA31E /* My-objects-Models_IPhone.png in Resources */,
 				3D5F991E1C4D04EB00DD47F5 /* shape4.png in Resources */,
 				01ACD0B11C3D11BF0096AD14 /* SettingsViewController.xib in Resources */,
 				250991AD1D27CD2E005327E6 /* MediaPreviewVCPhone.xib in Resources */,
-				25EC3D201D360CFF006AE211 /* Login-IPhone@2x.png in Resources */,
 				01F872DA1C3A6C4E009AA31E /* Animation_IPhone@2x.png in Resources */,
 				3D5F99141C4D04EB00DD47F5 /* shape1@2x.png in Resources */,
-				25F748E31D08175200FB0AFD /* twit_Pad@2x.png in Resources */,
 				254A4B331D34F82B00D23D6D /* SwitchPropCell.xib in Resources */,
 				257564C41AE6E3D400B66113 /* RenderingViewController.xib in Resources */,
 				E2497665196BE0190025D442 /* ObjCellView.xib in Resources */,
 				250E54A91D3E07C40081A7CB /* Icon0@2x - Copy.png in Resources */,
-				25EC3D281D3612D6006AE211 /* Feeds_iphone.png in Resources */,
-				25EC3D341D36139B006AE211 /* Login-icon@2x.png in Resources */,
 				250FEC521D1E5506000C8A2C /* Step-2_-img_phone@2x.png in Resources */,
 				25FA148E1D3CE57600A95DA3 /* Icon0.png in Resources */,
 				0169C4631C33ED5A00132FF6 /* popoverArrowLeft-white@2x.png in Resources */,
-				25F748C91D08085400FB0AFD /* fb_Phone.png in Resources */,
-				01F873381C3A7DE4009AA31E /* Facebook_IPhone@2x.png in Resources */,
 				01B395051C37A42C003955C6 /* Import-model_Pad.png in Resources */,
 				3D45B7C11C5A151D0060A72B /* White-texture.png in Resources */,
 				01B02CE61C61CAB400C9102A /* Rotate_IPhone@3x.png in Resources */,
@@ -5493,7 +4876,6 @@
 				01B02CE81C61CAB400C9102A /* Scale_IPhone@3x.png in Resources */,
 				01F872871C3A42EF009AA31E /* MY-OBJECTS_IPhone.png in Resources */,
 				01B02CD21C61CAB400C9102A /* My-objects-Light_IPhone@3x.png in Resources */,
-				01ACD0FE1C3D44930096AD14 /* iyan3d-sign-in_Pad@2x.png in Resources */,
 				250FEC251D1E52D2000C8A2C /* Step-4_-img@2x.png in Resources */,
 				01CCD1C51C3F927D00565664 /* ObjSidePanel.xib in Resources */,
 				3DE0653B1C7C76E400CB7158 /* LightAndVideoProperties.xib in Resources */,
@@ -5501,11 +4883,7 @@
 				01B4D0531C2937000091E19B /* My-objects-Light_Pad.png in Resources */,
 				01B02CC01C61CAB400C9102A /* Import-model_IPhone@3x.png in Resources */,
 				25EC3D2C1D3612D6006AE211 /* info-icon_phone.png in Resources */,
-				4EA064E822B3738A00E1DCF0 /* GoogleService-Info.plist in Resources */,
-				01ACD1021C3D44930096AD14 /* Login-Img_Pad@2x.png in Resources */,
 				25243D191DA2891400BA517B /* Hot Pizza.ttf in Resources */,
-				01ACD0FC1C3D44930096AD14 /* Google_Pad@2x.png in Resources */,
-				25EC3D2E1D3612D6006AE211 /* Login-IPhone.png in Resources */,
 				3DC60FFC1C6B192D00A8D412 /* hq-IPhone@2x.png in Resources */,
 				01ACD0EE1C3D3AE20096AD14 /* Render-Preview-size_Small@2x.png in Resources */,
 				250FEC4A1D1E5506000C8A2C /* Step-1_-img_phone.png in Resources */,
@@ -5517,14 +4895,12 @@
 				4E82DD9622E2B72800587210 /* randNoise.png in Resources */,
 				01F8730A1C3A6C4E009AA31E /* Previous-frame_IPhone@2x.png in Resources */,
 				3D5F99261C4D04EB00DD47F5 /* shape6.png in Resources */,
-				25F748CB1D08085400FB0AFD /* fb_Phone@2x.png in Resources */,
 				25034FE21D24F9960036F201 /* BeginViewPhone@2x.xib in Resources */,
 				250FEC841D1EA8B2000C8A2C /* round-close_phone@3x.png in Resources */,
 				251815991D1D5C51009F68A8 /* Step-4_-img.png in Resources */,
 				01F872631C3A42EF009AA31E /* Animation_IPhone.png in Resources */,
 				01B394FA1C37A337003955C6 /* Export-video_Pad.png in Resources */,
 				01F872E01C3A6C4E009AA31E /* Export-video_IPhone@2x.png in Resources */,
-				01F8733C1C3A7DE4009AA31E /* iyan3d-sign-in_IPhone@2x.png in Resources */,
 				01B02CAC1C61CAB400C9102A /* Add-Frames_IPhone@3x.png in Resources */,
 				01F872EE1C3A6C4E009AA31E /* Import_IPhone@2x.png in Resources */,
 				01ACD0EA1C3D3AE20096AD14 /* Render-Preview-position_Right-Top@2x.png in Resources */,
@@ -5544,7 +4920,6 @@
 				3DBC85F41C2BCCD000B512AB /* selected_mark@2x.png in Resources */,
 				01BA32451C5CC086000A5F3E /* popover-delete.png in Resources */,
 				01B02CD41C61CAB400C9102A /* My-objects-Models_IPhone@3x.png in Resources */,
-				25F748CF1D08085400FB0AFD /* gPlus_Pad@2x.png in Resources */,
 				01B4D0651C2937000091E19B /* Redo_Pad@2x.png in Resources */,
 				C8AA46F51C227D1000C4AB53 /* SceneSelectionControllerNew.xib in Resources */,
 				01ACD0D01C3D1AAA0096AD14 /* Tool-Bar_Right.png in Resources */,
@@ -5561,18 +4936,14 @@
 				01F872E41C3A6C4E009AA31E /* Import-image_IPhone@2x.png in Resources */,
 				E24974DF196BDC8E0025D442 /* jointsData.json in Resources */,
 				01B4D0691C2937000091E19B /* Rotate_Pad@2x.png in Resources */,
-				0184EC751C350A5B006F0B57 /* Twitter_Pad.png in Resources */,
 				01F873001C3A6C4E009AA31E /* MY-OBJECTS_IPhone@2x.png in Resources */,
 				01B4BD1B1C32C93B00E09269 /* Undo_IPhone@2x.png in Resources */,
 				01ACD0921C3CDEE60096AD14 /* ImportImageNewPhone.xib in Resources */,
 				0169C4671C33ED5A00132FF6 /* popoverArrowLeft@2x.png in Resources */,
 				0169C4691C33ED5A00132FF6 /* popoverArrowLeftSimple.png in Resources */,
-				01F8732E1C3A78B4009AA31E /* iyan3d-text-sign-in_IPhone.png in Resources */,
-				3DB4ABA21C75DA9400C89B5C /* Add-Bone-pad.png in Resources */,
 				01B4D0201C292CD50091E19B /* EditorViewController.xib in Resources */,
 				250FEC3E1D1E5506000C8A2C /* Divider-1_phone.png in Resources */,
 				3DC60FFE1C6B192D00A8D412 /* hq.png in Resources */,
-				0184EC6D1C350A5B006F0B57 /* Google_Pad.png in Resources */,
 				01B02CDC1C61CAB400C9102A /* Options_IPhone@3x.png in Resources */,
 				01B4D0611C2937000091E19B /* OPtions_Pad@2x.png in Resources */,
 				0169C46B1C33ED5A00132FF6 /* popoverArrowRight-white@2x.png in Resources */,
@@ -5587,13 +4958,10 @@
 				0169C45D1C33ED5A00132FF6 /* popoverArrowDown.png in Resources */,
 				25D671931C46353100BE685D /* controls1.sgm in Resources */,
 				01B395341C37AACE003955C6 /* Import-models_Pad@2x.png in Resources */,
-				25EC3D221D360CFF006AE211 /* Login-IPhone@3x.png in Resources */,
 				01F872711C3A42EF009AA31E /* Import-model_IPhone.png in Resources */,
 				01F872EC1C3A6C4E009AA31E /* Import-text_IPhone@2x.png in Resources */,
 				4E9A56D522E3833200575D98 /* render_image.png in Resources */,
-				25F748E11D08175200FB0AFD /* twit_Pad.png in Resources */,
 				01B02CE41C61CAB400C9102A /* Redo_IPhone@3x.png in Resources */,
-				0184EC6B1C350A5B006F0B57 /* Facebook_Pad.png in Resources */,
 				3D3F591C1C2801C600713C79 /* TextFrameCell.xib in Resources */,
 				01F872A41C3A5A06009AA31E /* Redo_IPhone.png in Resources */,
 				25EC3D541D366882006AE211 /* View_IPhone@2x.png in Resources */,
@@ -5602,7 +4970,6 @@
 				25034FE01D24F9960036F201 /* BeginViewPhone.xib in Resources */,
 				3DAC8C401C6C5F980020C31D /* RenderingViewControllerPhone@2x.xib in Resources */,
 				3D5D0F461C633697006B987E /* Particle_IPhone@2x.png in Resources */,
-				25EFBEB91BE25CB400DB300C /* RETrimControl.bundle in Resources */,
 				E2C4DB5A1A9F5FFC00F0AD12 /* light.sgm in Resources */,
 				01F872751C3A42EF009AA31E /* Import-text_IPhone.png in Resources */,
 				01B02CBE1C61CAB400C9102A /* Import-Light_IPhone@3x.png in Resources */,
@@ -5611,28 +4978,24 @@
 				3D58CD491C3D0D3D006371DE /* TextColorPicker.xib in Resources */,
 				250FEC5C1D1E5506000C8A2C /* Step-4_-img_phone.png in Resources */,
 				8AED29BB198A29AD004FC1E5 /* viewCameraModes.json in Resources */,
-				3DB4ABA41C75DA9400C89B5C /* Add-Bone-pad@2x.png in Resources */,
 				E2497670196BE0190025D442 /* ScaleForAutoRigViewController.xib in Resources */,
 				01B02CDE1C61CAB400C9102A /* pause_IPhone@3x_.png in Resources */,
 				8ADEFEAA197425E8001E159D /* humanTPoseBoneLimits.json in Resources */,
 				01ACD0C41C3D1AAA0096AD14 /* Render-Preview-position_Left-Top.png in Resources */,
 				25F7C44E1B68093600C4183F /* deviceCodes.json in Resources */,
 				3D5D0F491C6336A4006B987E /* Particle_IPhone@3x.png in Resources */,
-				25EC3D161D360CFF006AE211 /* Feeds_iphone@3x.png in Resources */,
 				01F872FC1C3A6C4E009AA31E /* My-objects-Models_IPhone@2x.png in Resources */,
 				E24974C2196BDC650025D442 /* controls3.sgm in Resources */,
 				C8AA46EE1C227CED00C4AB53 /* SceneSelectionFrameCell.xib in Resources */,
 				01B6C8BF1C3BBA0D0050D2F9 /* AssetFrameCellPhone.xib in Resources */,
 				01F872F61C3A6C4E009AA31E /* My-objects-Camera_IPhone@2x.png in Resources */,
 				01B4D0551C2937000091E19B /* My-objects-Light_Pad@2x.png in Resources */,
-				25F748E71D08175200FB0AFD /* twit_Phone@2x.png in Resources */,
 				250E54AB1D3E07C40081A7CB /* Icon1@2x.png in Resources */,
 				01B3950C1C37A72B003955C6 /* Add-Bones_Pad.png in Resources */,
 				3DD47BF01C60A43500E7CCFD /* 60001.sgm in Resources */,
 				E24974C3196BDC650025D442 /* controls4.sgm in Resources */,
 				4E82DD9822E2B72800587210 /* round83.png in Resources */,
 				01F872991C3A42EF009AA31E /* undo_IPhone.png in Resources */,
-				01F8733A1C3A7DE4009AA31E /* Google_IPhone@2x.png in Resources */,
 				4E9A56DB22E3833200575D98 /* render_image-phone.png in Resources */,
 				01ACD0C01C3D1AAA0096AD14 /* Frame-Count-Display_Frames.png in Resources */,
 				25FA149C1D3CF68700A95DA3 /* TexturePropCell.xib in Resources */,
@@ -5665,14 +5028,12 @@
 				25034FEB1D24F9960036F201 /* OnBoardVCPhone@2x.xib in Resources */,
 				250FEC651D1E5506000C8A2C /* Welcome-Img_phone@2x.png in Resources */,
 				251815981D1D5C51009F68A8 /* Step-3_-img.png in Resources */,
-				25EC3D471D361453006AE211 /* Feeds@2x.png in Resources */,
 				01F872FB1C3A6C4E009AA31E /* My-objects-Light_IPhone@2x.png in Resources */,
 				01ACD0A61C3CEF360096AD14 /* color_IPhone.png in Resources */,
 				3DD47BFB1C60A43500E7CCFD /* 60006.sgm in Resources */,
 				3DE065391C7C28B600CB7158 /* My-objects-Particles.png in Resources */,
 				C8DF1FE21C242DBD00F689D6 /* close.png in Resources */,
 				250FEC591D1E5506000C8A2C /* Step-3_-img_phone@2x.png in Resources */,
-				01F8732D1C3A78B4009AA31E /* iyan3d-sign-in_IPhone.png in Resources */,
 				3DB4ABA81C75F92000C89B5C /* Options_IPhone-@2X.png in Resources */,
 				01B02CD11C61CAB400C9102A /* My-objects-Image_IPhone@3x.png in Resources */,
 				0169C4741C33ED5A00132FF6 /* popoverArrowUp-white@2x.png in Resources */,
@@ -5684,7 +5045,6 @@
 				01B02CE31C61CAB400C9102A /* Previous-frame_IPhone@3x.png in Resources */,
 				C8AA46F61C227D1000C4AB53 /* SceneSelectionControllerNew.xib in Resources */,
 				25D6719B1C46930900BE685D /* controls8.sgm in Resources */,
-				25EC3D331D36139B006AE211 /* Login-icon.png in Resources */,
 				01B3953A1C37AB90003955C6 /* My-objects-Image_Pad@2x.png in Resources */,
 				01F872A81C3A689B009AA31E /* Add-Bones_IPhone.png in Resources */,
 				01B4D0461C2937000091E19B /* Export_Pad@2x.png in Resources */,
@@ -5699,10 +5059,8 @@
 				01BA32511C5CC292000A5F3E /* popover-skin@2x.png in Resources */,
 				01C2B79C1C46543200384370 /* color@2x.png in Resources */,
 				01F872821C3A42EF009AA31E /* My-objects-Light_IPhone.png in Resources */,
-				01F8732B1C3A78B4009AA31E /* Google_IPhone.png in Resources */,
 				01B02CAB1C61CAB400C9102A /* Add-Bones_IPhone@3x.png in Resources */,
 				01ACD0F31C3D3AE20096AD14 /* Tool-Bar_Right@2x.png in Resources */,
-				25F748D41D08085400FB0AFD /* gPlus_Phone@2x.png in Resources */,
 				251815961D1D5C51009F68A8 /* Step-2_-img.png in Resources */,
 				25243D161DA2891400BA517B /* Bernstein Regular.ttf in Resources */,
 				25EC3D531D366882006AE211 /* View_IPhone.png in Resources */,
@@ -5715,7 +5073,6 @@
 				01F872961C3A42EF009AA31E /* Rotate_IPhone.png in Resources */,
 				25CACF6A1B27D4DD0027F48C /* FontCellView.xib in Resources */,
 				01D2F09F1C44CDD9000E41C7 /* Play_Pad@2x.png in Resources */,
-				4E82DBF822E1E22400587210 /* Android.mk in Resources */,
 				C8AA47041C227D3600C4AB53 /* New-scene.png in Resources */,
 				01F872D71C3A6C4E009AA31E /* Add-Bones_IPhone@2x.png in Resources */,
 				25CACF6B1B27D4DD0027F48C /* FontCellViewPhone.xib in Resources */,
@@ -5723,14 +5080,11 @@
 				3DD47BF71C60A43500E7CCFD /* 60004.sgm in Resources */,
 				2518159C1D1D5C51009F68A8 /* Welcome-Img.png in Resources */,
 				01F872FF1C3A6C4E009AA31E /* My-objects-Text_IPhone@2x.png in Resources */,
-				01F873411C3A7DE4009AA31E /* Twitter_IPhone@2x.png in Resources */,
 				01B6C8BA1C3B94590050D2F9 /* AnimationSelectionCollectionViewCellPhone.xib in Resources */,
 				259EE1541BDE342800C99784 /* dummy.png in Resources */,
-				25F748D21D08085400FB0AFD /* gPlus_Phone.png in Resources */,
 				01B4CFEB1C29219A0091E19B /* Add-Frames.png in Resources */,
 				01B02CED1C61CAB400C9102A /* undo_IPhone@3x.png in Resources */,
 				01B4D0541C2937000091E19B /* My-objects-Light_Pad.png in Resources */,
-				3DB4AB9F1C75DA9400C89B5C /* Add-Bone-IPhone@2x.png in Resources */,
 				25EC46231D33D67E004DC02C /* SliderPropCell.xib in Resources */,
 				01B6F3F71C3E94890041D42F /* SettingsViewControllerPhone.xib in Resources */,
 				250FEC831D1EA8B2000C8A2C /* Divider-1_phone@3x.png in Resources */,
@@ -5748,7 +5102,6 @@
 				0169C4781C33ED5A00132FF6 /* popoverArrowUp@2x.png in Resources */,
 				01B4BCB81C32904C00E09269 /* EditorViewControllerPhone.xib in Resources */,
 				01B02CCD1C61CAB400C9102A /* Move_IPhone@3x.png in Resources */,
-				01F873291C3A78B4009AA31E /* Facebook_IPhone.png in Resources */,
 				01ACD0CB1C3D1AAA0096AD14 /* Render-Preview-size_Large.png in Resources */,
 				3D3F591D1C2801C600713C79 /* TextFrameCell.xib in Resources */,
 				01B6F3F11C3E5C700041D42F /* SceneSelectionControllerNewPhone.xib in Resources */,
@@ -5757,7 +5110,6 @@
 				01ACD0E71C3D3AE20096AD14 /* Render-Preview-position_Left-Top@2x.png in Resources */,
 				0169C4601C33ED5A00132FF6 /* popoverArrowDown@2x.png in Resources */,
 				25FA149A1D3CED9D00A95DA3 /* tick.png in Resources */,
-				01ACD0FB1C3D44930096AD14 /* Facebook_Pad@2x.png in Resources */,
 				0169C4621C33ED5A00132FF6 /* popoverArrowDownSimple.png in Resources */,
 				01F8728E1C3A42EF009AA31E /* pause_IPhone.png in Resources */,
 				01B6C8B71C3B920B0050D2F9 /* AnimationSelectionSliderPhone.xib in Resources */,
@@ -5769,7 +5121,6 @@
 				3DD47BF31C60A43500E7CCFD /* 60002.sgm in Resources */,
 				250FEC511D1E5506000C8A2C /* Step-2_-img_phone.png in Resources */,
 				01B4D0481C2937000091E19B /* Import_Pad.png in Resources */,
-				2512BFDF1CB2708E006E19A3 /* GoogleSignIn.bundle in Resources */,
 				250FEC8F1D1EA8B2000C8A2C /* Welcome-Img_phone@3x.png in Resources */,
 				01B02CC31C61CAB400C9102A /* Import-models_IPhone@3x.png in Resources */,
 				01B4D04C1C2937000091E19B /* Move_Pad.png in Resources */,
@@ -5781,11 +5132,8 @@
 				01ACD0961C3CE93D0096AD14 /* TextSelectionSidePanelPhone.xib in Resources */,
 				4E82DD9522E2B72800587210 /* wheel2.png in Resources */,
 				01F872861C3A42EF009AA31E /* My-objects-Text_IPhone.png in Resources */,
-				25EC3D451D361453006AE211 /* Feeds.png in Resources */,
 				250FEC201D1E52D2000C8A2C /* Step-1_-img@2x.png in Resources */,
 				E20672491B049AA6006DD2F7 /* camera.sgm in Resources */,
-				01ACD1051C3D44930096AD14 /* Twitter_Pad@2x.png in Resources */,
-				3DB4ABA11C75DA9400C89B5C /* Add-Bone-IPhone@3x.png in Resources */,
 				01F872621C3A42EF009AA31E /* Add-Frames_IPhone.png in Resources */,
 				01F872661C3A42EF009AA31E /* Back_IPhone.png in Resources */,
 				25FA14911D3CE57600A95DA3 /* Icon1.png in Resources */,
@@ -5795,7 +5143,6 @@
 				2518158D1D1D4AAD009F68A8 /* round-close.png in Resources */,
 				0169C47A1C33ED5A00132FF6 /* popoverArrowUpSimple.png in Resources */,
 				250FEC8D1D1EA8B2000C8A2C /* Step-4_-img_phone@3x.png in Resources */,
-				01F8733F1C3A7DE4009AA31E /* iyan3d-text-sign-in_IPhone@2x.png in Resources */,
 				4E9A56DA22E3833200575D98 /* render_image-phone@2x.png in Resources */,
 				0169C46E1C33ED5A00132FF6 /* popoverArrowRight.png in Resources */,
 				01B02CB71C61CAB400C9102A /* EXPORT@3x.png in Resources */,
@@ -5807,7 +5154,6 @@
 				01F872801C3A42EF009AA31E /* My-objects-Image_IPhone.png in Resources */,
 				01B02CBD1C61CAB400C9102A /* Import-image_IPhone@3x.png in Resources */,
 				01B394F51C37A282003955C6 /* Play_Pad.png in Resources */,
-				25F748CE1D08085400FB0AFD /* gPlus_Pad.png in Resources */,
 				01B395081C37A42C003955C6 /* Import-models_Pad.png in Resources */,
 				0169C45C1C33ED5A00132FF6 /* popoverArrowDown-white@2x.png in Resources */,
 				01B4D06C1C2937000091E19B /* Scale_Pad.png in Resources */,
@@ -5824,18 +5170,13 @@
 				25EC3D4A1D365847006AE211 /* SegmentCell.xib in Resources */,
 				01BA32481C5CC086000A5F3E /* popover-skin.png in Resources */,
 				01F8731E1C3A7500009AA31E /* PopUpViewControllerPhone.xib in Resources */,
-				25F748E61D08175200FB0AFD /* twit_Phone.png in Resources */,
-				0184EC701C350A5B006F0B57 /* iyan3d-sign-in_Pad.png in Resources */,
 				01F873451C3A84BF009AA31E /* Next-frame_IPhone.png in Resources */,
-				25EC3D151D360CFF006AE211 /* Feeds_iphone@2x.png in Resources */,
 				01B4CF891C291EFD0091E19B /* AnimationSelectionSlider.xib in Resources */,
-				01ACD1011C3D44930096AD14 /* iyan3d-text-sign-in_Pad@2x.png in Resources */,
 				250FEC871D1EA8B2000C8A2C /* Step-1_-img_phone@3x.png in Resources */,
 				250E54B91D3E092C0081A7CB /* Icon0@3x.png in Resources */,
 				01B4D05A1C2937000091E19B /* My-objects-Models_Pad@2x.png in Resources */,
 				3D04EAF61C25830F00C18E1A /* No-Bevel.png in Resources */,
 				01F872A31C3A5A06009AA31E /* Play_IPhone.png in Resources */,
-				0184EC721C350A5B006F0B57 /* iyan3d-text-sign-in_Pad.png in Resources */,
 				01B395021C37A42C003955C6 /* Import-image_Pad.png in Resources */,
 				01ACD0A81C3CEF360096AD14 /* color_IPhone@2x.png in Resources */,
 				01F872781C3A42EF009AA31E /* Import_IPhone.png in Resources */,
@@ -5853,7 +5194,6 @@
 				01ACD0A01C3CEEE70096AD14 /* No-Bevel_IPhone.png in Resources */,
 				01F873091C3A6C4E009AA31E /* Play_IPhone@2x.png in Resources */,
 				25034FEF1D24F9960036F201 /* StepView.xib in Resources */,
-				0184EC741C350A5B006F0B57 /* Login-Img_Pad.png in Resources */,
 				01F872701C3A42EF009AA31E /* Import-Light_IPhone.png in Resources */,
 				01B394F91C37A337003955C6 /* Export-image_Pad.png in Resources */,
 				25EC3D391D3613B8006AE211 /* info-icon.png in Resources */,
@@ -5872,7 +5212,6 @@
 				01F872741C3A42EF009AA31E /* Import-models_IPhone.png in Resources */,
 				3D5D0F411C632864006B987E /* Particles@2x.png in Resources */,
 				250FEC471D1E5506000C8A2C /* round-close_phone@2x.png in Resources */,
-				25F748C61D08085400FB0AFD /* fb_Pad.png in Resources */,
 				E20672BF1B049AA6006DD2F7 /* controls5.sgm in Resources */,
 				01F8727E1C3A42EF009AA31E /* My-objects-Camera_IPhone.png in Resources */,
 				250E54BB1D3E092C0081A7CB /* Icon1@3x.png in Resources */,
@@ -5889,10 +5228,8 @@
 				01B395311C37AACE003955C6 /* Import-Light_Pad@2x.png in Resources */,
 				01B395181C37A8DD003955C6 /* Next-Frame@2x.png in Resources */,
 				01F872F51C3A6C4E009AA31E /* Move_IPhone@2x.png in Resources */,
-				25F748C81D08085400FB0AFD /* fb_Pad@2x.png in Resources */,
 				3D5F991B1C4D04EB00DD47F5 /* shape3.png in Resources */,
 				01CCD1C91C3FDBA600565664 /* ObjSidePanelPhone.xib in Resources */,
-				25EFBEBA1BE25CB400DB300C /* RETrimControl.bundle in Resources */,
 				250FEC411D1E5506000C8A2C /* Divider-1_phone@2x.png in Resources */,
 				251815841D1D4924009F68A8 /* Step-1_-img.png in Resources */,
 				250FEC4D1D1E5506000C8A2C /* Step-1_-img_phone@2x.png in Resources */,
@@ -5901,7 +5238,6 @@
 				E20672EC1B049AA6006DD2F7 /* LoadingViewControllerPad.xib in Resources */,
 				01B4CF8D1C291EFD0091E19B /* FrameCellNew.xib in Resources */,
 				01B4D0421C2937000091E19B /* Back.png in Resources */,
-				3DB4AB9D1C75DA9400C89B5C /* Add-Bone-IPhone.png in Resources */,
 				250E54B11D3E09060081A7CB /* BackBtn.png in Resources */,
 				01F872D91C3A6C4E009AA31E /* Add-Frames_IPhone@2x.png in Resources */,
 				01B3951C1C37A8DD003955C6 /* View@2x.png in Resources */,
@@ -5933,7 +5269,6 @@
 				01B4D0621C2937000091E19B /* OPtions_Pad@2x.png in Resources */,
 				01F873131C3A6C4E009AA31E /* undo_IPhone@2x.png in Resources */,
 				3DE065361C7C287800CB7158 /* My-objects-Particles@2x.png in Resources */,
-				01F873311C3A78B4009AA31E /* Twitter_IPhone.png in Resources */,
 				250E54B31D3E09060081A7CB /* BackBtn@2x.png in Resources */,
 				01B4D05C1C2937000091E19B /* My-objects-Text_Pad.png in Resources */,
 				250FEC8B1D1EA8B2000C8A2C /* Step-3_-img_phone@3x.png in Resources */,
@@ -5943,20 +5278,14 @@
 				01F872DB1C3A6C4E009AA31E /* Animation_IPhone@2x.png in Resources */,
 				250991AE1D27CD2E005327E6 /* MediaPreviewVCPhone.xib in Resources */,
 				3D5F99151C4D04EB00DD47F5 /* shape1@2x.png in Resources */,
-				25EC3D211D360CFF006AE211 /* Login-IPhone@2x.png in Resources */,
 				C8AA47061C227D3600C4AB53 /* New.png in Resources */,
 				01B4D04E1C2937000091E19B /* Move_Pad@2x.png in Resources */,
-				25F748E41D08175200FB0AFD /* twit_Pad@2x.png in Resources */,
 				01B4D0561C2937000091E19B /* My-objects-Light_Pad@2x.png in Resources */,
 				254A4B341D34F82B00D23D6D /* SwitchPropCell.xib in Resources */,
 				250E54AA1D3E07C40081A7CB /* Icon0@2x - Copy.png in Resources */,
-				01F873391C3A7DE4009AA31E /* Facebook_IPhone@2x.png in Resources */,
 				250FEC531D1E5506000C8A2C /* Step-2_-img_phone@2x.png in Resources */,
-				25EC3D291D3612D6006AE211 /* Feeds_iphone.png in Resources */,
-				25EC3D351D36139B006AE211 /* Login-icon@2x.png in Resources */,
 				0169C4641C33ED5A00132FF6 /* popoverArrowLeft-white@2x.png in Resources */,
 				25FA148F1D3CE57600A95DA3 /* Icon0.png in Resources */,
-				25F748CA1D08085400FB0AFD /* fb_Phone.png in Resources */,
 				01B395061C37A42C003955C6 /* Import-model_Pad.png in Resources */,
 				3D45B7C21C5A151D0060A72B /* White-texture.png in Resources */,
 				01B02CE71C61CAB400C9102A /* Rotate_IPhone@3x.png in Resources */,
@@ -5968,7 +5297,6 @@
 				C8E1799F1C20612E00C78C07 /* Images.xcassets in Resources */,
 				01F872881C3A42EF009AA31E /* MY-OBJECTS_IPhone.png in Resources */,
 				01B02CD31C61CAB400C9102A /* My-objects-Light_IPhone@3x.png in Resources */,
-				01ACD0FF1C3D44930096AD14 /* iyan3d-sign-in_Pad@2x.png in Resources */,
 				250FEC261D1E52D2000C8A2C /* Step-4_-img@2x.png in Resources */,
 				01CCD1C61C3F927D00565664 /* ObjSidePanel.xib in Resources */,
 				3DE0653C1C7C76E400CB7158 /* LightAndVideoProperties.xib in Resources */,
@@ -5977,12 +5305,8 @@
 				01B02CC11C61CAB400C9102A /* Import-model_IPhone@3x.png in Resources */,
 				E206732D1B049AA6006DD2F7 /* BoneMesh.sgm in Resources */,
 				25EC3D2D1D3612D6006AE211 /* info-icon_phone.png in Resources */,
-				4EA064E922B3738A00E1DCF0 /* GoogleService-Info.plist in Resources */,
-				01ACD1031C3D44930096AD14 /* Login-Img_Pad@2x.png in Resources */,
 				25243D1A1DA2891400BA517B /* Hot Pizza.ttf in Resources */,
-				01ACD0FD1C3D44930096AD14 /* Google_Pad@2x.png in Resources */,
 				3DC60FFD1C6B192D00A8D412 /* hq-IPhone@2x.png in Resources */,
-				25EC3D2F1D3612D6006AE211 /* Login-IPhone.png in Resources */,
 				01B4CFF51C29219A0091E19B /* Previous-Frame.png in Resources */,
 				01ACD0EF1C3D3AE20096AD14 /* Render-Preview-size_Small@2x.png in Resources */,
 				250FEC4B1D1E5506000C8A2C /* Step-1_-img_phone.png in Resources */,
@@ -5993,14 +5317,12 @@
 				25EC3D1D1D360CFF006AE211 /* info-icon_phone@2x.png in Resources */,
 				3D5F99271C4D04EB00DD47F5 /* shape6.png in Resources */,
 				4E82DD9722E2B72800587210 /* randNoise.png in Resources */,
-				25F748CC1D08085400FB0AFD /* fb_Phone@2x.png in Resources */,
 				25034FE31D24F9960036F201 /* BeginViewPhone@2x.xib in Resources */,
 				250FEC851D1EA8B2000C8A2C /* round-close_phone@3x.png in Resources */,
 				2518159A1D1D5C51009F68A8 /* Step-4_-img.png in Resources */,
 				01F872641C3A42EF009AA31E /* Animation_IPhone.png in Resources */,
 				01B394FB1C37A337003955C6 /* Export-video_Pad.png in Resources */,
 				01F872E11C3A6C4E009AA31E /* Export-video_IPhone@2x.png in Resources */,
-				01F8733D1C3A7DE4009AA31E /* iyan3d-sign-in_IPhone@2x.png in Resources */,
 				01B02CAD1C61CAB400C9102A /* Add-Frames_IPhone@3x.png in Resources */,
 				E206733D1B049AA6006DD2F7 /* ObjCellViewPhone.xib in Resources */,
 				01F872EF1C3A6C4E009AA31E /* Import_IPhone@2x.png in Resources */,
@@ -6026,7 +5348,6 @@
 				01BA32461C5CC086000A5F3E /* popover-delete.png in Resources */,
 				01B02CD51C61CAB400C9102A /* My-objects-Models_IPhone@3x.png in Resources */,
 				01B4D0211C292CD50091E19B /* EditorViewController.xib in Resources */,
-				25F748D01D08085400FB0AFD /* gPlus_Pad@2x.png in Resources */,
 				3DBC85EF1C2BCBEC00B512AB /* close@2x.png in Resources */,
 				4E37A44522E18D76003A91DC /* properties-img-phone@2x.png in Resources */,
 				01ACD0D11C3D1AAA0096AD14 /* Tool-Bar_Right.png in Resources */,
@@ -6039,18 +5360,14 @@
 				01B4D04A1C2937000091E19B /* Import_Pad@2x.png in Resources */,
 				01F872E51C3A6C4E009AA31E /* Import-image_IPhone@2x.png in Resources */,
 				3D04EAF91C25883900C18E1A /* color.png in Resources */,
-				0184EC761C350A5B006F0B57 /* Twitter_Pad.png in Resources */,
 				01F873011C3A6C4E009AA31E /* MY-OBJECTS_IPhone@2x.png in Resources */,
 				01B4BD1C1C32C93B00E09269 /* Undo_IPhone@2x.png in Resources */,
 				01ACD0931C3CDEE60096AD14 /* ImportImageNewPhone.xib in Resources */,
 				0169C4681C33ED5A00132FF6 /* popoverArrowLeft@2x.png in Resources */,
 				0169C46A1C33ED5A00132FF6 /* popoverArrowLeftSimple.png in Resources */,
-				01F8732F1C3A78B4009AA31E /* iyan3d-text-sign-in_IPhone.png in Resources */,
-				3DB4ABA31C75DA9400C89B5C /* Add-Bone-pad.png in Resources */,
 				E206739A1B049AA6006DD2F7 /* sphere.sgm in Resources */,
 				3DC60FFF1C6B192D00A8D412 /* hq.png in Resources */,
 				250FEC3F1D1E5506000C8A2C /* Divider-1_phone.png in Resources */,
-				0184EC6E1C350A5B006F0B57 /* Google_Pad.png in Resources */,
 				01B4D0581C2937000091E19B /* My-objects-Models_Pad.png in Resources */,
 				01B02CDD1C61CAB400C9102A /* Options_IPhone@3x.png in Resources */,
 				01B4D0681C2937000091E19B /* Rotate_Pad.png in Resources */,
@@ -6065,14 +5382,11 @@
 				0169C45E1C33ED5A00132FF6 /* popoverArrowDown.png in Resources */,
 				25D671941C46353100BE685D /* controls1.sgm in Resources */,
 				01B395351C37AACE003955C6 /* Import-models_Pad@2x.png in Resources */,
-				25EC3D231D360CFF006AE211 /* Login-IPhone@3x.png in Resources */,
 				01F872721C3A42EF009AA31E /* Import-model_IPhone.png in Resources */,
 				01F872ED1C3A6C4E009AA31E /* Import-text_IPhone@2x.png in Resources */,
 				4E9A56D622E3833200575D98 /* render_image.png in Resources */,
 				E20673BC1B049AA6006DD2F7 /* mirrorJoints.json in Resources */,
-				25F748E21D08175200FB0AFD /* twit_Pad.png in Resources */,
 				01B02CE51C61CAB400C9102A /* Redo_IPhone@3x.png in Resources */,
-				0184EC6C1C350A5B006F0B57 /* Facebook_Pad.png in Resources */,
 				25EC3D551D366882006AE211 /* View_IPhone@2x.png in Resources */,
 				01F872A51C3A5A06009AA31E /* Redo_IPhone.png in Resources */,
 				0169C4701C33ED5A00132FF6 /* popoverArrowRight@2x.png in Resources */,
@@ -6088,14 +5402,12 @@
 				250FEC5D1D1E5506000C8A2C /* Step-4_-img_phone.png in Resources */,
 				E20673DB1B049AA6006DD2F7 /* light.sgm in Resources */,
 				C8AA47021C227D3600C4AB53 /* Mail.png in Resources */,
-				3DB4ABA51C75DA9400C89B5C /* Add-Bone-pad@2x.png in Resources */,
 				01B02CDF1C61CAB400C9102A /* pause_IPhone@3x_.png in Resources */,
 				E20673E51B049AA6006DD2F7 /* viewCameraModes.json in Resources */,
 				01ACD0C51C3D1AAA0096AD14 /* Render-Preview-position_Left-Top.png in Resources */,
 				E20673E81B049AA6006DD2F7 /* ScaleForAutoRigViewController.xib in Resources */,
 				3D04EAF41C25830F00C18E1A /* Bevel-pad.png in Resources */,
 				3D5D0F4A1C6336A4006B987E /* Particle_IPhone@3x.png in Resources */,
-				25EC3D171D360CFF006AE211 /* Feeds_iphone@3x.png in Resources */,
 				01F872FD1C3A6C4E009AA31E /* My-objects-Models_IPhone@2x.png in Resources */,
 				25F7C44F1B68093600C4183F /* deviceCodes.json in Resources */,
 				E20673EC1B049AA6006DD2F7 /* humanTPoseBoneLimits.json in Resources */,
@@ -6103,14 +5415,12 @@
 				01F872F71C3A6C4E009AA31E /* My-objects-Camera_IPhone@2x.png in Resources */,
 				E20673EE1B049AA6006DD2F7 /* controls3.sgm in Resources */,
 				01B4D0661C2937000091E19B /* Redo_Pad@2x.png in Resources */,
-				25F748E81D08175200FB0AFD /* twit_Phone@2x.png in Resources */,
 				250E54AC1D3E07C40081A7CB /* Icon1@2x.png in Resources */,
 				01B3950D1C37A72B003955C6 /* Add-Bones_Pad.png in Resources */,
 				3DD47BF11C60A43500E7CCFD /* 60001.sgm in Resources */,
 				E20673F61B049AA6006DD2F7 /* controls4.sgm in Resources */,
 				4E82DD9922E2B72800587210 /* round83.png in Resources */,
 				01F8729A1C3A42EF009AA31E /* undo_IPhone.png in Resources */,
-				01F8733B1C3A7DE4009AA31E /* Google_IPhone@2x.png in Resources */,
 				4E9A56DC22E3833200575D98 /* render_image-phone.png in Resources */,
 				25FA149D1D3CF68700A95DA3 /* TexturePropCell.xib in Resources */,
 				01ACD0C11C3D1AAA0096AD14 /* Frame-Count-Display_Frames.png in Resources */,
@@ -6124,104 +5434,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		030EC959997B74CFF5C8DD0C /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Iyan3D-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		33E21E0BEB9E83B09E1EF9DB /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Iyan3D-Simulator/Pods-Iyan3D-Simulator-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Iyan3D-Simulator/Pods-Iyan3D-Simulator-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Iyan3D-Simulator/Pods-Iyan3D-Simulator-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		4EA0650322B389FE00E1DCF0 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/Fabric/run\"\n";
-		};
-		6DE0B58DDE87D3271B4695B6 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Iyan3D-Simulator-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		733EAC34D9B8DA355F986592 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Iyan3D/Pods-Iyan3D-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Iyan3D/Pods-Iyan3D-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Iyan3D/Pods-Iyan3D-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C885D7771876BE6100A45D71 /* Sources */ = {
@@ -6982,7 +6194,6 @@
 		};
 		C885D7B11876BE6200A45D71 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 45C6C1F67AB758D3309FA446 /* Pods-Iyan3D.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
@@ -6994,7 +6205,6 @@
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Iyan3D/3rdParty/AdMob",
 					"$(PROJECT_DIR)/FrameWorks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -7003,19 +6213,12 @@
 				INFOPLIST_FILE = "Iyan3D/Iyan3D-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Iyan3D/3rdParty/YouTube",
-					"$(PROJECT_DIR)/Flurry",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Iyan3D/3rdParty/Analytics",
 					"$(PROJECT_DIR)/FrameWorks",
-					"$(PROJECT_DIR)/Iyan3D/3rdParty/assimp",
 				);
-				MTL_COMPILER_FLAGS = "";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_LANGUAGE_REVISION = UseDeploymentTarget;
 				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.iyan3dpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "74cc7fd5-c7e4-40ae-8354-fad5045525b8";
 				PROVISIONING_PROFILE_SPECIFIER = "Iyan 3d pro - dev";
 				WRAPPER_EXTENSION = app;
 			};
@@ -7023,7 +6226,6 @@
 		};
 		C885D7B21876BE6200A45D71 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C4B5BBE6FEEBF4475ECD9ED8 /* Pods-Iyan3D.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
@@ -7035,7 +6237,6 @@
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Iyan3D/3rdParty/AdMob",
 					"$(PROJECT_DIR)/FrameWorks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -7044,19 +6245,12 @@
 				INFOPLIST_FILE = "Iyan3D/Iyan3D-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Iyan3D/3rdParty/YouTube",
-					"$(PROJECT_DIR)/Flurry",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Iyan3D/3rdParty/Analytics",
 					"$(PROJECT_DIR)/FrameWorks",
-					"$(PROJECT_DIR)/Iyan3D/3rdParty/assimp",
 				);
-				MTL_COMPILER_FLAGS = "";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_LANGUAGE_REVISION = UseDeploymentTarget;
 				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.iyan3dpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "74cc7fd5-c7e4-40ae-8354-fad5045525b8";
 				PROVISIONING_PROFILE_SPECIFIER = "Iyan 3d pro - dev";
 				WRAPPER_EXTENSION = app;
 			};
@@ -7064,7 +6258,6 @@
 		};
 		E20674041B049AA6006DD2F7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8D6B3ECBDA6C891A3AEF71BF /* Pods-Iyan3D-Simulator.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
@@ -7074,7 +6267,6 @@
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Iyan3D/3rdParty/AdMob",
 					"$(PROJECT_DIR)/FrameWorks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -7083,12 +6275,8 @@
 				INFOPLIST_FILE = "Iyan3Dcopy-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Iyan3D/3rdParty/YouTube",
-					"$(PROJECT_DIR)/Flurry",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Iyan3D/3rdParty/Analytics",
 					"$(PROJECT_DIR)/FrameWorks",
-					"$(PROJECT_DIR)/Iyan3D/3rdParty/assimp",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.iyan3dpro;
 				PRODUCT_NAME = "Iyan3D-Simulator";
@@ -7099,7 +6287,6 @@
 		};
 		E20674051B049AA6006DD2F7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 16C0499CA70CE2CA87914930 /* Pods-Iyan3D-Simulator.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
@@ -7109,7 +6296,6 @@
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Iyan3D/3rdParty/AdMob",
 					"$(PROJECT_DIR)/FrameWorks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -7118,12 +6304,8 @@
 				INFOPLIST_FILE = "Iyan3Dcopy-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Iyan3D/3rdParty/YouTube",
-					"$(PROJECT_DIR)/Flurry",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/Iyan3D/3rdParty/Analytics",
 					"$(PROJECT_DIR)/FrameWorks",
-					"$(PROJECT_DIR)/Iyan3D/3rdParty/assimp",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.iyan3dpro;
 				PRODUCT_NAME = "Iyan3D-Simulator";

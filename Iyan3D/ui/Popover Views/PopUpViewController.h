@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GAI.h"
 #import "Constants.h"
 
 @protocol PopUpViewControllerDelegate

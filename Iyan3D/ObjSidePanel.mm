@@ -47,7 +47,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.screenName   = @"OBJSelection iOS";
     NSString* nibName = @"ObjCellView";
     if ([[AppHelper getAppHelper] iPhone6Plus])
         nibName = @"ObjCellViewPhone";
