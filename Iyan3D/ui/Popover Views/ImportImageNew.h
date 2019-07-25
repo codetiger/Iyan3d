@@ -11,7 +11,6 @@
 
 @protocol ImageImportNewDelgate
 - (void)pickedImageWithInfo:(NSDictionary*)info type:(BOOL)isTempNode;
-- (void)loadingViewStatus:(BOOL)status;
 - (void)showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd;
 - (void)pickedVideoWithInfo:(NSString*)path FileName:(NSString*)fileName IsTemp:(BOOL)isTemp;
 - (void)removeTempNodeFromScene;

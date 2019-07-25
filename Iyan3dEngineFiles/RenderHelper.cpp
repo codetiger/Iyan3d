@@ -553,13 +553,11 @@ void RenderHelper::drawMeshBuffersForRTT()
         smgr->setRenderTarget(renderingScene->touchTexture,true,true,false,Vector4(255,255,255,255));
         
         SGNode *sgNode = renderingScene->selectedNode;
-        int totalMeshBufferIndex = sgNode->materialProps.size();
         vector<Vector4> vertexColors;
         vector<float> isMeshColored;
         vector<bool> mBSelected;
         vector<float> transparancies;
         vector<float> reflections;
-        
         
         bool isLighting = sgNode->getProperty(LIGHTING).value.x;
         bool isNodeSelected = sgNode->getProperty(SELECTED).value.x;

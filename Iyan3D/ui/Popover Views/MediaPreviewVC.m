@@ -108,7 +108,7 @@
 
         if (completed) {
             NSMutableDictionary* attributes = [[NSMutableDictionary alloc] init];
-            if (mediaType == IMAGE_TYPE)
+            if (self->mediaType == IMAGE_TYPE)
                 [attributes setObject:@"Image" forKey:@"Share"];
             else
                 [attributes setObject:@"Video" forKey:@"Share"];

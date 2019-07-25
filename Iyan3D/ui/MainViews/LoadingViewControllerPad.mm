@@ -160,7 +160,6 @@
 
         cache = [CacheSystem cacheSystem];
         [cache OpenDatabase];
-        [cache createTablesForPrice];
         [cache createAnimationTables];
         [cache checkAndCreateGroupColumnInAssetsTable];
 
@@ -254,13 +253,13 @@
 
 - (void)loadSceneView {
     if ([Utility IsPadDevice]) {
-        SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:@"SceneSelectionControllerNew" bundle:nil IsFirstTimeOpen:YES];
+        SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:@"SceneSelectionControllerNew" bundle:nil];
         sceneSelectionView.fromLoadingView              = true;
         sceneSelectionView.isAppFirstTime               = isAppFirstTime;
         AppDelegate* appDelegate                        = (AppDelegate*)[[UIApplication sharedApplication] delegate];
         [appDelegate.window setRootViewController:sceneSelectionView];
     } else {
-        SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:([self iPhone6Plus]) ? @"SceneSelectionControllerNewPhone@2x" : @"SceneSelectionControllerNewPhone" bundle:nil IsFirstTimeOpen:YES];
+        SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:([self iPhone6Plus]) ? @"SceneSelectionControllerNewPhone@2x" : @"SceneSelectionControllerNewPhone" bundle:nil];
         sceneSelectionView.fromLoadingView              = true;
         sceneSelectionView.isAppFirstTime               = isAppFirstTime;
         AppDelegate* appDelegate                        = (AppDelegate*)[[UIApplication sharedApplication] delegate];

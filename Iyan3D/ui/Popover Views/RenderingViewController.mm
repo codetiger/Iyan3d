@@ -393,14 +393,14 @@
             if (buttonIndex == CANCEL_BUTTON_INDEX) {
                 [self dismissViewControllerAnimated:NO
                                          completion:^{
-                                             cancelPressed = YES;
-                                             [self.cancelActivityIndicator setHidden:false];
-                                             [self.cancelActivityIndicator startAnimating];
-                                             [thread cancel];
-                                             isCanceled = true;
-                                             [self.delegate clearFolder:NSTemporaryDirectory()];
-                                             [self.delegate resumeRenderingAnimationScene];
-                                             [self deallocMem];
+                                            self->cancelPressed = YES;
+                                            [self.cancelActivityIndicator setHidden:false];
+                                            [self.cancelActivityIndicator startAnimating];
+                                            [self->thread cancel];
+                                            self->isCanceled = true;
+                                            [self.delegate clearFolder:NSTemporaryDirectory()];
+                                            [self.delegate resumeRenderingAnimationScene];
+                                            [self deallocMem];
                                          }];
             }
             break;
@@ -738,37 +738,6 @@ CVPixelBufferRef pixelBufferFromCGImage(CGImageRef image, CGSize imageSize) {
     }];
 
     [self presentViewController:controller animated:YES completion:nil];
-}
-
-- (IBAction)rateButtonAction:(id)sender {
-    //    NSString *templateReviewURL = @"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=640516535";
-
-    NSString* templateReviewURLiOS7 = @"https://itunes.apple.com/app/id640516535?mt=8";
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:templateReviewURLiOS7]];
-}
-
-- (void)upgradeButtonPressed {
-    //[self.delegate upgradeButtonPressed];
-    //[[AppHelper getAppHelper] callPaymentGateWayForPremiumUpgrade];
-}
-
-- (void)loadingViewStatus:(BOOL)status {
-}
-
-- (void)premiumUnlocked {
-    if (tempSelectedIndex == 0 || tempSelectedIndex == -1) {
-        if (self.watermarkSwitch.isOn)
-            [self.watermarkSwitch setOn:NO];
-        [self.renderingTypes reloadData];
-    } else {
-        selectedIndex = tempSelectedIndex;
-        [self.renderingTypes reloadData];
-    }
-
-    [[UIApplication sharedApplication] endIgnoringInteractionEvents];
-}
-
-- (void)premiumUnlockedCancelled {
 }
 
 - (void)statusForOBJImport:(NSNumber*)status {

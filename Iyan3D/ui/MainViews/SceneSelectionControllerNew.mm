@@ -29,22 +29,19 @@
 #define FRAME_COUNT 0
 #define FRAME_DURATION 1
 
-#define RESTORE_PURCHASH_ALERT 2
-
 #define ALERT_TYPE 1
 #define IMAGE_TYPE 2
 #define URL_TYPE 3
 
 @implementation SceneSelectionControllerNew
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil IsFirstTimeOpen:(BOOL)value {
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         cache         = [CacheSystem cacheSystem];
         scenesArray   = [cache GetSceneList];
         dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"yyyy/MM/dd HH:mm:ss"];
-        isFirstTime = value;
     }
     return self;
 }
@@ -62,14 +59,6 @@
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         [self.scenesCollectionView registerNib:[UINib nibWithNibName:@"SceneSelectionFrameCellPhone" bundle:nil] forCellWithReuseIdentifier:@"CELL"];
     }
-
-    if ([[AppHelper getAppHelper] userDefaultsBoolForKey:@"premiumUnlocked"] && ![[AppHelper getAppHelper] userDefaultsBoolForKey:@"hasRestored"] && isFirstTime) {
-        UIAlertView* infoAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Information", nil) message:NSLocalizedString(@"Already_upgraded_Premium_Please_Restore_Purchase", nil) delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [infoAlert setTag:RESTORE_PURCHASH_ALERT];
-        [infoAlert show];
-    }
-
-    isFirstTimeUser = false;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -199,22 +188,6 @@
     [self addNewScene];
 }
 
-- (IBAction)feedBackButtonAction:(id)sender {
-    if ([MFMailComposeViewController canSendMail]) {
-        MFMailComposeViewController* picker = [[MFMailComposeViewController alloc] init];
-        picker.mailComposeDelegate          = self;
-        NSArray* usersTo                    = [NSArray arrayWithObject:@"codetiger42@icloud.com"];
-        [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3D Pro (%@, iOS Version: %@)", [self deviceName], iOSVersion]];
-        [picker setToRecipients:usersTo];
-        [self presentModalViewController:picker animated:YES];
-    } else {
-        [self.view endEditing:YES];
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", nil) message:NSLocalizedString(@"No_Email_account_configured", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
-        [alert show];
-        return;
-    }
-}
-
 #pragma CollectionView Delegates
 
 - (NSInteger)collectionView:(UICollectionView*)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -341,23 +314,17 @@
     } else if (indexValue == CONTACT_US) {
         [self.popoverController dismissPopoverAnimated:YES];
         if ([MFMailComposeViewController canSendMail]) {
-            MFMailComposeViewController* picker = [[MFMailComposeViewController alloc] init];
-            picker.mailComposeDelegate          = self;
-            NSArray* usersTo                    = [NSArray arrayWithObject:@"codetiger42@icloud.com"];
-            [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3d pro app (%@  , iOS Version: %@)", [self deviceName], iOSVersion]];
-            [picker setToRecipients:usersTo];
-            [self presentModalViewController:picker animated:YES];
+            MFMailComposeViewController *composeViewController = [[MFMailComposeViewController alloc] initWithNibName:nil bundle:nil];
+            [composeViewController setMailComposeDelegate:self];
+            [composeViewController setToRecipients:@[@"codetiger42@icloud.com"]];
+            [composeViewController setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3D Pro (%@, iOS Version: %@)", [self deviceName], iOSVersion]];
+            [self presentViewController:composeViewController animated:YES completion:nil];
         } else {
             [self.view endEditing:YES];
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", nil) message:NSLocalizedString(@"No_Email_account_configured", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
             [alert show];
             return;
         }
-
-    } else if (indexValue == RATE_US) {
-        [self.popoverController dismissPopoverAnimated:YES];
-        NSString* templateReviewURLiOS7 = @"https://itunes.apple.com/app/id1163508489?mt=8";
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:templateReviewURLiOS7]];
     }
 }
 
@@ -384,23 +351,7 @@
 }
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
-    switch (result) {
-        case MFMailComposeResultCancelled:
-            [self dismissViewControllerAnimated:YES completion:nil];
-            break;
-        case MFMailComposeResultSaved:
-            [self dismissViewControllerAnimated:YES completion:nil];
-            break;
-        case MFMailComposeResultSent:
-            [self dismissViewControllerAnimated:YES completion:nil];
-            break;
-        case MFMailComposeResultFailed:
-            [self dismissViewControllerAnimated:YES completion:nil];
-            break;
-        default:
-            [self dismissViewControllerAnimated:YES completion:nil];
-            break;
-    }
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (NSString*)deviceName {

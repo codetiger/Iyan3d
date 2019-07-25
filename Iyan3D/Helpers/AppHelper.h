@@ -12,7 +12,6 @@
 #import "CacheSystem.h"
 
 @protocol AppHelperDelegate
-- (void)loadingViewStatus:(BOOL)status;
 - (void)statusForOBJImport:(NSNumber*)object;
 - (void)setAnimationData:(NSArray*)allAnimations;
 - (void)performLocalTasks;

@@ -72,7 +72,6 @@
         tableData = [NSMutableArray arrayWithObjects:
                                         NSLocalizedString(@"Tutorials", nil),
                                         NSLocalizedString(@"Settings", nil),
-                                        NSLocalizedString(@"Rate This App", nil),
                                         NSLocalizedString(@"Contact Us", nil),
                                         nil];
     } else if ([clickedBtnName isEqualToString:@"viewBtn"]) {

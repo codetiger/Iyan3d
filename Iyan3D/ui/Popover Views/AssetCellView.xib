@@ -28,10 +28,6 @@
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="premium.png" translatesAutoresizingMaskIntoConstraints="NO" id="4VO-fp-lT1">
-                        <rect key="frame" x="0.0" y="0.0" width="34" height="32"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                    </imageView>
                 </subviews>
             </view>
             <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -39,12 +35,8 @@
             <connections>
                 <outlet property="assetImageView" destination="MCk-ZP-bCD" id="nYl-fM-r3o"/>
                 <outlet property="assetNameLabel" destination="sMe-ps-0uo" id="hlH-aJ-dTl"/>
-                <outlet property="premiumicon" destination="4VO-fp-lT1" id="3h3-Mv-63q"/>
             </connections>
             <point key="canvasLocation" x="839.13043478260875" y="227.34375"/>
         </collectionViewCell>
     </objects>
-    <resources>
-        <image name="premium.png" width="34" height="32"/>
-    </resources>
 </document>

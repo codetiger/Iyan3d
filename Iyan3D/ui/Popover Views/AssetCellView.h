@@ -13,6 +13,5 @@
 @property (weak, nonatomic) IBOutlet UILabel* assetNameLabel;
 @property (weak, nonatomic) IBOutlet UIImage* assetImageView;
 @property (weak, nonatomic) IBOutlet UILabel* freeTagLabel;
-@property (weak, nonatomic) IBOutlet UIImageView* premiumicon;
 
 @end

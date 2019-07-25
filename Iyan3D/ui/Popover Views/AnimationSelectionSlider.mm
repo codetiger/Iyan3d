@@ -248,7 +248,7 @@
         actionWithTitle:NSLocalizedString(@"My Animations", nil)
                   style:UIAlertActionStyleDefault
                 handler:^(UIAlertAction* action) {
-                    if (animationCategoryTab == MY_ANIMATION)
+                if (self->animationCategoryTab == MY_ANIMATION)
                         return;
                     [self openMyAnimations];
                     [view dismissViewControllerAnimated:YES completion:nil];
@@ -375,22 +375,7 @@
 
 #pragma mark AppHelper delegates
 
-- (void)loadingViewStatus:(BOOL)status {
-}
-
 - (void)statusForOBJImport:(NSNumber*)object {
-}
-
-- (void)premiumUnlocked {
-}
-
-- (void)addRestoreId:(NSString*)productIdentifier {
-}
-
-- (void)statusForRestorePurchase:(NSNumber*)object {
-}
-
-- (void)transactionCancelled {
 }
 
 - (void)setAnimationData:(NSArray*)allAnimations {

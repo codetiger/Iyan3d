@@ -19,10 +19,8 @@
 - (void)OpenDatabase;
 - (NSString*)insertImportedScene;
 - (void)UpdateAsset:(AssetItem*)a;
-- (void)updateAssetPrice:(AssetItem*)asset;
 - (void)deleteMyAsset:(int)assetId;
 - (NSMutableArray*)GetAssetList:(int)type Search:(NSString*)keyword;
-- (NSString*)getAssetPrice:(NSString*)iap;
 - (AssetItem*)GetAsset:(int)assetId;
 - (AssetItem*)GetAssetByName:(NSString*)assetName;
 - (AssetItem*)GetAssetItem:(NSString*)assetIap;
@@ -47,7 +45,6 @@
 - (bool)checkOBJImporterPurchase;
 - (bool)checkDownloadedAsset:(int)assetId;
 - (void)addOBJImporterColumn;
-- (void)createTablesForPrice;
 - (void)createAnimationTables;
 - (BOOL)checkAndCreateGroupColumnInAssetsTable;
 

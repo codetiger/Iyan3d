@@ -36,9 +36,7 @@
     [super viewDidLoad];
     [self setupImageTap];
     self.doneBtn.layer.cornerRadius    = CORNER_RADIUS;
-    self.restoreBtn.layer.cornerRadius = CORNER_RADIUS;
     [self readUserSettings];
-    [_restorePurchaseProgress setHidden:YES];
 
     if (self.speedSwitch != nil)
         [self.speedSwitch setOn:[[AppHelper getAppHelper] userDefaultsBoolForKey:@"ScreenScaleDisable"]];
@@ -53,7 +51,6 @@
     [self.settingsTitleLabel setText:NSLocalizedString(@"SETTINGS", nil)];
 
     [self.doneBtn setTitle:NSLocalizedString(@"Done", nil) forState:UIControlStateNormal];
-    [self.restoreBtn setTitle:NSLocalizedString(@"RESTORE PURCHASE", nil) forState:UIControlStateNormal];
 
     [self.toolbarPosition setTitle:NSLocalizedString(@"RIGHT", nil) forSegmentAtIndex:0];
     [self.toolbarPosition setTitle:NSLocalizedString(@"LEFT", nil) forSegmentAtIndex:1];
@@ -315,16 +312,7 @@
     [[AppHelper getAppHelper] saveBoolUserDefaults:self.speedSwitch.isOn withKey:@"ScreenScaleDisable"];
 }
 
-- (void)loadingViewStatus:(BOOL)status {
-}
-
 - (void)statusForOBJImport:(NSNumber*)object {
-}
-
-- (void)premiumUnlocked {
-}
-
-- (void)addRestoreId:(NSString*)productIdentifier {
 }
 
 - (void)setAnimationData:(NSArray*)allAnimations {

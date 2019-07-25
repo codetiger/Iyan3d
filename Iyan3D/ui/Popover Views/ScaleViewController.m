@@ -22,27 +22,30 @@ float previousX = 0, previousY = 0, previousZ = 0;
     currentYValue = YValue;
     currentZValue = ZValue;
     [self setScaleValueLabelsWithXScale:currentXValue YScale:currentYValue ZScale:currentZValue];
-    [self updateScale:currentXValue:currentYValue:currentZValue];
+    [self updateScale:currentXValue yValue:currentYValue zValue:currentZValue];
     [self setOverAllLockFuntion];
 
     return self;
 }
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.xSlider.minimumValue = self.ySlider.minimumValue = self.zSlider.minimumValue = 0.01;
 
     [self setScaleValueLabelsWithXScale:currentXValue YScale:currentYValue ZScale:currentZValue];
-    [self updateScale:currentXValue:currentYValue:currentZValue];
+    [self updateScale:currentXValue yValue:currentYValue zValue:currentZValue];
     [self setOverAllLockFuntion];
 
     // Do any additional setup after loading the view from its nib.
 }
+
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self.xSlider setTag:2];
     [self.ySlider setTag:3];
     [self.zSlider setTag:4];
 }
+
 - (void)setOverAllLockFuntion {
     if ([self.xyzLock isOn]) {
         self.lockImage.image = [UIImage imageNamed:@"lock.png"];
@@ -57,6 +60,7 @@ float previousX = 0, previousY = 0, previousZ = 0;
     }
     [self setScaleValueLabelsWithXScale:self.xSlider.value YScale:self.ySlider.value ZScale:self.zSlider.value];
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -72,10 +76,11 @@ float previousX = 0, previousY = 0, previousZ = 0;
     [self setScaleValueLabelsWithXScale:self.xSlider.value YScale:self.ySlider.value ZScale:self.zSlider.value];
 
     if (self.xSlider.value > 0 && self.ySlider.value > 0 && self.zSlider.value > 0)
-        [self updateScale:self.xSlider.value:self.ySlider.value:self.zSlider.value];
+        [self updateScale:self.xSlider.value yScale:self.ySlider.value zScale:self.zSlider.value];
 
     [self.delegate scaleValueForAction:self.xSlider.value YValue:self.ySlider.value ZValue:self.zSlider.value];
 }
+
 - (IBAction)settingsValueChangedAction:(UISlider*)slider {
     if ([self.xyzLock isOn]) {
         if (previousX > self.xSlider.value || previousX < self.xSlider.value)
@@ -94,28 +99,26 @@ float previousX = 0, previousY = 0, previousZ = 0;
     self.zValue.text = [NSString stringWithFormat:@"%.02f", self.zSlider.value];
     [self.delegate scalePropertyChanged:self.xSlider.value YValue:self.ySlider.value ZValue:self.zSlider.value];
 }
+
 - (IBAction)scaleLockSwtichChangedAction:(id)sender {
     [self setOverAllLockFuntion];
 }
-- (void)updateScale:(float)XValue:(float)YValue
-                   :(float)ZValue {
-    self.xSlider.value = XValue;
-    self.ySlider.value = YValue;
-    self.zSlider.value = ZValue;
 
-    [self.xSlider setValue:XValue];
-    [self.ySlider setValue:YValue];
-    [self.zSlider setValue:ZValue];
-    previousX = XValue;
-    previousY = YValue;
-    previousZ = ZValue;
+- (void)updateScale:(float)xValue yValue:(float)yValue zValue:(float)zValue {
+    [self.xSlider setValue:xValue];
+    [self.ySlider setValue:yValue];
+    [self.zSlider setValue:zValue];
+    
+    previousX = xValue;
+    previousY = yValue;
+    previousZ = zValue;
 
-    float minimumValue        = MIN(XValue, MIN(YValue, ZValue));
+    float minimumValue        = MIN(xValue, MIN(yValue, zValue));
     self.xSlider.minimumValue = self.ySlider.minimumValue = self.zSlider.minimumValue = (minimumValue) / 2.0;
 
-    float maximumValue        = MAX(XValue, MAX(YValue, ZValue));
+    float maximumValue        = MAX(xValue, MAX(yValue, zValue));
     self.xSlider.maximumValue = self.ySlider.maximumValue = self.zSlider.maximumValue = (self.xSlider.minimumValue + maximumValue) * 2.0;
-    [self setScaleValueLabelsWithXScale:XValue YScale:YValue ZScale:ZValue];
+    [self setScaleValueLabelsWithXScale:xValue YScale:yValue ZScale:zValue];
 }
 
 @end

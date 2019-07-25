@@ -31,7 +31,6 @@
 @property (weak, nonatomic) IBOutlet UIScrollView* scrollView;
 @property (weak, nonatomic) IBOutlet UIPageControl* pageControl;
 - (IBAction)startBtnAction:(id)sender;
-- (IBAction)skipBtnAction:(id)sender;
 - (IBAction)closeBtnAction:(id)sender;
 - (IBAction)changePage;
 

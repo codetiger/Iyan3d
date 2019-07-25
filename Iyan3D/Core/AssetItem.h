@@ -16,11 +16,9 @@
 @property (atomic, assign) int     boneCount;
 @property (atomic, assign) int     group;
 @property (atomic, copy) NSString* name;
-@property (atomic, copy) NSString* iap;
 @property (atomic, copy) NSString* hash;
 @property (atomic, copy) NSString* modifiedDate;
 @property (atomic, copy) NSString* keywords;
-@property (atomic, copy) NSString* price;
 @property (atomic, assign) bool    isTempAsset;
 @property (atomic, copy) NSString* textureName;
 

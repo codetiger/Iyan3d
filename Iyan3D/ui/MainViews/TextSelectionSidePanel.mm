@@ -10,7 +10,6 @@
 #import "Constants.h"
 #import "Utility.h"
 
-#define CANCEL_PREMIUM_NOT_PURCHASE 50
 #define CANCEL_BUTTON_INDEX 0
 #define OK_BUTTON_ACTION 1
 #define FONT_STORE 0

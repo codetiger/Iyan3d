@@ -39,15 +39,6 @@ SceneManager* scenemgr;
     return YES;
 }
 
-- (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary*)userInfo {
-    NSLog(@"Received notification: %@", userInfo);
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"renderCompleted" object:nil];
-}
-
-- (void)application:(UIApplication*)application didRegisterUserNotificationSettings:(UIUserNotificationSettings*)notificationSettings {
-    [[UIApplication sharedApplication] registerForRemoteNotifications];
-}
-
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken {
     NSString*       deviceTokenString    = [[[[deviceToken description]
         stringByReplacingOccurrencesOfString:@"<"
@@ -98,37 +89,6 @@ SceneManager* scenemgr;
 }
 
 - (void)applicationWillTerminate:(UIApplication*)application {
-}
-
-- (BOOL)application:(UIApplication*)application openURL:(NSURL*)url sourceApplication:(NSString*)sourceApplication annotation:(id)annotation {
-    NSString* ext = [[[url absoluteString] pathExtension] lowercaseString];
-    NSString* msg = @"There was a problem in loading the file you just imported.";
-
-    NSArray*       paths              = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString*      documentsDirectory = [paths objectAtIndex:0];
-    NSFileManager* fm                 = [NSFileManager defaultManager];
-
-    if ([ext isEqualToString:@"zip"]) {
-        ZipArchive* zip = [[ZipArchive alloc] init];
-        if ([zip UnzipOpenFile:[url path]]) {
-            if ([zip UnzipFileTo:documentsDirectory overWrite:YES]) {
-                msg = @"Your file was imported successfully, Please use import option in the Add Menu to import the file into your scene.";
-                [fm removeItemAtPath:[url path] error:nil];
-            }
-        }
-        [zip UnzipCloseFile];
-
-    } else if ([ext isEqualToString:@"obj"] || [ext isEqualToString:@"3ds"] || [ext isEqualToString:@"fbx"] || [ext isEqualToString:@"dae"] || [ext isEqualToString:@"png"] || [ext isEqualToString:@"jpg"] || [ext isEqualToString:@"jpeg"] || [ext isEqualToString:@"tga"] || [ext isEqualToString:@"bmp"]) {
-        msg = @"Your file was imported successfully, Please use import option in the Add Menu to import the file into your scene.";
-    }
-
-    UIAlertView* message = [[UIAlertView alloc] initWithTitle:@"Information" message:msg delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    [message performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
-
-    return YES;
-}
-
-- (void)alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 }
 
 - (BOOL)iPhone6Plus {

@@ -33,6 +33,6 @@
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil updateXValue:(float)XValue updateYValue:(float)YValue updateZValue:(float)ZValue;
 - (IBAction)settingsValueChangedAction:(UISlider*)sender;
 - (IBAction)scaleLockSwtichChangedAction:(id)sender;
-- (void)updateScale:(float)XValue:(float)YValue
-                   :(float)ZValue;
+- (void)updateScale:(float)xValue yScale:(float)yValue zScale:(float)zValue;
+
 @end

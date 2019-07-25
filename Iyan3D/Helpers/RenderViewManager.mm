@@ -230,7 +230,6 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName) {
             float     alpha        = [[moreDetail objectForKey:@"alpha"] floatValue];
             NSString* fontFileName = [moreDetail objectForKey:@"fontFileName"];
             Vector4   textColor    = Vector4(red, green, blue, alpha);
-            NODE_TYPE nodeType     = (type == ASSET_TEXT) ? NODE_TEXT : NODE_TEXT_SKIN;
 
             std::string fontFilePath = FileHelper::getDocumentsDirectory() + [fontFileName UTF8String];
 

@@ -25,7 +25,6 @@
 }
 
 - (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil;
-@property (weak, nonatomic) IBOutlet UIButton* restoreBtn;
 @property (weak, nonatomic) IBOutlet UISegmentedControl* toolbarPosition;
 @property (weak, nonatomic) IBOutlet UISegmentedControl* renderPreviewSize;
 @property (weak, nonatomic) IBOutlet UISegmentedControl* frameCountDisplay;
@@ -44,7 +43,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView* previewPositionRightTop;
 @property (weak, nonatomic) IBOutlet UIImageView* previewPositionLeftBottom;
 @property (weak, nonatomic) IBOutlet UIImageView* previewPositionLeftTop;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView* restorePurchaseProgress;
 @property (weak, nonatomic) IBOutlet UISwitch* speedSwitch;
 @property (weak, nonatomic) IBOutlet UIButton* helpBtn;
 
@@ -59,7 +57,6 @@
 
 - (IBAction)toolTipAction:(id)sender;
 - (IBAction)qualityOrSpeed:(id)sender;
-- (IBAction)restoreAction:(id)sender;
 - (IBAction)toolBarPositionChanged:(id)sender;
 - (IBAction)renderPreviewSizeChanged:(id)sender;
 - (IBAction)frameCountDisplayType:(id)sender;

@@ -401,13 +401,13 @@ void SceneManager::setPropertyValue(Material* material, string name, float* valu
 
 void SceneManager::setPropertyValue(Material* material, string name, int* values, DATA_TYPE type, unsigned short count, bool isFragmentData, u16 paramIndex, int nodeIndex, int materialIndex, Texture* tex, int userValue, bool blurTex) {
     shared_ptr<Node> nod;
+
     if (nodeIndex != NOT_EXISTS)
         nod = nodes[nodeIndex];
 
     if (nodeIndex == NOT_EXISTS) {
         renderMan->bindDynamicUniform(material, name, values, type, count, paramIndex, nodeIndex, tex, isFragmentData, blurTex);
     } else {
-        short uIndex = material->setPropertyValue(name, values, type, count, paramIndex, nodeIndex, materialIndex, renderTargetIndex);
         renderMan->bindDynamicUniform(material, name, values, type, count, paramIndex, nodeIndex, tex, isFragmentData, blurTex);
     }
 }

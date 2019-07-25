@@ -15,11 +15,10 @@
 - (void)dealloc {
     _group        = 0;
     _name         = nil;
-    _iap          = nil;
     _hash         = nil;
     _modifiedDate = nil;
     _keywords     = nil;
-    _price        = nil;
     _isTempAsset  = false;
 }
+
 @end

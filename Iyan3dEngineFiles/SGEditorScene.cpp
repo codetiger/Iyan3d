@@ -173,7 +173,9 @@ void SGEditorScene::initVariables(SceneManager* sceneMngr, int maxUniforms, int 
 
 void SGEditorScene::initTextures()
 {
-    const int MTLStorageModeShared  = 0, MTLStorageModePrivate = 2, MTLStorageModeMemoryless = 3;
+#define MTLStorageModeShared 0
+#define MTLStorageModePrivate 2
+#define MTLStorageModeMemoryless 3
 
     touchTexture = smgr->createRenderTargetTexture("TouchTexture", TEXTURE_RGBA8, TEXTURE_BYTE, TOUCH_TEXTURE_WIDTH, TOUCH_TEXTURE_HEIGHT, MTLStorageModeShared);
 

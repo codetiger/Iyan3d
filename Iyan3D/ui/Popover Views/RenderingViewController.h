@@ -114,9 +114,7 @@
 - (IBAction)toolTipAction:(id)sender;
 - (IBAction)cameraResolutionChanged:(id)sender;
 - (IBAction)transparentBgValueChanged:(id)sender;
-- (IBAction)waterMarkValueChanged:(id)sender;
 - (IBAction)cancelButtonAction:(id)sender;
-- (IBAction)rateButtonAction:(id)sender;
 - (IBAction)exportButtonAction:(id)sender;
 - (IBAction)startButtonAction:(id)sender;
 

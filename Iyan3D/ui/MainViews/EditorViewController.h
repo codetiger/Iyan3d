@@ -114,8 +114,6 @@
 @property (weak, nonatomic) IBOutlet UILabel* myObjectsLabel;
 
 - (IBAction)toolTipAction:(id)sender;
-- (IBAction)moveLastAction:(id)sender;
-- (IBAction)moveFirstAction:(id)sender;
 - (IBAction)editFunction:(id)sender;
 - (IBAction)addFrames:(id)sender;
 - (IBAction)exportAction:(id)sender;

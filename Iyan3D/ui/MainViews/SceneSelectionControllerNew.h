@@ -20,7 +20,7 @@
 #import "WEPopoverController.h"
 #import "SettingsViewController.h"
 
-@interface SceneSelectionControllerNew : UIViewController <UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, MFMailComposeViewControllerDelegate, ScenePropertiesDelegate, UIAlertViewDelegate, PopUpViewControllerDelegate, WEPopoverControllerDelegate, SettingsViewControllerDelegate, MFMailComposeViewControllerDelegate, OnBoardDelegate, UIDocumentInteractionControllerDelegate> {
+@interface SceneSelectionControllerNew : UIViewController <UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, MFMailComposeViewControllerDelegate, ScenePropertiesDelegate, UIAlertViewDelegate, PopUpViewControllerDelegate, WEPopoverControllerDelegate, SettingsViewControllerDelegate, OnBoardDelegate, UIDocumentInteractionControllerDelegate> {
     NSMutableArray*         scenesArray;
     CacheSystem*            cache;
     NSDateFormatter*        dateFormatter;
@@ -29,12 +29,10 @@
     CGFloat                 screenHeight;
     SettingsViewController* settingsVc;
 
-    bool isFirstTime;
     int  selectedSceneIndex;
-    bool isFirstTimeUser;
 }
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil IsFirstTimeOpen:(BOOL)value;
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil;
 
 @property (weak, nonatomic) IBOutlet UIView* topBar;
 @property (nonatomic, strong) NSString*      fileBeginsWith;

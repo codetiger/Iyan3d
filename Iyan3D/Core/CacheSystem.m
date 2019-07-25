@@ -73,7 +73,6 @@ static NSString*    dbLock = nil;
 
 static const NSString* TABLE_ASSET_INFO     = @"asset_info";
 static const NSString* OBJ_IMPORTER_TABLE   = @"addons";
-static const NSString* ASSET_PRICE_TABLE    = @"asset_price_table";
 static const NSString* ALL_ANIMATIONS_TABLE = @"animations_table";
 static const NSString* MY_ANIMATIONS_TABLE  = @"my_animations_table";
 
@@ -85,7 +84,6 @@ static const NSString* ASSET_HASH     = @"asset_hash";
 static const NSString* ASSET_DATE     = @"asset_date";
 static const NSString* ASSET_TYPE     = @"asset_type";
 static const NSString* ASSET_BONES    = @"asset_bones";
-static const NSString* ASSET_PRICE    = @"asset_price";
 static const NSString* ASSET_GROUP    = @"asset_group";
 
 static const NSString* ASSET_PUBLISHED = @"asset_published";
@@ -437,14 +435,14 @@ static const NSString* FEED_ISREAD     = @"isread";
     @synchronized(dbLock) {
         NSString*     querySQL = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = %d", TABLE_ASSET_INFO, ASSET_ID, a.assetId];
         sqlite3_stmt* statement;
+        NSString* iap  = @"";
+
         if (sqlite3_prepare_v2(_cacheSystem, [querySQL UTF8String], -1, &statement, NULL) == SQLITE_OK) {
             if (sqlite3_step(statement) == SQLITE_ROW) {
                 sqlite3_stmt* statement;
 
                 NSString* name = [Utility encryptString:a.name password:@"SGmanKindWin5SG"];
-                NSString* iap  = [Utility encryptString:a.iap password:@"SGmanKindWin5SG"];
                 NSString* has  = [Utility encryptString:a.hash password:@"SGmanKindWin5SG"];
-
                 NSString* querySQL = [NSString stringWithFormat:@"UPDATE %@ SET %@ = \"%@\", %@ = \"%@\", %@ = \"%@\", %@ = \"%@\", %@ = \"%@\", %@ = %d, %@ = %d, %@ = %d WHERE %@ = %d", TABLE_ASSET_INFO, ASSET_NAME, name, ASSET_KEYWORDS, a.keywords, ASSET_IAP, iap, ASSET_HASH, has, ASSET_DATE, a.modifiedDate, ASSET_TYPE, a.type, ASSET_BONES, a.boneCount, ASSET_GROUP, a.group, ASSET_ID, a.assetId];
 
                 sqlite3_prepare_v2(_cacheSystem, [querySQL UTF8String], -1, &statement, NULL);
@@ -455,39 +453,9 @@ static const NSString* FEED_ISREAD     = @"isread";
                 sqlite3_stmt* statement;
 
                 NSString* name = [Utility encryptString:a.name password:@"SGmanKindWin5SG"];
-                NSString* iap  = [Utility encryptString:a.iap password:@"SGmanKindWin5SG"];
                 NSString* has  = [Utility encryptString:a.hash password:@"SGmanKindWin5SG"];
 
                 NSString* querySQL = [NSString stringWithFormat:@"INSERT INTO %@ (%@, %@, %@, %@, %@, %@, %@, %@, %@) VALUES (%d, \"%@\", \"%@\", \"%@\", \"%@\", \"%@\", %d, %d, %d)", TABLE_ASSET_INFO, ASSET_ID, ASSET_NAME, ASSET_KEYWORDS, ASSET_IAP, ASSET_HASH, ASSET_DATE, ASSET_TYPE, ASSET_BONES, ASSET_GROUP, a.assetId, name, a.keywords, iap, has, a.modifiedDate, a.type, a.boneCount, a.group];
-
-                sqlite3_prepare_v2(_cacheSystem, [querySQL UTF8String], -1, &statement, NULL);
-                if (sqlite3_step(statement) != SQLITE_DONE)
-                    NSLog(@"Failed Inserting Asset %s", sqlite3_errmsg(_cacheSystem));
-                sqlite3_finalize(statement);
-            }
-            sqlite3_finalize(statement);
-        }
-    }
-}
-
-- (void)updateAssetPrice:(AssetItem*)asset {
-    @synchronized(dbLock) {
-        NSString* iap = [Utility encryptString:asset.iap password:@"SGmanKindWin5SG"];
-
-        NSString*     querySQL = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = \"%@\"", ASSET_PRICE_TABLE, ASSET_IAP, iap];
-        sqlite3_stmt* statement;
-        if (sqlite3_prepare_v2(_cacheSystem, [querySQL UTF8String], -1, &statement, NULL) == SQLITE_OK) {
-            if (sqlite3_step(statement) == SQLITE_ROW) {
-                sqlite3_stmt* statement;
-                NSString*     querySQL = [NSString stringWithFormat:@"UPDATE %@ SET %@ = \"%@\" WHERE %@ = \"%@\"", ASSET_PRICE_TABLE, ASSET_PRICE, asset.price, ASSET_IAP, iap];
-                sqlite3_prepare_v2(_cacheSystem, [querySQL UTF8String], -1, &statement, NULL);
-                if (sqlite3_step(statement) != SQLITE_DONE)
-                    NSLog(@"Failed Updating Asset %s", sqlite3_errmsg(_cacheSystem));
-                sqlite3_finalize(statement);
-
-            } else {
-                sqlite3_stmt* statement;
-                NSString*     querySQL = [NSString stringWithFormat:@"INSERT INTO %@ (%@, %@) VALUES (\"%@\", \"%@\")", ASSET_PRICE_TABLE, ASSET_IAP, ASSET_PRICE, iap, asset.price];
 
                 sqlite3_prepare_v2(_cacheSystem, [querySQL UTF8String], -1, &statement, NULL);
                 if (sqlite3_step(statement) != SQLITE_DONE)
@@ -565,41 +533,16 @@ static const NSString* FEED_ISREAD     = @"isread";
                 a.assetId      = sqlite3_column_int(statement, 0);
                 a.name         = name;
                 a.keywords     = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
-                a.iap          = iap;
                 a.hash         = has;
                 a.modifiedDate = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 5)];
                 a.type         = sqlite3_column_int(statement, 6);
                 a.boneCount    = sqlite3_column_int(statement, 7);
-                a.price        = [self getAssetPrice:a.iap];
                 [array addObject:a];
             }
             sqlite3_finalize(statement);
         }
 
         return array;
-    }
-}
-
-- (NSString*)getAssetPrice:(NSString*)iap {
-    NSCharacterSet* notAllowedChars = [[NSCharacterSet characterSetWithCharactersInString:@"0abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789. "] invertedSet];
-
-    NSString* encryptedIap = [Utility encryptString:iap password:@"SGmanKindWin5SG"];
-    encryptedIap           = [[encryptedIap componentsSeparatedByCharactersInSet:notAllowedChars] componentsJoinedByString:@""];
-
-    @synchronized(dbLock) {
-        NSString*     querySQL = [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@ = \"%@\"", ASSET_PRICE_TABLE, ASSET_IAP, encryptedIap];
-        sqlite3_stmt* statement;
-        const char*   errMsg;
-        if (sqlite3_prepare_v2(_cacheSystem, [querySQL UTF8String], -1, &statement, &errMsg) == SQLITE_OK && sqlite3_step(statement) == SQLITE_ROW) {
-            NSString* assetPrice = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 1)];
-            sqlite3_finalize(statement);
-            return assetPrice;
-        } else {
-            // Asset is free or it's iap is invalid
-            sqlite3_finalize(statement);
-            return @"BUY";
-        }
-        sqlite3_free((char*)errMsg);
     }
 }
 
@@ -622,12 +565,10 @@ static const NSString* FEED_ISREAD     = @"isread";
             a.assetId      = sqlite3_column_int(statement, 0);
             a.name         = name;
             a.keywords     = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
-            a.iap          = iap;
             a.hash         = has;
             a.modifiedDate = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 5)];
             a.type         = sqlite3_column_int(statement, 6);
             a.boneCount    = sqlite3_column_int(statement, 7);
-            a.price        = [self getAssetPrice:a.iap];
 
             sqlite3_finalize(statement);
             return a;
@@ -656,12 +597,10 @@ static const NSString* FEED_ISREAD     = @"isread";
             a.assetId      = sqlite3_column_int(statement, 0);
             a.name         = name;
             a.keywords     = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
-            a.iap          = iap;
             a.hash         = has;
             a.modifiedDate = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 5)];
             a.type         = sqlite3_column_int(statement, 6);
             a.boneCount    = sqlite3_column_int(statement, 7);
-            a.price        = [self getAssetPrice:a.iap];
 
             sqlite3_finalize(statement);
             return a;
@@ -690,12 +629,10 @@ static const NSString* FEED_ISREAD     = @"isread";
             a.assetId      = sqlite3_column_int(statement, 0);
             a.name         = name;
             a.keywords     = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 2)];
-            a.iap          = iap;
             a.hash         = has;
             a.modifiedDate = [NSString stringWithFormat:@"%s", sqlite3_column_text(statement, 5)];
             a.type         = sqlite3_column_int(statement, 6);
             a.boneCount    = sqlite3_column_int(statement, 7);
-            a.price        = [self getAssetPrice:a.iap];
             sqlite3_finalize(statement);
             return a;
         }
@@ -896,16 +833,6 @@ static const NSString* DOWNLOADED_ASSET_TYPE      = @"asset_type";
             return false;
     }
     return false;
-}
-
-- (void)createTablesForPrice {
-    @synchronized(dbLock) {
-        char*     errMsg;
-        NSString* createAssetPriceTable = [NSString stringWithFormat:@"CREATE TABLE %@ (%@ TEXT, %@ TEXT)", ASSET_PRICE_TABLE, ASSET_IAP, ASSET_PRICE];
-        if (sqlite3_exec(_cacheSystem, [createAssetPriceTable UTF8String], NULL, NULL, &errMsg) != SQLITE_OK) {
-        }
-        sqlite3_free(errMsg);
-    }
 }
 
 - (void)addOBJImporterColumn {

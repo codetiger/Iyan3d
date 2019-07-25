@@ -14,6 +14,7 @@
 #import "SceneSelectionControllerNew.h"
 #import "MediaPreviewVC.h"
 #import <sys/utsname.h>
+#import <StoreKit/StoreKit.h>
 
 #import "SceneImporter.h"
 
@@ -246,7 +247,6 @@ BOOL missingAlertShown;
 - (void)viewWillDisappear:(BOOL)animated {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"AppGoneBackground" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"applicationDidBecomeActive" object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"renderCompleted" object:nil];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer*)gestureRecognizer shouldReceiveTouch:(UITouch*)touch {
@@ -861,6 +861,10 @@ BOOL missingAlertShown;
     NSString* thumbPath = [self saveThumbnail];
     [renderViewMan createi3dFileWithThumb:thumbPath];
     [self loadSceneSelectionView];
+    
+    if([SKStoreReviewController class]){
+        [SKStoreReviewController requestReview] ;
+    }
 }
 
 - (IBAction)playButtonAction:(id)sender {
@@ -1167,7 +1171,6 @@ BOOL missingAlertShown;
 }
 
 - (IBAction)scaleBtnAction:(id)sender {
-    bool status = false;
     if ((editorScene->selectedNodeIds.size() > 0) && (editorScene->allObjectsScalable())) {
         editorScene->controlType = SCALE;
         editorScene->updater->updateControlsOrientaion();
@@ -1744,8 +1747,8 @@ const NSStringEncoding kEncoding_wchar_t =
                   style:UIAlertActionStyleDefault
                 handler:^(UIAlertAction* action) {
                     [self showOrHideProgress:SHOW_PROGRESS];
-                    if (editorScene->selectedNodeIds.size() > 0) {
-                        editorScene->loader->removeSelectedObjects();
+        if (self->editorScene->selectedNodeIds.size() > 0) {
+                        self->editorScene->loader->removeSelectedObjects();
                         [self undoRedoButtonState:DEACTIVATE_BOTH];
                     } else {
                         [self deleteObjectOrAnimation];
@@ -1760,8 +1763,8 @@ const NSStringEncoding kEncoding_wchar_t =
                   style:UIAlertActionStyleDefault
                 handler:^(UIAlertAction* action) {
                     [self showOrHideProgress:SHOW_PROGRESS];
-                    if (editorScene->selectedNodeIds.size() > 0) {
-                        assetAddType = IMPORT_ASSET_ACTION;
+                    if (self->editorScene->selectedNodeIds.size() > 0) {
+                        self->assetAddType = IMPORT_ASSET_ACTION;
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [self createDuplicateAssets];
                             [self undoRedoButtonState:DEACTIVATE_BOTH];
@@ -1799,7 +1802,7 @@ const NSStringEncoding kEncoding_wchar_t =
             if (nodeType == NODE_IMAGE || nodeType == NODE_VIDEO)
                 isVideoOrImageOrParticle = true;
         }
-        int state = (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_RIG && editorScene->nodes[editorScene->selectedNodeId]->joints.size() == HUMAN_JOINTS_SIZE) ? editorScene->getMirrorState() : MIRROR_DISABLE;
+        
         [self showCommonPropsVCAtRect:longPressposition WithProps:editorScene->nodes[editorScene->selectedNodeId]->getAllProperties(editorScene->selectedMeshBufferId) AnyDirection:YES];
     }
 }
@@ -2277,22 +2280,17 @@ const NSStringEncoding kEncoding_wchar_t =
     } else if (indexValue == CONTACT_US) {
         [self.popoverController dismissPopoverAnimated:YES];
         if ([MFMailComposeViewController canSendMail]) {
-            MFMailComposeViewController* picker = [[MFMailComposeViewController alloc] init];
-            picker.mailComposeDelegate          = self;
-            NSArray* usersTo                    = [NSArray arrayWithObject:@"codetiger42@icloud.com"];
-            [picker setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3D Pro (%@ , iOS Version: %s)", [self deviceName], iOSVersion]];
-            [picker setToRecipients:usersTo];
-            [self presentModalViewController:picker animated:YES];
+            MFMailComposeViewController *composeViewController = [[MFMailComposeViewController alloc] initWithNibName:nil bundle:nil];
+            [composeViewController setMailComposeDelegate:self];
+            [composeViewController setToRecipients:@[@"codetiger42@icloud.com"]];
+            [composeViewController setSubject:[NSString stringWithFormat:@"Feedback on Iyan 3D Pro (%@, iOS Version: %@)", [self deviceName], iOSVersion]];
+            [self presentViewController:composeViewController animated:YES completion:nil];
         } else {
             [self.view endEditing:YES];
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Alert", nil) message:NSLocalizedString(@"No_Email_account_configured", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
             [alert show];
             return;
         }
-    } else if (indexValue == RATE_US) {
-        [self.popoverController dismissPopoverAnimated:YES];
-        NSString* templateReviewURLiOS7 = @"https://itunes.apple.com/app/id1163508489?mt=8";
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:templateReviewURLiOS7]];
     }
 }
 
@@ -2314,24 +2312,7 @@ const NSStringEncoding kEncoding_wchar_t =
 }
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
-    switch (result) {
-        case MFMailComposeResultCancelled:
-            [self dismissViewControllerAnimated:YES completion:nil];
-            break;
-        case MFMailComposeResultSaved:
-            [self dismissViewControllerAnimated:YES completion:nil];
-            break;
-        case MFMailComposeResultSent:
-            [self dismissViewControllerAnimated:YES completion:nil];
-            break;
-        case MFMailComposeResultFailed:
-            NSLog(@"Mail sent failure: %@", [error localizedDescription]);
-            [self dismissViewControllerAnimated:YES completion:nil];
-            break;
-        default:
-            [self dismissViewControllerAnimated:YES completion:nil];
-            break;
-    }
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)optionBtnDelegate:(int)indexValue {
@@ -2691,19 +2672,14 @@ void downloadFile(NSString* url, NSString* fileName) {
 }
 
 - (void)loadSceneSelectionView {
-    if ([Utility IsPadDevice]) {
-        SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:@"SceneSelectionControllerNew" bundle:nil IsFirstTimeOpen:NO];
-        sceneSelectionView.fromLoadingView              = false;
-        sceneSelectionView.isAppFirstTime               = false;
-        AppDelegate* appDelegate                        = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-        [appDelegate.window setRootViewController:sceneSelectionView];
-    } else {
-        SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:([self iPhone6Plus]) ? @"SceneSelectionControllerNewPhone@2x" : @"SceneSelectionControllerNewPhone" bundle:nil IsFirstTimeOpen:NO];
-        sceneSelectionView.fromLoadingView              = false;
-        sceneSelectionView.isAppFirstTime               = false;
-        AppDelegate* appDelegate                        = (AppDelegate*)[[UIApplication sharedApplication] delegate];
-        [appDelegate.window setRootViewController:sceneSelectionView];
-    }
+    NSString* xibName = [Utility IsPadDevice] ? @"SceneSelectionControllerNew": ([self iPhone6Plus] ? @"SceneSelectionControllerNewPhone@2x" : @"SceneSelectionControllerNewPhone");
+
+    SceneSelectionControllerNew* sceneSelectionView = [[SceneSelectionControllerNew alloc] initWithNibName:xibName bundle:nil];
+    sceneSelectionView.fromLoadingView              = false;
+    sceneSelectionView.isAppFirstTime               = false;
+    AppDelegate* appDelegate                        = (AppDelegate*)[[UIApplication sharedApplication] delegate];
+    [appDelegate.window setRootViewController:sceneSelectionView];
+
     [self performSelectorOnMainThread:@selector(removeSGEngine) withObject:nil waitUntilDone:YES];
     [self removeFromParentViewController];
 }
@@ -3024,7 +3000,6 @@ void downloadFile(NSString* url, NSString* fileName) {
     sgmAsset.assetId      = 20000 + [cache getNextObjAssetId];
     sgmAsset.type         = NODE_SGM;
     sgmAsset.name         = [NSString stringWithFormat:@"%@%d", fileName, [cache getNextObjAssetId]];
-    sgmAsset.iap          = 0;
     sgmAsset.keywords     = [NSString stringWithFormat:@" %@", fileName];
     sgmAsset.boneCount    = 0;
     NSString* filePath    = [NSString stringWithFormat:@"%@/%@", documentsDirectoryPath, fileName];

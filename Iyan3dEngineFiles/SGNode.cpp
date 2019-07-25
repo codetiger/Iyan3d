@@ -811,7 +811,9 @@ int toString(const char a[])
 Mesh* SGNode::readData(ifstream *filePointer, int &origIndex)
 {
     assetId = FileHelper::readInt(filePointer);
-    int sgbVersion = FileHelper::readInt(filePointer);
+    
+    //int sgbVersion = #unused
+    FileHelper::readInt(filePointer);
     
     type = (NODE_TYPE)FileHelper::readInt(filePointer);
     setPropertiesOfNode();
@@ -819,30 +821,37 @@ Mesh* SGNode::readData(ifstream *filePointer, int &origIndex)
         getProperty(HAS_PHYSICS).value.x = FileHelper::readFloat(filePointer);
     else
         FileHelper::readFloat(filePointer);
+    
     if(IsPropertyExists(PHYSICS_KIND))
         getProperty(PHYSICS_KIND).value.x = FileHelper::readFloat(filePointer);
     else
         FileHelper::readFloat(filePointer);
+    
     if(IsPropertyExists(WEIGHT))
         getProperty(WEIGHT).value.x = FileHelper::readFloat(filePointer);
     else
         FileHelper::readFloat(filePointer);
+    
     if(IsPropertyExists(FORCE_MAGNITUDE))
         getProperty(FORCE_MAGNITUDE).value.x = FileHelper::readFloat(filePointer);
     else
         FileHelper::readFloat(filePointer);
+    
     if(IsPropertyExists(IS_SOFT))
         getProperty(IS_SOFT).value.x = FileHelper::readFloat(filePointer);
     else
         FileHelper::readFloat(filePointer);
+    
     if(IsPropertyExists(LIGHT_TYPE))
         getProperty(LIGHT_TYPE).value.x = FileHelper::readFloat(filePointer);
     else
         FileHelper::readFloat(filePointer);
+    
     if(IsPropertyExists(SPECIFIC_FLOAT))
         getProperty(SPECIFIC_FLOAT).value.x = FileHelper::readFloat(filePointer);
     else
         FileHelper::readFloat(filePointer);
+    
     if(IsPropertyExists(FONT_SIZE))
         getProperty(FONT_SIZE).value.x = FileHelper::readFloat(filePointer);
     else
