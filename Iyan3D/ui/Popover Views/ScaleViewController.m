@@ -22,7 +22,7 @@ float previousX = 0, previousY = 0, previousZ = 0;
     currentYValue = YValue;
     currentZValue = ZValue;
     [self setScaleValueLabelsWithXScale:currentXValue YScale:currentYValue ZScale:currentZValue];
-    [self updateScale:currentXValue yValue:currentYValue zValue:currentZValue];
+    [self updateScale:currentXValue yScale:currentYValue zScale:currentZValue];
     [self setOverAllLockFuntion];
 
     return self;
@@ -33,7 +33,7 @@ float previousX = 0, previousY = 0, previousZ = 0;
     self.xSlider.minimumValue = self.ySlider.minimumValue = self.zSlider.minimumValue = 0.01;
 
     [self setScaleValueLabelsWithXScale:currentXValue YScale:currentYValue ZScale:currentZValue];
-    [self updateScale:currentXValue yValue:currentYValue zValue:currentZValue];
+    [self updateScale:currentXValue yScale:currentYValue zScale:currentZValue];
     [self setOverAllLockFuntion];
 
     // Do any additional setup after loading the view from its nib.
@@ -104,7 +104,7 @@ float previousX = 0, previousY = 0, previousZ = 0;
     [self setOverAllLockFuntion];
 }
 
-- (void)updateScale:(float)xValue yValue:(float)yValue zValue:(float)zValue {
+- (void)updateScale:(float)xValue yScale:(float)yValue zScale:(float)zValue {
     [self.xSlider setValue:xValue];
     [self.ySlider setValue:yValue];
     [self.zSlider setValue:zValue];

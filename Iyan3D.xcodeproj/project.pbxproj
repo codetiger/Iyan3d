@@ -1294,6 +1294,10 @@
 		4E8B1D8C22E4031A00AFB715 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8A22E4031800AFB715 /* Accelerate.framework */; };
 		4E8B1D9622E4132D00AFB715 /* libFreetype2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D7B22E3FD6500AFB715 /* libFreetype2.a */; };
 		4E8B1D9822E4133100AFB715 /* libFreetype2_sim.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E8B1D8E22E4061200AFB715 /* libFreetype2_sim.a */; };
+		4E99536622EAF28300866C60 /* unlock.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E99536422EAF28300866C60 /* unlock.png */; };
+		4E99536722EAF28300866C60 /* unlock.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E99536422EAF28300866C60 /* unlock.png */; };
+		4E99536822EAF28300866C60 /* bracket.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E99536522EAF28300866C60 /* bracket.png */; };
+		4E99536922EAF28300866C60 /* bracket.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E99536522EAF28300866C60 /* bracket.png */; };
 		4E9A56D322E3833200575D98 /* render_image-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56C322E3833100575D98 /* render_image-phone@3x.png */; };
 		4E9A56D422E3833200575D98 /* render_image-phone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56C322E3833100575D98 /* render_image-phone@3x.png */; };
 		4E9A56D522E3833200575D98 /* render_image.png in Resources */ = {isa = PBXBuildFile; fileRef = 4E9A56CF22E3833200575D98 /* render_image.png */; };
@@ -2482,6 +2486,8 @@
 		4E8B1D8722E402E400AFB715 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		4E8B1D8A22E4031800AFB715 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		4E8B1D8E22E4061200AFB715 /* libFreetype2_sim.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFreetype2_sim.a; path = FrameWorks/libFreetype2_sim.a; sourceTree = "<group>"; };
+		4E99536422EAF28300866C60 /* unlock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unlock.png; path = "../../../../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/Iyan3D/Resources/images/editorViewController/unlock.png"; sourceTree = "<group>"; };
+		4E99536522EAF28300866C60 /* bracket.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bracket.png; path = "../../../../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/Iyan3D/Resources/images/editorViewController/bracket.png"; sourceTree = "<group>"; };
 		4E9A56C322E3833100575D98 /* render_image-phone@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "render_image-phone@3x.png"; path = "../../../../../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/Iyan3D/Resources/images/editorViewController/render_image-phone@3x.png"; sourceTree = "<group>"; };
 		4E9A56CF22E3833200575D98 /* render_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = render_image.png; path = "../../../../../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/Iyan3D/Resources/images/editorViewController/render_image.png"; sourceTree = "<group>"; };
 		4E9A56D022E3833200575D98 /* render_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "render_image@2x.png"; path = "../../../../../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/Iyan3D/Resources/images/editorViewController/render_image@2x.png"; sourceTree = "<group>"; };
@@ -2708,6 +2714,8 @@
 		01B4CF921C29219A0091E19B /* editorViewController */ = {
 			isa = PBXGroup;
 			children = (
+				4E99536522EAF28300866C60 /* bracket.png */,
+				4E99536422EAF28300866C60 /* unlock.png */,
 				01F872421C3A42EF009AA31E /* IPhone */,
 				01B4CF931C29219A0091E19B /* rightview */,
 				01B4CFAE1C29219A0091E19B /* topview */,
@@ -4598,6 +4606,7 @@
 				2518159B1D1D5C51009F68A8 /* Welcome-Img.png in Resources */,
 				01B4D06F1C2937000091E19B /* Undo_Pad.png in Resources */,
 				01F872FE1C3A6C4E009AA31E /* My-objects-Text_IPhone@2x.png in Resources */,
+				4E99536622EAF28300866C60 /* unlock.png in Resources */,
 				01B6C8B91C3B94590050D2F9 /* AnimationSelectionCollectionViewCellPhone.xib in Resources */,
 				01B4D0511C2937000091E19B /* My-objects-Camera_Pad@2x.png in Resources */,
 				C8AA47031C227D3600C4AB53 /* New-scene.png in Resources */,
@@ -4744,6 +4753,7 @@
 				250FEC881D1EA8B2000C8A2C /* Step-2_-img_phone@3x.png in Resources */,
 				01B4D05B1C2937000091E19B /* My-objects-Text_Pad.png in Resources */,
 				01F872971C3A42EF009AA31E /* Scale_IPhone.png in Resources */,
+				4E99536822EAF28300866C60 /* bracket.png in Resources */,
 				01B395301C37AACE003955C6 /* Import-Light_Pad@2x.png in Resources */,
 				01B395171C37A8DD003955C6 /* Next-Frame@2x.png in Resources */,
 				01F872F41C3A6C4E009AA31E /* Move_IPhone@2x.png in Resources */,
@@ -5019,6 +5029,7 @@
 				259EE1541BDE342800C99784 /* dummy.png in Resources */,
 				01B4CFEB1C29219A0091E19B /* Add-Frames.png in Resources */,
 				01B02CED1C61CAB400C9102A /* undo_IPhone@3x.png in Resources */,
+				4E99536722EAF28300866C60 /* unlock.png in Resources */,
 				01B4D0541C2937000091E19B /* My-objects-Light_Pad.png in Resources */,
 				25EC46231D33D67E004DC02C /* SliderPropCell.xib in Resources */,
 				01B6F3F71C3E94890041D42F /* SettingsViewControllerPhone.xib in Resources */,
@@ -5165,6 +5176,7 @@
 				3D5F991B1C4D04EB00DD47F5 /* shape3.png in Resources */,
 				01CCD1C91C3FDBA600565664 /* ObjSidePanelPhone.xib in Resources */,
 				250FEC411D1E5506000C8A2C /* Divider-1_phone@2x.png in Resources */,
+				4E99536922EAF28300866C60 /* bracket.png in Resources */,
 				251815841D1D4924009F68A8 /* Step-1_-img.png in Resources */,
 				250FEC4D1D1E5506000C8A2C /* Step-1_-img_phone@2x.png in Resources */,
 				01B4CF851C291EFD0091E19B /* AnimationSelectionCollectionViewCell.xib in Resources */,
