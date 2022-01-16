@@ -1552,7 +1552,7 @@ BOOL missingAlertShown;
         [imageDetails setObject:[NSNumber numberWithFloat:imgH] forKey:@"Height"];
         [imageDetails setObject:[NSNumber numberWithBool:isTempNode] forKey:@"isTempNode"];
     
-
+    assetAddType = IMPORT_ASSET_ACTION;
     [self performSelectorOnMainThread:@selector(loadNodeForImage:) withObject:imageDetails waitUntilDone:YES];
     [self.center_progress stopAnimating];
     [self.center_progress setHidden:YES];
@@ -2632,7 +2632,7 @@ void downloadFile(NSString* url, NSString* fileName)
         editorScene->objMan->loadAndSaveAsSGM(*objStr, *textureStr, 123456,!isHaveTexture,color);
     }
     
-    NSString* texTo = [NSString stringWithFormat:@"%@/Resources/Sgm/%d-cm.png",docDirPath,assetId];
+    NSString* texTo = [NSString stringWithFormat:@"%@/Resources/Textures/%d-cm.png",docDirPath,assetId];
     [fm removeItemAtPath:texTo error:nil];
     
     if(!isTempNode){
@@ -2640,7 +2640,7 @@ void downloadFile(NSString* url, NSString* fileName)
     }
   
     NSString* texFrom = [NSString stringWithFormat:@"%@/%@.png",docDirPath,(!isHaveTexture)?@"Resources/Sgm/White-texture":textureFileName];
-    texTo = [NSString stringWithFormat:@"%@/Resources/Sgm/%d-cm.png",docDirPath,assetIdReturn];
+    texTo = [NSString stringWithFormat:@"%@/Resources/Textures/%d-cm.png",docDirPath,assetIdReturn];
     [fm copyItemAtPath:texFrom toPath:texTo error:nil];
     
     if (!isTempNode){
@@ -2808,7 +2808,11 @@ void downloadFile(NSString* url, NSString* fileName)
     
     [renderViewMan loadNodeInScene:NODE_SGM AssetId:assetId AssetName:assetName TextureName:([dict objectForKey:@"textureName"]) Width:0 Height:0 isTempNode:isTempNode More:dict ActionType:IMPORT_ASSET_ACTION VertexColor:color];
    
+    
+    
     if(!isTempNode){
+        editorScene->selectMan->selectObject(editorScene->nodes.size()-1);
+        [self changeTexture:@"0-cm.png" VertexColor:Vector3(1.0)]; // for White Texture Thumbnail
         if(assetId >= 20000 && assetId <= 30000){
             NSMutableArray* nodes = [[NSMutableArray alloc]init];
             for(int i = 0; i < editorScene->nodes.size(); i++){
@@ -2828,7 +2832,9 @@ void downloadFile(NSString* url, NSString* fileName)
             [nodes removeAllObjects];
             nodes = nil;
         }
-    }    
+        [self changeTexture:[dict objectForKey:@"textureName"] VertexColor:Vector3(color.x,color.y,color.z)]; // back to original Texture
+        editorScene->selectMan->unselectObject(editorScene->nodes.size()-1);
+    }
 }
 
 void boneLimitsCallBack(){
@@ -2867,7 +2873,7 @@ void boneLimitsCallBack(){
     std::string *texture = new std::string([textureName UTF8String]);
 
     if(!(editorScene->selectedNodeIds.size() > 0) && editorScene->hasNodeSelected()){
-        editorScene->changeTexture(*texture, Vector3(1));
+        editorScene->changeTexture(*texture, Vector3(color));
     }
 }
 

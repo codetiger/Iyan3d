@@ -52,6 +52,7 @@
         NSString *rigs = [resourcesDir stringByAppendingPathComponent:@"/Objs"];
         NSString *objs = [resourcesDir stringByAppendingPathComponent:@"/Rigs"];
         NSString *sgm = [resourcesDir stringByAppendingPathComponent:@"/Sgm"];
+        NSString *textures = [resourcesDir stringByAppendingPathComponent:@"/Textures"];
         NSString *anims = [resourcesDir stringByAppendingPathComponent:@"/Animations"];
 
         if (![fileManager fileExistsAtPath:projectFolderPath]) {
@@ -61,6 +62,8 @@
             [[NSFileManager defaultManager] createDirectoryAtPath:objs withIntermediateDirectories:NO attributes:nil error:nil];
             [[NSFileManager defaultManager] createDirectoryAtPath:sgm withIntermediateDirectories:NO attributes:nil error:nil];
             [[NSFileManager defaultManager] createDirectoryAtPath:anims withIntermediateDirectories:NO attributes:nil error:nil];
+            [[NSFileManager defaultManager] createDirectoryAtPath:textures withIntermediateDirectories:NO attributes:nil error:nil];
+
             
             if (![[NSFileManager defaultManager] fileExistsAtPath:databasePath]) {
                 isAppFirstTime = true;

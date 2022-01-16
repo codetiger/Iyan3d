@@ -170,7 +170,6 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
     currentScene->freezeRendering = true;
     SGNode *sgnode = new SGNode(type);
     sgnode->node = sgnode->loadNode(assetId,textureName,type,smgr,name,imgwidth,imgheight,textColor,fontFilePath);
-
     if(!sgnode->node){
         delete sgnode;
         Logger::log(INFO,"SGANimationScene","Node not loaded");
@@ -203,7 +202,6 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
     
     //if (type >= NODE_LIGHT && type != NODE_ADDITIONAL_LIGHT)
     sgnode->node->setTexture(currentScene->shadowTexture,2);
-    
     if(actionType != UNDO_ACTION && actionType != REDO_ACTION && !isTempNode)
         sgnode->actionId = ++currentScene->actionObjectsSize;
     currentScene->nodes.push_back(sgnode);

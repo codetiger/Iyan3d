@@ -60,7 +60,7 @@
     if(_addBtn.tag == OBJ)
         return [filesList count]+6;
     else
-        return ([filesList count] == 0) ? 1 : [filesList count];
+        return [filesList count]+1;
 }
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -93,8 +93,8 @@
         ObjCellView *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CELL" forIndexPath:indexPath];
         cell.layer.borderColor = [UIColor grayColor].CGColor;
         cell.layer.backgroundColor = [UIColor colorWithRed:15/255.0 green:15/255.0 blue:15/255.0 alpha:1].CGColor;
-
-        if([filesList count] == 0){
+        
+        if(indexPath.row == 0){
             cell.assetNameLabel.text = @"Pick Color";
             cell.assetImageView.backgroundColor = [UIColor colorWithRed:color.x green:color.y blue:color.z alpha:1.0];
             cell.assetImageView.image = NULL;
@@ -102,8 +102,8 @@
         else{
             NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
             NSString* docDirPath = [srcDirPath objectAtIndex:0];
-            NSString* srcFilePath = [NSString stringWithFormat:@"%@/%@",docDirPath,filesList[indexPath.row]];
-            cell.assetNameLabel.text = filesList[indexPath.row];
+            NSString* srcFilePath = [NSString stringWithFormat:@"%@/%@",docDirPath,filesList[indexPath.row-1]];
+            cell.assetNameLabel.text = filesList[indexPath.row-1];
             cell.assetImageView.image=[UIImage imageWithContentsOfFile:srcFilePath];
         }
             return cell;
@@ -126,7 +126,7 @@
         indexPathOfOBJ = indexPath.row;
     else
     {
-        if([filesList count] == 0){
+        if(indexPath.row == 0){
             haveTexture = NO;
             _vertexColorProp = [[TextColorPicker alloc] initWithNibName:@"TextColorPicker" bundle:nil TextColor:nil];
             _vertexColorProp.delegate = self;
@@ -144,7 +144,7 @@
         }
         else{
             haveTexture = YES;
-            textureFileName = [[filesList objectAtIndex:indexPath.row]stringByDeletingPathExtension];
+            textureFileName = [[filesList objectAtIndex:indexPath.row-1]stringByDeletingPathExtension];
         }
     }
     
@@ -173,6 +173,7 @@
         [self removeFromParentViewController];
     }
 }
+
 - (IBAction)colorPickerAction:(id)sender {
     _vertexColorProp = [[TextColorPicker alloc] initWithNibName:@"TextColorPicker" bundle:nil TextColor:nil];
     _vertexColorProp.delegate = self;
@@ -193,8 +194,7 @@
 {
     haveTexture = NO;
     color = vetexColor;
-    if([filesList count] == 0)
-        [self.importFilesCollectionView reloadData];
+    [self.importFilesCollectionView reloadData];
     if(isDragFinish)
         [_objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:YES];
 }

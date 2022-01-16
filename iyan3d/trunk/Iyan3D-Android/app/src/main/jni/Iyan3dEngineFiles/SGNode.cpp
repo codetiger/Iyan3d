@@ -276,7 +276,7 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneMan
 #ifdef ANDROID
     StoragePath = constants::DocumentsStoragePath + "/mesh/";
 #endif
-    
+
     string meshPath = StoragePath + to_string(assetId) + fileExt;
     string textureFileName = StoragePath + textureName+".png";
     
@@ -288,11 +288,15 @@ shared_ptr<Node> SGNode::loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneMan
         if(!checkFileExists(meshPath))
             return shared_ptr<Node>();
     }
-    if(!checkFileExists(textureFileName))
+    if(!checkFileExists(textureFileName)){
         textureFileName = FileHelper::getDocumentsDirectory() + textureName+".png";
-        if(!checkFileExists(textureFileName))
+        if(!checkFileExists(textureFileName)){
             textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Sgm/" + textureName+".png";
-    
+            if(!checkFileExists(textureFileName))
+                textureFileName = FileHelper::getDocumentsDirectory()+ "/Resources/Textures/" + textureName+".png";
+        }
+    }
+
     int objLoadStatus = 0;
     Mesh *mesh = (objectType == NODE_SGM) ? CSGRMeshFileLoader::createSGMMesh(meshPath,smgr->device) : objLoader->createMesh(meshPath,objLoadStatus,smgr->device);
     

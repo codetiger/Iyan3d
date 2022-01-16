@@ -469,7 +469,7 @@ void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor)
     if(!isNodeSelected || selectedNodeId == NOT_SELECTED)
         return;
     
-    string texturePath = FileHelper::getDocumentsDirectory() + "/" + textureFileName;
+    string texturePath = FileHelper::getDocumentsDirectory() + "/Resources/Textures/" + textureFileName;
     
     printf("Texture Path %s " , texturePath.c_str());
     
