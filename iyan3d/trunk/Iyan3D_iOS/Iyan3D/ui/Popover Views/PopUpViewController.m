@@ -69,6 +69,9 @@
     else if([clickedBtnName isEqualToString:@"propertiesBtn"]){
         tableData = [NSMutableArray arrayWithObjects:@"Duplicate", @"Delete",@"Rename", nil];
     }
+    else if([clickedBtnName isEqualToString:@"optionsBtn"]){
+        tableData = [NSMutableArray arrayWithObjects:@"Move Camera", nil];
+    }
     else if([clickedBtnName isEqualToString:@"loginBtn"]){
         self.popoverBtns.hidden=YES;
         [self.loginBtn setHidden:NO];
@@ -206,6 +209,9 @@
     }
     else if([clickedBtn isEqualToString:@"propertiesBtn"]){
         [self.delegate propertiesBtnDelegate:(int)indexPath.row];
+    }
+    else if([clickedBtn isEqualToString:@"optionsBtn"]){
+        [self.delegate optionBtnDelegate:(int)indexPath.row];
     }
 
     else {

@@ -19,7 +19,7 @@
 -(void)highlightObjectList;
 - (void) loginBtnAction;
 - (void) propertiesBtnDelegate:(int)indexValue;
-
+-(void) optionBtnDelegate:(int)indexValue;
 @end
 
 @interface PopUpViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>{

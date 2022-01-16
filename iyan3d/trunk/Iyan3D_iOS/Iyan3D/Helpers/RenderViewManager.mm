@@ -388,6 +388,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         [self.delegate stopPlaying];
         return;
     }
+    [self.delegate undoRedoButtonState:DEACTIVATE_BOTH];
     editorScene->setLightingOn();
 }
 
@@ -471,8 +472,8 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
         }
     }
     editorScene->updater->updateControlsOrientaion();
-    if (editorScene->actionMan->actions.size() > 0 && editorScene->actionMan->currentAction > 0 && !_isPlaying) {
-        //[self.undoButton setEnabled:YES];
+    if (!_isPlaying) {
+        [self.delegate undoRedoButtonState:DEACTIVATE_BOTH];
     }
 }
 
@@ -480,8 +481,20 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
     if (sender.state == UIGestureRecognizerStateBegan)
     {
         _longPress=true;
+        CGPoint position;
+        position = [sender locationInView:self.renderView];
+        _longPresPosition=CGRectMake(position.x, position.y, 1, 1);
+
         if (!_isPlaying && !_isPanned)
         {
+            if(editorScene->selectedNodeId==-1 && editorScene->selectedNodeIds.size() == 0)
+            {
+                
+                [self.delegate presentPopOver:_longPresPosition];
+                _longPress=false;
+            }
+            
+
             if(editorScene->selectedNodeIds.size() > 0) {
                 if(editorScene->allNodesRemovable())
                     [self.delegate presentPopOver:_longPresPosition];
@@ -495,9 +508,7 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             }
             
         }
-        CGPoint position;
-        position = [sender locationInView:self.renderView];
-        _longPresPosition=CGRectMake(position.x, position.y, 1, 1);
+        
     }
 }
 

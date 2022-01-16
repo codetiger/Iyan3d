@@ -135,9 +135,13 @@ BOOL missingAlertShown;
     [self.framesCollectionView reloadData];
     [self.objectList reloadData];
     [self initScene];
+    [self changeAllButtonBG];
+    [self setupEnableDisableControls];
     [self createDisplayLink];
+    [self undoRedoButtonState:DEACTIVATE_BOTH];
     if([[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]){
         [self toolbarPosition:(int)[[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]];
+        NSLog(@"Toolbar position : %@ ",[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]);
     } else {
         [[AppHelper getAppHelper] saveToUserDefaults:[NSNumber numberWithInt:0] withKey:@"toolbarPosition"];
         [self toolbarPosition:0];
@@ -153,6 +157,8 @@ BOOL missingAlertShown;
     NSLog(@"Document Path : %@ ",documentsDirectory);
     [_center_progress stopAnimating];
     [_center_progress setHidden:YES];
+    if (editorScene->actionMan->actions.size() > 0)
+        [self.undoBtn setEnabled:YES];
 }
 
 
@@ -203,6 +209,174 @@ BOOL missingAlertShown;
     [_framesCollectionView reloadData];
 }
 
+- (void)changeAllButtonBG{
+    if(editorScene->isNodeSelected)
+    {
+        
+        if(editorScene->controlType==MOVE){
+            [self.moveBtn setBackgroundColor:[UIColor colorWithRed:123.0f / 255.0f green:123.0f / 255.0f blue:127.0f / 255.0f alpha:1]];
+            [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
+            [self.scaleBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
+            
+        }
+        if(editorScene->controlType==ROTATE){
+            [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:123.0f / 255.0f green:123.0f / 255.0f blue:127.0f / 255.0f alpha:1]];
+            [self.moveBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
+            [self.scaleBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
+            
+        }
+        if(editorScene->controlType==SCALE){
+            [self.scaleBtn setBackgroundColor:[UIColor colorWithRed:123.0f / 255.0f green:123.0f / 255.0f blue:127.0f / 255.0f alpha:1]];
+            [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
+            [self.moveBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
+            
+        }
+
+    }
+    else if (editorScene->selectedNodeIds.size()>0)
+    {
+        if(editorScene->controlType==MOVE){
+            [self.moveBtn setBackgroundColor:[UIColor colorWithRed:123.0f / 255.0f green:123.0f / 255.0f blue:127.0f / 255.0f alpha:1]];
+            [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
+            [self.scaleBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
+            
+        }
+        if(editorScene->controlType==ROTATE){
+            [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:123.0f / 255.0f green:123.0f / 255.0f blue:127.0f / 255.0f alpha:1]];
+            [self.moveBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
+            [self.scaleBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
+            
+        }
+        if(editorScene->controlType==SCALE){
+            [self.scaleBtn setBackgroundColor:[UIColor colorWithRed:123.0f / 255.0f green:123.0f / 255.0f blue:127.0f / 255.0f alpha:1]];
+            [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
+            [self.moveBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
+            
+        }
+
+        
+    }
+    else
+    {
+        [self.moveBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
+        [self.rotateBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
+        [self.scaleBtn setBackgroundColor:[UIColor colorWithRed:66.0f / 255.0f green:66.0f / 255.0f blue:68.0f / 255.0f alpha:1]];
+    }
+
+    
+}
+
+-(void)setupEnableDisableControls{
+    if(editorScene->isNodeSelected)
+    {
+        if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_LIGHT || editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_ADDITIONAL_LIGHT){
+            [self.moveBtn setEnabled:true];
+            [self.rotateBtn setEnabled:false];
+            [self.optionsBtn setEnabled:true];
+            [self.scaleBtn setEnabled:false];
+            return;
+        }
+        if(editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_CAMERA){
+            [self.moveBtn setEnabled:true];
+            [self.rotateBtn setEnabled:true];
+            [self.optionsBtn setEnabled:true];
+            [self.scaleBtn setEnabled:false];
+            return;
+        }
+        [self.moveBtn setEnabled:true];
+        [self.optionsBtn setEnabled:true];
+        [self.rotateBtn setEnabled:true];
+        [self.scaleBtn setEnabled:true];
+        return;
+    }
+    else if (editorScene->selectedNodeIds.size()>0)
+    {
+        if(!editorScene->allObjectsScalable()){
+            [self.moveBtn setEnabled:true];
+            [self.rotateBtn setEnabled:false];
+            [self.scaleBtn setEnabled:false];
+            [self.optionsBtn setEnabled:false];
+            return;
+        }
+        [self.moveBtn setEnabled:true];
+        [self.rotateBtn setEnabled:true];
+        [self.scaleBtn setEnabled:true];
+        [self.optionsBtn setEnabled:false];
+        return;
+
+    }
+    else if (editorScene->isRigMode){
+        [self.moveBtn setEnabled:true];
+        [self.optionsBtn setEnabled:false];
+        [self.rotateBtn setEnabled:true];
+        [self.scaleBtn setEnabled:true];
+        [self.undoBtn setEnabled:false];
+        [self.redoBtn setEnabled:false];
+        [self.importBtn setEnabled:false];
+        [self.exportBtn setEnabled:false];
+        [self.animationBtn setEnabled:false];
+        [self.optionsBtn setEnabled:false];
+        [self.objectList setUserInteractionEnabled:false];
+        [self.playBtn setEnabled:false];
+        return;
+    }
+    else
+    {
+        [self.optionsBtn setEnabled:true];
+        [self.moveBtn setEnabled:false];
+        [self.rotateBtn setEnabled:false];
+        [self.scaleBtn setEnabled:false];
+        [self.importBtn setEnabled:true];
+        [self.exportBtn setEnabled:true];
+        [self.animationBtn setEnabled:true];
+        [self.objectList setUserInteractionEnabled:true];
+        [self.playBtn setEnabled:true];
+        return;
+
+
+    }
+}
+
+- (void)undoRedoButtonState:(int)state
+{
+    switch (state) {
+        case DEACTIVATE_UNDO:
+            if ([self.undoBtn isEnabled])
+                [self.undoBtn setEnabled:NO];
+            if (![self.redoBtn isEnabled])
+                [self.redoBtn setEnabled:YES];
+            break;
+        case DEACTIVATE_REDO:
+            if ([self.redoBtn isEnabled])
+                [self.redoBtn setEnabled:NO];
+            if (![self.undoBtn isEnabled])
+                [self.undoBtn setEnabled:YES];
+            break;
+        case DEACTIVATE_BOTH:
+            if ([self.undoBtn isEnabled])
+                [self.undoBtn setEnabled:NO];
+            if ([self.redoBtn isEnabled])
+                [self.redoBtn setEnabled:NO];
+            break;
+        default:
+            if (![self.undoBtn isEnabled])
+                [self.undoBtn setEnabled:YES];
+            if (![self.redoBtn isEnabled])
+                [self.redoBtn setEnabled:YES];
+            break;
+    }
+    
+    if (editorScene) {
+        NSLog(@"Action Size : %lu",editorScene->actionMan->actions.size());
+        NSLog(@"Current action : %d",editorScene->actionMan->currentAction);
+        if (editorScene->actionMan->actions.size() > 0 && editorScene->actionMan->currentAction > 0)
+            [self.undoBtn setEnabled:YES];
+        if (editorScene->actionMan->actions.size() > 0 && editorScene->actionMan->currentAction < (editorScene->actionMan->actions.size()))
+            [self.redoBtn setEnabled:YES];
+    }
+}
+
+
 - (void) removeTempNodeFromScene
 {
     if(editorScene && editorScene->loader)
@@ -236,6 +410,9 @@ BOOL missingAlertShown;
     float bevalValue = [[fontDetails objectForKey:@"bevelRadius"]floatValue];
     
     [renderViewMan loadNodeInScene:ASSET_TEXT_RIG AssetId:assetId AssetName:assetName TextureName:(@"") Width:fontSize Height:bevalValue isTempNode:isTempNode More:fontDetails ActionType:assetAddType VertexColor:Vector4(-1)];
+    if (!isTempNode) {
+        [self undoRedoButtonState:DEACTIVATE_BOTH];
+    }
 }
 
 - (void) importAdditionalLight{
@@ -244,6 +421,7 @@ BOOL missingAlertShown;
         //editorScene->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, ASSET_ADDITIONAL_LIGHT + lightCount , "Light"+ to_string(lightCount));
         [self addLightToScene:[NSString stringWithFormat:@"Light%d",lightCount] assetId:ASSET_ADDITIONAL_LIGHT + lightCount ];
         lightCount++;
+        [self undoRedoButtonState:DEACTIVATE_BOTH];
     } else {
         UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Scene cannot contain more than five lights." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [closeAlert show];
@@ -272,12 +450,20 @@ BOOL missingAlertShown;
     int imgHeight = [[nsDict objectForKey:@"Height"]intValue];
     int isTempNode = [[nsDict objectForKey:@"isTempNode"]intValue];
     [renderViewMan loadNodeInScene:type AssetId:assetId AssetName:saltedFileName TextureName:(@"") Width:imgWidth Height:imgHeight isTempNode:isTempNode More:nil ActionType:assetAddType VertexColor:Vector4(-1)];
+    if (!isTempNode) {
+        [self undoRedoButtonState:DEACTIVATE_BOTH];
+    }
+   
+    
 }
 
 - (void) loadNode:(AssetItem*) asset
 {
     NSLog(@"Asset Id : %d ", asset.assetId);
     [renderViewMan loadNodeInScene:asset.type AssetId:asset.assetId AssetName:[self getwstring:asset.name] TextureName:(asset.textureName) Width:0 Height:0 isTempNode:asset.isTempAsset More:nil ActionType:assetAddType VertexColor:Vector4(-1)];
+    if (!asset.isTempAsset) {
+        [self undoRedoButtonState:DEACTIVATE_BOTH];
+    }
 }
 
 - (void)createDisplayLink
@@ -297,8 +483,11 @@ BOOL missingAlertShown;
             if(editorScene->isRigMode){
                 editorScene->selectMan->checkSelectionForAutoRig(renderViewMan.tapPosition);
             }
-            else
+            else{
                 editorScene->selectMan->checkSelection(renderViewMan.tapPosition);
+                 [self changeAllButtonBG];
+                 [self setupEnableDisableControls];
+            }
 
             [self reloadFrames];
             renderViewMan.checkTapSelection = false;
@@ -310,6 +499,8 @@ BOOL missingAlertShown;
         }
         if(renderViewMan.makePanOrPinch)
             [renderViewMan panOrPinchProgress];
+
+        
         editorScene->renderAll();
         if(!isMetalSupported)
             [renderViewMan presentRenderBuffer];
@@ -468,6 +659,7 @@ BOOL missingAlertShown;
     editorScene->currentFrame = indexPath.row;
     editorScene->actionMan->switchFrame(editorScene->currentFrame);
     [self HighlightFrame];
+    [self undoRedoButtonState:DEACTIVATE_BOTH];
 }
 
 #pragma mark - Object Selection Table View Deligates
@@ -534,10 +726,12 @@ BOOL missingAlertShown;
 }
 - (NSIndexPath *)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"Deselected");
     [self objectSelectionCompleted:(int)indexPath.row];
     return indexPath;
 }
 -(void)tableView:(UITableView *)tableView deSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
     [self.objectList deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -615,6 +809,7 @@ BOOL missingAlertShown;
 {
     editorScene->rigMan->deallocAutoRig(NO);
     editorScene->enterOrExitAutoRigMode(false);
+    [self setupEnableDisableControls];
     [self autoRigViewButtonHandler:YES];
     selectedNodeId = -1;
 }
@@ -624,6 +819,7 @@ BOOL missingAlertShown;
     
     if(editorScene->rigMan->deallocAutoRig(YES)){
         editorScene->enterOrExitAutoRigMode(false);
+        [self setupEnableDisableControls];
     }
     [self addrigFileToCacheDirAndDatabase:[NSString stringWithFormat:@"%s%@",editorScene->nodes[selectedNodeId]->textureName.c_str(),@".png"]];
     [self autoRigViewButtonHandler:YES];
@@ -931,6 +1127,20 @@ BOOL missingAlertShown;
   
     if(!editorScene->isNodeSelected || (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_UNDEFINED))
     {
+        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
+        _popUpVc = [[PopUpViewController alloc] initWithNibName:@"PopUpViewController" bundle:nil clickedButton:@"optionsBtn"];
+        [_popUpVc.view setClipsToBounds:YES];
+        self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_popUpVc];
+        self.popoverController.animationType=WEPopoverAnimationTypeCrossFade;
+        self.popoverController.popoverContentSize = CGSizeMake(205.0, 42);
+        self.popoverController.delegate =self;
+        self.popUpVc.delegate=self;
+        CGRect rect = _optionsBtn.frame;
+        rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
+        [self.popoverController presentPopoverFromRect:rect
+                                                inView:self.view
+                              permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
+                                              animated:YES];
         return;
     }
 
@@ -943,7 +1153,7 @@ BOOL missingAlertShown;
             Vector3 mainLight = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(editorScene->currentFrame, editorScene->nodes[editorScene->selectedNodeId]->scaleKeys);
             lightProps = Quaternion(mainLight.x,mainLight.y,mainLight.z,1.0);
         }
-        
+        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
         _lightProp = [[LightProperties alloc] initWithNibName:@"LightProperties" bundle:nil LightColor:lightProps];
         _lightProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_lightProp];
@@ -955,13 +1165,14 @@ BOOL missingAlertShown;
         rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
         [self.popoverController presentPopoverFromRect:rect
                                                 inView:self.view
-                              permittedArrowDirections:UIPopoverArrowDirectionRight
+                               permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
                                               animated:NO];
     }
     else if(editorScene->isNodeSelected && (editorScene->nodes[editorScene->selectedNodeId]->getType() == NODE_CAMERA))
     {
         float fovValue = editorScene->cameraFOV;
         NSInteger resolutionType = editorScene->cameraResolutionType;
+        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
         _camProp = [[CameraSettings alloc] initWithNibName:@"CameraSettings" bundle:nil FOVvalue:fovValue ResolutionType:resolutionType];
         _camProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_camProp];
@@ -973,7 +1184,7 @@ BOOL missingAlertShown;
         rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
         [self.popoverController presentPopoverFromRect:rect
                                                 inView:self.view
-                              permittedArrowDirections:UIPopoverArrowDirectionRight
+                              permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
                                               animated:NO];
    
     }
@@ -983,6 +1194,7 @@ BOOL missingAlertShown;
         float specularValue = editorScene->nodes[editorScene->selectedNodeId]->props.shininess;
         bool isLightningValue = editorScene->nodes[editorScene->selectedNodeId]->props.isLighting;
         bool isVisibleValue = editorScene->nodes[editorScene->selectedNodeId]->props.isVisible;
+        BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
         _meshProp = [[MeshProperties alloc] initWithNibName:@"MeshProperties" bundle:nil BrightnessValue:brightnessValue SpecularValue:specularValue LightningValue:isLightningValue Visibility:isVisibleValue];
         _meshProp.delegate = self;
         self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_meshProp];
@@ -994,7 +1206,7 @@ BOOL missingAlertShown;
         rect = [self.view convertRect:rect fromView:_optionsBtn.superview];
         [self.popoverController presentPopoverFromRect:rect
                                                 inView:self.view
-                              permittedArrowDirections:UIPopoverArrowDirectionRight
+                              permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
                                               animated:NO];
     }
 }
@@ -1003,12 +1215,18 @@ BOOL missingAlertShown;
 {
     editorScene->controlType = MOVE;
     editorScene->updater->updateControlsOrientaion();
+    [self changeAllButtonBG];
 }
 
 - (IBAction)rotateBtnAction:(id)sender
 {
-    editorScene->controlType = ROTATE;
-    editorScene->updater->updateControlsOrientaion();
+    if(editorScene->hasNodeSelected() || editorScene->allObjectsScalable())
+    {
+        editorScene->controlType = ROTATE;
+        editorScene->updater->updateControlsOrientaion();
+        [self changeAllButtonBG];
+    }
+    
 }
 
 - (IBAction)scaleBtnAction:(id)sender
@@ -1025,11 +1243,12 @@ BOOL missingAlertShown;
         if(status){
             editorScene->controlType = SCALE;
             editorScene->updater->updateControlsOrientaion();
-        
+            NSLog(@"Function is here 2");
              editorScene->renHelper->setControlsVisibility(false);
              Vector3 currentScale = editorScene->getSelectedNodeScale();
              _scaleProps = [[ScaleViewController alloc] initWithNibName:@"ScaleViewController" bundle:nil updateXValue:currentScale.x updateYValue:currentScale.y updateZValue:currentScale.z];
              _scaleProps.delegate = self;
+            BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
              self.popoverController = [[WEPopoverController alloc] initWithContentViewController:_scaleProps];
              self.popoverController.popoverContentSize = CGSizeMake(270, 177);
              self.popoverController.popoverLayoutMargins= UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
@@ -1038,9 +1257,10 @@ BOOL missingAlertShown;
              CGRect rect = _scaleBtn.frame;
              rect = [self.view convertRect:rect fromView:_scaleBtn.superview];
              [self.popoverController presentPopoverFromRect:rect
-             inView:self.view
-             permittedArrowDirections:UIPopoverArrowDirectionRight
-             animated:NO];
+                                                inView:self.view
+                                   permittedArrowDirections:(status) ? UIPopoverArrowDirectionLeft : UIPopoverArrowDirectionRight
+                                                   animated:NO];
+            [self changeAllButtonBG];
         }
     }
     else{
@@ -1066,6 +1286,8 @@ BOOL missingAlertShown;
     int returnValue2 = NOT_SELECTED;
 
     ACTION_TYPE actionType = (ACTION_TYPE)editorScene->undo(returnValue2);
+    [self undoRedoButtonState:actionType];
+    
     NSLog(@"Undo Return Value : %d",returnValue2);
     switch (actionType) {
         case DO_NOTHING: {
@@ -1117,7 +1339,10 @@ BOOL missingAlertShown;
         default: {
             break;
         }
+            
+            
     }
+     [self undoRedoButtonState:DEACTIVATE_BOTH];
     [self updateAssetListInScenes];
 }
 
@@ -1138,7 +1363,7 @@ BOOL missingAlertShown;
 - (IBAction)redoBtnAction:(id)sender
 {
     int returnValue = editorScene->redo();
-    
+    [self undoRedoButtonState:returnValue];
     if (returnValue == DO_NOTHING) {
         //DO NOTHING
     }
@@ -1173,7 +1398,10 @@ BOOL missingAlertShown;
             }
         }
     }
-        NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->currentFrame inSection:0];
+    if (editorScene->actionMan->actions.size() <= 0 || editorScene->actionMan->currentAction >= editorScene->actionMan->actions.size())
+            [self undoRedoButtonState:DEACTIVATE_REDO];
+    
+    NSIndexPath* toPath = [NSIndexPath indexPathForItem:editorScene->currentFrame inSection:0];
         [self.framesCollectionView scrollToItemAtIndexPath:toPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
         [self HighlightFrame];
         [self.framesCollectionView reloadData];
@@ -1434,15 +1662,15 @@ BOOL missingAlertShown;
     //[self showTipsViewForAction:OBJECT_MOVED];
     //isFileSaved = !(animationScene->changeAction = true);
     [_framesCollectionView reloadData];
-    //[self undoRedoButtonState:DEACTIVATE_BOTH];
+    [self undoRedoButtonState:DEACTIVATE_BOTH];
 }
 
 - (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd
 {
     if(editorScene)
         editorScene->selectMan->unselectObjects();
+    BOOL status = ([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1);
     
-    if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1){
         if(showView)
             [self.leftView addSubview:subViewToAdd];
     
@@ -1450,41 +1678,29 @@ BOOL missingAlertShown;
         CATransition *transition = [CATransition animation];
         transition.duration = 0.5;
         transition.type = kCATransitionPush;
-        transition.subtype = (showView) ? kCATransitionFromRight : kCATransitionFromLeft;
+        if (status) {
+            transition.subtype = (showView) ? kCATransitionFromRight : kCATransitionFromLeft;
+        }
+        else{
+            transition.subtype = (showView) ? kCATransitionFromLeft : kCATransitionFromRight;
+        }
         [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
         [self.leftView.layer addAnimation:transition forKey:nil];
     
         CATransition* transition1 = [CATransition animation];
         transition1.duration = 0.5;
         transition1.type = kCATransitionPush;
-        transition1.subtype = (showView) ? kCATransitionFromRight : kCATransitionFromLeft;
+        if (status) {
+            transition1.subtype = (showView) ? kCATransitionFromRight : kCATransitionFromLeft;
+        }
+        else{
+            transition1.subtype = (showView) ? kCATransitionFromLeft : kCATransitionFromRight;
+        }
         [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
         [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
     
         [self.rightView setHidden:showView];
-    }
-    else
-    {
-        if(showView)
-            [self.leftView addSubview:subViewToAdd];
-        
-        [self.leftView setHidden:(!showView)];
-        CATransition *transition = [CATransition animation];
-        transition.duration = 0.5;
-        transition.type = kCATransitionPush;
-        transition.subtype = (showView) ? kCATransitionFromLeft : kCATransitionFromRight;
-        [transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-        [self.leftView.layer addAnimation:transition forKey:nil];
-        
-        CATransition* transition1 = [CATransition animation];
-        transition1.duration = 0.5;
-        transition1.type = kCATransitionPush;
-        transition1.subtype = (showView) ? kCATransitionFromLeft : kCATransitionFromRight;
-        [transition1 setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-        [self.rightView.layer addAnimation:transition1 forKey:kCATransition];
-        
-        [self.rightView setHidden:showView];
-    }
+    
 }
 - (void) showOrHideRightView:(BOOL)showView{
     if([[[AppHelper getAppHelper]userDefaultsForKey:@"toolbarPosition"]integerValue]==1){
@@ -1611,41 +1827,66 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                  alertControllerWithTitle:nil
                                  message:nil
                                  preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction* deleteButton = [UIAlertAction
-                                   actionWithTitle:@"Delete"
-                                   style:UIAlertActionStyleDefault
-                                   handler:^(UIAlertAction * action)
-                                   {
-                                       if(editorScene->selectedNodeIds.size() > 0)
-                                           editorScene->loader->removeSelectedObjects();
-                                        else
-                                            [renderViewMan removeNodeFromScene:editorScene->selectedNodeId IsUndoOrRedo:NO];
-                                       [self updateAssetListInScenes];
-
-                                   }];
-    [view addAction:deleteButton];
-    if(editorScene->selectedNodeIds.size() <= 0 && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT){
-        UIAlertAction* duplicateButton = [UIAlertAction
-                                          actionWithTitle:@"Duplicate"
-                                          style:UIAlertActionStyleDefault
-                                          handler:^(UIAlertAction * action)
-                                          {
-                                              [self createDuplicateAssets];
-                                              [self updateAssetListInScenes];
-                                          }];
+    
+    if(editorScene->selectedNodeId==-1 && editorScene->selectedNodeIds.size()<=0)
+    {
+        UIAlertAction* movaCam = [UIAlertAction
+                                  actionWithTitle:@"Move Camera"
+                                  style:UIAlertActionStyleDefault
+                                  handler:^(UIAlertAction * action)
+                                  {
+                                      
+                                  }];
         
-        [view addAction:duplicateButton];
+        [view addAction:movaCam];
     }
-    if(editorScene->selectedNodeIds.size() <= 0 && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_IMAGE){
-        UIAlertAction* changeTexture = [UIAlertAction
-                                        actionWithTitle:@"Change Texture"
-                                        style:UIAlertActionStyleDefault
-                                        handler:^(UIAlertAction * action)
-                                        {
-                                            [self changeTextureForAsset];
-                                        }];
-        [view addAction:changeTexture];
+    else
+    {
+        UIAlertAction* deleteButton = [UIAlertAction
+                                       actionWithTitle:@"Delete"
+                                       style:UIAlertActionStyleDefault
+                                       handler:^(UIAlertAction * action)
+                                       {
+                                           if(editorScene->selectedNodeIds.size() > 0){
+                                               editorScene->loader->removeSelectedObjects();
+                                               [self undoRedoButtonState:DEACTIVATE_BOTH];
+                                           }
+                                           else{
+                                               [renderViewMan removeNodeFromScene:editorScene->selectedNodeId IsUndoOrRedo:NO];
+                                               [self undoRedoButtonState:DEACTIVATE_BOTH];
+                                           }
+                                           [self updateAssetListInScenes];
+                                           
+                                       }];
+        [view addAction:deleteButton];
+        
+        if(editorScene->selectedNodeId!=-1 && editorScene->selectedNodeIds.size() <= 0 && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT && editorScene->selectedNodeId!=-1){
+            UIAlertAction* duplicateButton = [UIAlertAction
+                                              actionWithTitle:@"Duplicate"
+                                              style:UIAlertActionStyleDefault
+                                              handler:^(UIAlertAction * action)
+                                              {
+                                                  [self createDuplicateAssets];
+                                                  [self updateAssetListInScenes];
+                                              }];
+            
+            [view addAction:duplicateButton];
+        }
+        if(editorScene->selectedNodeId!=-1 && editorScene->selectedNodeIds.size() <= 0 && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_ADDITIONAL_LIGHT && editorScene->nodes[editorScene->selectedNodeId]->getType() != NODE_IMAGE && editorScene->selectedNodeId!=-1){
+            UIAlertAction* changeTexture = [UIAlertAction
+                                            actionWithTitle:@"Change Texture"
+                                            style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction * action)
+                                            {
+                                                [self changeTextureForAsset];
+                                            }];
+            [view addAction:changeTexture];
+        }
+
+        
     }
+    
+    
     UIPopoverPresentationController *popover = view.popoverPresentationController;
     popover.sourceRect = arect;
     popover.sourceView=self.renderView;
@@ -1767,6 +2008,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 - (void)objectSelectionCompleted:(int)assetIndex
 {
     editorScene->selectMan->selectObject(assetIndex);
+    [self setupEnableDisableControls];
    
 }
 
@@ -1916,6 +2158,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                 editorScene->rigMan->sgmForRig(editorScene->nodes[selectedNodeId]);
                 editorScene->rigMan->switchSceneMode((AUTORIG_SCENE_MODE)(RIG_MODE_OBJVIEW));
                 editorScene->rigMan->boneLimitsCallBack = &boneLimitsCallBack;
+                [self setupEnableDisableControls];
                 [_rigCancelBtn setHidden:NO];
             }
         }
@@ -2116,6 +2359,12 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
         }
     }
 
+}
+
+-(void) optionBtnDelegate:(int)indexValue
+{
+    NSLog(@"Mova camera Clicked");
+    [self.popoverController dismissPopoverAnimated:YES];
 }
 
 #pragma Save Delegates
@@ -2862,9 +3111,6 @@ void boneLimitsCallBack(){
     
 }
 
-- (void)setupEnableDisableControls{
-    
-}
 
 #pragma mark change Texture Delegates
 

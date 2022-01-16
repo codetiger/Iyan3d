@@ -30,6 +30,7 @@
 - (void) presentPopOver:(CGRect )arect;
 - (void) updateAssetListInScenes;
 - (void) stopPlaying;
+- (void)undoRedoButtonState:(int)state;
 
 @end
 
