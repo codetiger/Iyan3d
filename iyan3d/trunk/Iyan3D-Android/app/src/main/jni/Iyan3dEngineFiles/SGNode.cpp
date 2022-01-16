@@ -50,6 +50,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
         case NODE_OBJ:
         case NODE_SGM:{
             textureName = texturePath;
+            oriTextureName = textureName;
             props.vertexColor = Vector3(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z);
             node = loadSGMandOBJ(assetId,objectType,smgr);
             break;
@@ -57,6 +58,7 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
         case NODE_TEXT:{
             textureName = texturePath;
             props.vertexColor = Vector3(objSpecificColor.x, objSpecificColor.y, objSpecificColor.z);
+            props.oriVertexColor = props.vertexColor;
             node = load3DText(smgr, objectName, 4, 4, 16, specificFilePath, objSpecificColor, height / 50.0f, 4);
             props.transparency = 1.0;
             props.nodeSpecificFloat = height;

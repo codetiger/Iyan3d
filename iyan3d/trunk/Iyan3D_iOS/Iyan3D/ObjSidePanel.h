@@ -10,12 +10,15 @@
 #import "TextColorPicker.h"
 #import "WEPopoverController.h"
 #import "PopUpViewController.h"
+#import "Vector3.h"
 
 @protocol ObjSliderDelegate
 - (void) showOrHideLeftView:(BOOL)showView withView:(UIView*)subViewToAdd;
 
 - (void)importObjAndTexture:(int)indexPathOfOBJ TextureName:(NSString*)textureFileName VertexColor:(Vector3)color haveTexture:(BOOL)isHaveTexture IsTempNode:(BOOL)isTempNode;
 - (void) removeTempNodeFromScene;
+- (void) changeTexture:(NSString*)textureName VertexColor:(Vector3)color IsTemp:(BOOL)isTemp;
+- (void) removeTempTextureAndVertex;
 
 @end
 
@@ -27,7 +30,11 @@
     BOOL haveTexture;
     Vector3 color;
     NSArray* basicShapes;
+    int viewType;
 }
+
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil Type:(int)type;
+
 
 @property (weak, nonatomic) IBOutlet UIButton *addBtn;
 @property (weak, nonatomic) IBOutlet UIButton *cancelBtn;

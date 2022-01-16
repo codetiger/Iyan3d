@@ -220,8 +220,12 @@ bool isTransparentCallBack(int nodeId, string callbackFuncName)
             if(sgNode)
                 sgNode->isTempNode = isTempNode;
             if(!isTempNode){
-                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION)
+                if(assetAddType != UNDO_ACTION && assetAddType != REDO_ACTION){
                     editorScene->actionMan->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, assetId);
+//                    editorScene->selectMan->selectObject(editorScene->nodes.size()-1);
+//                    editorScene->actionMan->storeAddOrRemoveAssetAction((vertexColor != Vector4(-1)) ? ACTION_VERTEX_COLOR_CHANGE : ACTION_TEXTURE_CHANGE, 0);
+//                    editorScene->selectMan->unselectObject(editorScene->nodes.size()-1);
+                }
               [self.delegate updateAssetListInScenes];
             }
             break;

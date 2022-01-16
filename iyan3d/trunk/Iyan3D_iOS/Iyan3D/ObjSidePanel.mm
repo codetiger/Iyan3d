@@ -12,6 +12,8 @@
 
 #define OBJ 0
 #define Texture 1
+#define IMPORT_OBJFILE 4
+#define CHANGE_TEXTURE 6
 
 @interface ObjSidePanel ()
 
@@ -21,7 +23,7 @@
     NSArray *filesList;
 }
 
-- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil
+- (id)initWithNibName:(NSString*)nibNameOrNil bundle:(NSBundle*)nibBundleOrNil Type:(int)type
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -29,7 +31,8 @@
         color = Vector3(1.0,1.0,1.0);
         basicShapes = [NSArray arrayWithObjects:@"Cone",@"cube",@"Cylinder",@"Plane",@"Sphere",@"Torus",nil];
         indexPathOfOBJ = -1;
-
+        viewType = type;
+        textureFileName = @"-1";
     }
     return self;
 }
@@ -41,12 +44,12 @@
     NSString* docDirPath = [srcDirPath objectAtIndex:0];
     NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:docDirPath error:nil];
     filesList = [dirFiles filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.obj'"]];
-    
-    NSLog(@"Obj path: %@",docDirPath);
     self.addBtn.layer.cornerRadius=8.0;
     self.cancelBtn.layer.cornerRadius=8.0;
     [_colorWheelBtn setHidden:YES];
-    self.addBtn.tag = OBJ;
+    indexPathOfOBJ =  (viewType == IMPORT_OBJFILE) ? -1 : 0;
+    [self addBtnAction:nil];
+    _addBtn.tag = (viewType == IMPORT_OBJFILE) ? OBJ : Texture;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -148,7 +151,10 @@
         }
     }
     
-    [_objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:YES];
+    if(viewType == IMPORT_OBJFILE)
+        [_objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:YES];
+    else
+        [_objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:YES];
 }
 
 - (IBAction)addBtnAction:(id)sender {
@@ -168,7 +174,10 @@
         [_colorWheelBtn setHidden:NO];
     }
    else if(self.addBtn.tag == Texture){
-        [_objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:NO];
+       if(viewType == IMPORT_OBJFILE)
+           [_objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:NO];
+       else
+           [_objSlideDelegate changeTexture:textureFileName VertexColor:color IsTemp:NO];
         [self.objSlideDelegate showOrHideLeftView:NO withView:nil];
         [self removeFromParentViewController];
     }
@@ -195,14 +204,22 @@
     haveTexture = NO;
     color = vetexColor;
     [self.importFilesCollectionView reloadData];
-    if(isDragFinish)
+    if(isDragFinish){
+        if(viewType == IMPORT_OBJFILE)
         [_objSlideDelegate importObjAndTexture:indexPathOfOBJ TextureName:textureFileName VertexColor:color haveTexture:haveTexture IsTempNode:YES];
+        else
+            [_objSlideDelegate changeTexture:@"-1" VertexColor:color IsTemp:YES];
+
+    }
 }
 
 
 
 - (IBAction)cancelBtnAction:(id)sender {
-    [self.objSlideDelegate removeTempNodeFromScene];
+    if(viewType == IMPORT_OBJFILE)
+        [self.objSlideDelegate removeTempNodeFromScene];
+    else
+        [self.objSlideDelegate removeTempTextureAndVertex];
     [self.objSlideDelegate showOrHideLeftView:NO withView:nil];
 }
 @end

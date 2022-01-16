@@ -461,26 +461,69 @@ void SGEditorScene::clearLightProps()
         popLightProps();
 }
 
-void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor)
+void SGEditorScene::changeTexture(string textureFileName, Vector3 vertexColor, bool isTemp, bool isUndoRedo)
 {
     if(!isNodeSelected || selectedNodeId == NOT_SELECTED)
         return;
     
-    string texturePath = FileHelper::getDocumentsDirectory() + "/Resources/Textures/" + textureFileName;
+    string texturePath = FileHelper::getDocumentsDirectory() + "Resources/Textures/" + textureFileName+".png";
+    if(!nodes[selectedNodeId]->checkFileExists(texturePath))
+        texturePath = FileHelper::getCachesDirectory()+textureFileName+".png";
     
-    printf("Texture Path %s " , texturePath.c_str());
-    
-    if(textureFileName != "" && nodes[selectedNodeId]->checkFileExists(texturePath)) {
+    if(textureFileName != "-1" && nodes[selectedNodeId]->checkFileExists(texturePath)) {
         nodes[selectedNodeId]->props.perVertexColor = false;
         Texture *nodeTex = smgr->loadTexture(textureFileName,texturePath,TEXTURE_RGBA8,TEXTURE_BYTE);
         nodes[selectedNodeId]->node->setTexture(nodeTex,1);
-        nodes[selectedNodeId]->textureName = textureFileName;
+        if(!isTemp){
+            nodes[selectedNodeId]->textureName = textureFileName;
+        }
     } else {
-        nodes[selectedNodeId]->textureName = "";
         nodes[selectedNodeId]->props.vertexColor = vertexColor;
+        if(!isTemp){
+            nodes[selectedNodeId]->textureName = "";
+        }
         nodes[selectedNodeId]->props.perVertexColor = true;
     }
+    
+    if(!isUndoRedo && !isTemp)
+        actionMan->storeAddOrRemoveAssetAction(ACTION_TEXTURE_CHANGE, 0);
+    
+    if(!isUndoRedo){
+        nodes[selectedNodeId]->oriTextureName = nodes[selectedNodeId]->textureName;
+        nodes[selectedNodeId]->props.oriVertexColor = nodes[selectedNodeId]->props.vertexColor;
+    }
+}
 
+void SGEditorScene::removeTempTextureAndVertex(int selectedNode){
+
+    string StoragePath;
+#ifdef IOS
+        StoragePath = constants::CachesStoragePath + "/";
+#endif
+#ifdef ANDROID
+    StoragePath = constants::DocumentsStoragePath + "/mesh/";
+#endif
+    
+    string textureFileName = StoragePath + nodes[selectedNode]->textureName+".png";
+    
+    if(!nodes[selectedNode]->checkFileExists(textureFileName)){
+        textureFileName = FileHelper::getDocumentsDirectory() + nodes[selectedNode]->textureName+".png";
+        if(!nodes[selectedNode]->checkFileExists(textureFileName)){
+            textureFileName = FileHelper::getDocumentsDirectory()+ "Resources/Sgm/" + nodes[selectedNode]->textureName+".png";
+            if(!nodes[selectedNode]->checkFileExists(textureFileName))
+                textureFileName = FileHelper::getDocumentsDirectory()+ "Resources/Textures/" + nodes[selectedNode]->textureName+".png";
+        }
+    }
+    
+    if(nodes[selectedNode]->textureName != "" && nodes[selectedNode]->checkFileExists(textureFileName)) {
+        nodes[selectedNode]->props.perVertexColor = false;
+        Texture *nodeTex = smgr->loadTexture(nodes[selectedNode]->textureName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
+        nodes[selectedNode]->node->setTexture(nodeTex,1);
+    } else {
+        nodes[selectedNode]->textureName = "";
+        nodes[selectedNode]->props.vertexColor = nodes[selectedNode]->props.oriVertexColor;
+        nodes[selectedNode]->props.perVertexColor = true;
+    }
 }
 
 bool SGEditorScene::isNodeInSelection(SGNode *sgNode)

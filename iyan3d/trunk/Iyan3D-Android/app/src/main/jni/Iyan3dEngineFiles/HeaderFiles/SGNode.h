@@ -19,7 +19,7 @@ struct properties{
     int isLighting,isSelected,fontSize;
     float brightness,shininess,transparency,isColorMaterial,nodeSpecificFloat;
     bool isVisible,perVertexColor;
-    Vector3 vertexColor;
+    Vector3 vertexColor,oriVertexColor;
     Vector3 textColor;
     std::string prevMatName;
 };
@@ -36,7 +36,7 @@ public:
     int assetId,actionId;
     shared_ptr<Node> node;
     std::wstring name;
-    std::string textureName;
+    std::string textureName,oriTextureName;
     string optionalFilePath;
     properties props;
     Quaternion nodeInitialRotation;

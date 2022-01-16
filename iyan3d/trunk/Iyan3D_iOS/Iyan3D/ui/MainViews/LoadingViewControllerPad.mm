@@ -60,9 +60,7 @@
             [[NSFileManager defaultManager] createDirectoryAtPath:resourcesDir withIntermediateDirectories:NO attributes:nil error:nil];
             [[NSFileManager defaultManager] createDirectoryAtPath:rigs withIntermediateDirectories:NO attributes:nil error:nil];
             [[NSFileManager defaultManager] createDirectoryAtPath:objs withIntermediateDirectories:NO attributes:nil error:nil];
-            [[NSFileManager defaultManager] createDirectoryAtPath:sgm withIntermediateDirectories:NO attributes:nil error:nil];
             [[NSFileManager defaultManager] createDirectoryAtPath:anims withIntermediateDirectories:NO attributes:nil error:nil];
-            [[NSFileManager defaultManager] createDirectoryAtPath:textures withIntermediateDirectories:NO attributes:nil error:nil];
 
             
             if (![[NSFileManager defaultManager] fileExistsAtPath:databasePath]) {
@@ -117,6 +115,11 @@
                 }
             }
         }
+        
+        if(![fileManager fileExistsAtPath:textures])
+            [[NSFileManager defaultManager] createDirectoryAtPath:textures withIntermediateDirectories:NO attributes:nil error:nil];
+        if(![fileManager fileExistsAtPath:sgm])
+            [[NSFileManager defaultManager] createDirectoryAtPath:sgm withIntermediateDirectories:NO attributes:nil error:nil];
         
         NSError *error;
         NSString *thumnail = [projectDir stringByAppendingPathComponent:@"1c8ccd62ec29cc2fb116ecc6892cbab2.png"];

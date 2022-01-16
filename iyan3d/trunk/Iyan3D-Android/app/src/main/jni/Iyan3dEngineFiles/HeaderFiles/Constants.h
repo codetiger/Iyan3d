@@ -255,6 +255,7 @@ enum ActionType
     ACTION_ADD_JOINT,
     ACTION_ADD_BONE,
     ACTION_SGR_CREATED,
+    ACTION_TEXTURE_CHANGE,
     //Mesh setup actions
     IMPORT_ASSET_ACTION,
     UNDO_ACTION,

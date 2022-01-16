@@ -33,6 +33,7 @@
 #define IMPORT_LIGHT 3
 #define IMPORT_OBJFILE 4
 #define IMPORT_ADDBONE 5
+#define CHANGE_TEXTURE 6
 
 #define ABOUT 0
 #define HELP 1
@@ -367,8 +368,6 @@ BOOL missingAlertShown;
     }
     
     if (editorScene) {
-        NSLog(@"Action Size : %lu",editorScene->actionMan->actions.size());
-        NSLog(@"Current action : %d",editorScene->actionMan->currentAction);
         if (editorScene->actionMan->actions.size() > 0 && editorScene->actionMan->currentAction > 0)
             [self.undoBtn setEnabled:YES];
         if (editorScene->actionMan->actions.size() > 0 && editorScene->actionMan->currentAction < (editorScene->actionMan->actions.size()))
@@ -1878,6 +1877,7 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
                                             style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction * action)
                                             {
+                                                selectedNodeId = editorScene->selectedNodeId;
                                                 [self changeTextureForAsset];
                                             }];
             [view addAction:changeTexture];
@@ -1967,11 +1967,18 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
 }
 
 - (void) changeTextureForAsset{
-
-    NSLog(@"Select the texture:");
-    textureVc =[[ChangeTextureSidePanel alloc] initWithNibName:@"ChangeTextureSidePanel" bundle:Nil];
-    textureVc.textureDelegate=self;
-    [self showOrHideLeftView:YES withView:textureVc.view];
+    if([Utility IsPadDevice]){
+        [self.popoverController dismissPopoverAnimated:YES];
+        objVc =[[ObjSidePanel alloc] initWithNibName:@"ObjSidePanel" bundle:Nil Type:CHANGE_TEXTURE];
+        objVc.objSlideDelegate=self;
+        [self showOrHideLeftView:YES withView:objVc.view];
+    }
+    else{
+        [self.popoverController dismissPopoverAnimated:YES];
+        objVc =[[ObjSidePanel alloc] initWithNibName:@"ObjSidePanelPhone" bundle:Nil Type:CHANGE_TEXTURE];
+        objVc.objSlideDelegate=self;
+        [self showOrHideLeftView:YES withView:objVc.view];
+    }
 
 }
 
@@ -2126,13 +2133,13 @@ CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingUTF32LE);
     else if(indexValue==IMPORT_OBJFILE){
         if([Utility IsPadDevice]){
             [self.popoverController dismissPopoverAnimated:YES];
-            objVc =[[ObjSidePanel alloc] initWithNibName:@"ObjSidePanel" bundle:Nil];
+            objVc =[[ObjSidePanel alloc] initWithNibName:@"ObjSidePanel" bundle:Nil Type:IMPORT_OBJFILE];
             objVc.objSlideDelegate=self;
             [self showOrHideLeftView:YES withView:objVc.view];
         }
         else{
             [self.popoverController dismissPopoverAnimated:YES];
-            objVc =[[ObjSidePanel alloc] initWithNibName:@"ObjSidePanelPhone" bundle:Nil];
+            objVc =[[ObjSidePanel alloc] initWithNibName:@"ObjSidePanelPhone" bundle:Nil Type:IMPORT_OBJFILE];
             objVc.objSlideDelegate=self;
             [self showOrHideLeftView:YES withView:objVc.view];
         }
@@ -3114,13 +3121,32 @@ void boneLimitsCallBack(){
 
 #pragma mark change Texture Delegates
 
-- (void) changeTexture:(NSString*)textureName VertexColor:(Vector3)color
+- (void) changeTexture:(NSString*)textureName VertexColor:(Vector3)color IsTemp:(BOOL)isTemp
 {
+    
+    NSArray* srcDirPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* docDirPath = [srcDirPath objectAtIndex:0];
+    NSString* srcTextureFilePath = [NSString stringWithFormat:@"%@/%@.png",docDirPath,textureName];
     std::string *texture = new std::string([textureName UTF8String]);
+    if ([[NSFileManager defaultManager] fileExistsAtPath:srcTextureFilePath]){
+        NSString* desFilePath = [NSString stringWithFormat:@"%@/Resources/Textures/%@.png",docDirPath,(isTemp) ? @"temp" : textureName];
+        UIImage *image =[UIImage imageWithContentsOfFile:srcTextureFilePath];
+        NSData *imageData = [self convertAndScaleImage:image size:-1];
+        [imageData writeToFile:desFilePath atomically:YES];
+        *texture = *new std::string([(isTemp)?@"temp" : textureName UTF8String]);
 
-    if(!(editorScene->selectedNodeIds.size() > 0) && editorScene->hasNodeSelected()){
-        editorScene->changeTexture(*texture, Vector3(color));
     }
+        editorScene->selectMan->selectObject(selectedNodeId);
+    if(!(editorScene->selectedNodeIds.size() > 0) && editorScene->hasNodeSelected()){
+        editorScene->changeTexture(*texture, Vector3(color),isTemp,NO);
+        editorScene->selectMan->unselectObject(selectedNodeId);
+        editorScene->setLightingOn();
+    }
+}
+
+- (void) removeTempTextureAndVertex
+{
+    editorScene->removeTempTextureAndVertex(selectedNodeId);
 }
 
 

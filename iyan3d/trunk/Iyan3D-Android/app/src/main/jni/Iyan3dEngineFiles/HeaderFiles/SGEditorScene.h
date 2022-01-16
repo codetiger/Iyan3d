@@ -166,7 +166,8 @@ public:
     SGJoint* getSelectedJoint();
     shared_ptr<Node> getParentNode();
     
-    void changeTexture(string texturePath, Vector3 vertexColor);
+    void changeTexture(string texturePath, Vector3 vertexColor,bool isTemp, bool isUndoRedo);
+    void removeTempTextureAndVertex(int selectedNode);
     bool isNodeInSelection(SGNode* sgNode);
     bool allObjectsScalable();
     bool allNodesRemovable();

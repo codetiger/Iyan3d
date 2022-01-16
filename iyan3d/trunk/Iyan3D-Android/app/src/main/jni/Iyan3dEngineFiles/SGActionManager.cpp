@@ -499,6 +499,21 @@ void SGActionManager::storeAddOrRemoveAssetAction(int actionType, int assetId, s
         assetAction.objectIndex = (int)actionScene->selectedNodeIds.size();
         addAction(assetAction);
     }
+
+    else if(actionType == ACTION_TEXTURE_CHANGE){
+        assetAction.drop();
+        assetAction.actionType = ACTION_TEXTURE_CHANGE;
+        assetAction.objectIndex = (actionScene->nodes[actionScene->selectedNodeId]->actionId);
+        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->selectedNodeId]->oriTextureName));
+        assetAction.actionSpecificStrings.push_back(ConversionHelper::getWStringForString(actionScene->nodes[actionScene->selectedNodeId]->textureName));
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->props.oriVertexColor.x);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->props.oriVertexColor.y);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->props.oriVertexColor.z);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->props.vertexColor.x);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->props.vertexColor.y);
+        assetAction.actionSpecificFloats.push_back(actionScene->nodes[actionScene->selectedNodeId]->props.vertexColor.z);
+        addAction(assetAction);
+    }
 }
 
 void SGActionManager::StoreDeleteObjectKeys(int nodeIndex)
@@ -556,7 +571,6 @@ void SGActionManager::changeObjectScale(Vector3 scale, bool isChanged)
     }
     if(actionScene->selectedNodeIds.size() > 0) {
         Vector3 pScale = actionScene->getParentNode()->getScale();
-        printf(" Scale %f %f %f ", pScale.x, pScale.y, pScale.z);
         actionScene->getParentNode()->setScale(scale);
         actionScene->getParentNode()->updateAbsoluteTransformation();
     } else if(actionScene->isJointSelected && actionScene->nodes[actionScene->selectedNodeId]->getType() == NODE_TEXT_SKIN){
@@ -686,6 +700,12 @@ int SGActionManager::undo(int &returnValue2)
         case ACTION_MULTI_NODE_DELETED_AFTER: {
             returnValue = ADD_MULTI_ASSET_BACK;
             returnValue2 = recentAction.objectIndex;
+            break;
+        }
+        case ACTION_TEXTURE_CHANGE:{
+            actionScene->selectMan->selectObject(indexOfAction);
+            actionScene->changeTexture(ConversionHelper::getStringForWString(recentAction.actionSpecificStrings[0]).c_str(), Vector3(recentAction.actionSpecificFloats[0],recentAction.actionSpecificFloats[1],recentAction.actionSpecificFloats[2]), false,true);
+            actionScene->selectMan->unselectObject(indexOfAction);
             break;
         }
         default:
@@ -819,6 +839,12 @@ int SGActionManager::redo()
             actionScene->animMan->applyAnimations(ConversionHelper::getStringForWString(recentAction.actionSpecificStrings[0]), actionScene->selectedNodeId);
             actionScene->updater->reloadKeyFrameMap();
             actionScene->selectMan->unselectObject(actionScene->selectedNodeId);
+            break;
+        }
+        case ACTION_TEXTURE_CHANGE:{
+            actionScene->selectMan->selectObject(indexOfAction);
+            actionScene->changeTexture(ConversionHelper::getStringForWString(recentAction.actionSpecificStrings[1]).c_str(), Vector3(recentAction.actionSpecificFloats[3],recentAction.actionSpecificFloats[4],recentAction.actionSpecificFloats[5]), false,true);
+            actionScene->selectMan->unselectObject(indexOfAction);
             break;
         }
         default:
