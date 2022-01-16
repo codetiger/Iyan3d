@@ -175,7 +175,7 @@ struct Scene
 	}
 
 	Vec3fa getRadiance(Vec3fa point, Vec3fa dir, int depth, int E = 1) {
-		RTCRay ray = getIntersection(sgScene, point, dir);
+		RTCRay ray = getIntersection(sgScene, point, dir, 0xFFFF0000);
 		Vec3fa color = Vec3fa(0.0f);
 
 		if (ray.geomID != RTC_INVALID_GEOMETRY_ID && (int)ray.geomID < (int)meshes.size()) {

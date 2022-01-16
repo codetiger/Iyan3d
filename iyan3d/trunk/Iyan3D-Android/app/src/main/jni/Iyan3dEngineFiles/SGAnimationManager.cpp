@@ -380,11 +380,12 @@ bool SGAnimationManager::storeAnimations(int assetId)
 #elif ANDROID
     string filePath =  constants::DocumentsStoragePath + "/animations/" + to_string(assetId) + extension;
     string thumbnailPath = constants::DocumentsStoragePath + "/animations/" + to_string(assetId) + ".png";
+#elif UBUNTU
+    string filePath =  "/animations/" + to_string(assetId) + extension;
+    string thumbnailPath = "/animations/" + to_string(assetId) + ".png";
 #endif
     int oldResolution = animScene->cameraResolutionType;
-    
-    printf("Thumbnail Path %s",thumbnailPath.c_str());
-    
+
     animScene->cameraResolutionType = 2;
     animScene->renHelper->renderAndSaveImage((char*)thumbnailPath.c_str(), animScene->renHelper->renderingType,true,true);
     if(animScene->shaderMGR->deviceType == METAL)

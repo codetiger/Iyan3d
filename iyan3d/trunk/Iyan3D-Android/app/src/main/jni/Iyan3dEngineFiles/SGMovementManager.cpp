@@ -9,6 +9,9 @@
 #include "HeaderFiles/SGMovementManager.h"
 #include "HeaderFiles/SGEditorScene.h"
 
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#define MAX(a,b) (((a)>(b))?(a):(b))
+
 SGEditorScene *moveScene;
 
 SGMovementManager::SGMovementManager(SceneManager* smgr, void * scene)

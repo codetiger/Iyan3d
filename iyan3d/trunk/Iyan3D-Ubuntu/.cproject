@@ -26,6 +26,7 @@
 								<option id="gnu.cpp.compiler.option.other.other.1602453057" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=c++0x" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.99079189" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="__GXX_EXPERIMENTAL_CXX0X__"/>
+									<listOptionValue builtIn="false" value="RTCORE_ENABLE_RAY_MASK"/>
 									<listOptionValue builtIn="false" value="UBUNTU"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.include.paths.1231935748" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
@@ -54,6 +55,7 @@
 								<option id="gnu.c.compiler.option.preprocessor.preprocess.1980070076" name="Preprocess only (-E)" superClass="gnu.c.compiler.option.preprocessor.preprocess" value="false" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1873545140" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="UBUNTU"/>
+									<listOptionValue builtIn="false" value="RTCORE_ENABLE_RAY_MASK"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1859301454" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
@@ -71,7 +73,7 @@
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="swscale"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="embree"/>
 								</option>
-								<option id="gnu.cpp.link.option.paths.860272698" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths"/>
+								<option id="gnu.cpp.link.option.paths.860272698" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1066451276" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>

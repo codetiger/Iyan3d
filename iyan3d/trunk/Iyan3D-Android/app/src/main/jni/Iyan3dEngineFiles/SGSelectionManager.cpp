@@ -38,7 +38,7 @@ void SGSelectionManager::checkSelection(Vector2 touchPosition,bool isDisplayPrep
 bool SGSelectionManager::checkCtrlSelection(Vector2 curTouchPos,bool isDisplayPrepared)
 {
     if(!selectionScene || !smgr || (!selectionScene->hasNodeSelected() && selectionScene->selectedNodeIds.size() <= 0))
-        return;
+        return false;
 
     selectionScene->moveMan->prevTouchPoints[0] = curTouchPos;
 
@@ -91,7 +91,7 @@ void SGSelectionManager::postNodeJointSelection()
 bool SGSelectionManager::getCtrlColorFromTouchTextureAnim(Vector2 touchPosition)
 {
     if(!selectionScene || !smgr)
-        return;
+        return false;
     
     int controlStartIndex = (selectionScene->controlType == MOVE) ? X_MOVE : (selectionScene->controlType == ROTATE) ? X_ROTATE : X_SCALE;
     int controlEndIndex = (selectionScene->controlType == MOVE) ? Z_MOVE : (selectionScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE;
@@ -113,7 +113,7 @@ bool SGSelectionManager::getCtrlColorFromTouchTextureAnim(Vector2 touchPosition)
 bool SGSelectionManager::getNodeColorFromTouchTexture(bool touchMove)
 {
     if(!selectionScene || !smgr)
-        return;
+        return false;
 
     Vector2 touchPixel = selectionScene->nodeJointPickerPosition;
     if(selectNodeOrJointInPixel(touchPixel, touchMove))

@@ -17,6 +17,8 @@
 #define SELECT_COLOR_G 1.0
 #define SELECT_COLOR_B 0.0
 
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#define MAX(a,b) (((a)>(b))?(a):(b))
 
 #include "HeaderFiles/RenderHelper.h"
 #include "HeaderFiles/SGEditorScene.h"
@@ -495,7 +497,7 @@ void RenderHelper::setJointSpheresVisibility(bool visibilityFlag)
 void RenderHelper::setJointAndBonesVisibility(std::map<int, RigKey>& rigKeys, bool isVisible)
 {
     if(!renderingScene || !smgr || !renderingScene->isRigMode)
-        return false;
+        return;
     vector<TPoseJoint> tPoseJoints(renderingScene->tPoseJoints);
     for(int i = 1;i < rigKeys.size();i++){
         if(rigKeys[tPoseJoints[i].id].referenceNode && rigKeys[tPoseJoints[i].id].referenceNode->node)
@@ -512,7 +514,7 @@ void RenderHelper::setJointAndBonesVisibility(std::map<int, RigKey>& rigKeys, bo
 void RenderHelper::setEnvelopVisibility(std::map<int, SGNode*>& envelopes, bool isVisible)
 {
     if(!renderingScene || !smgr || !renderingScene->isRigMode)
-        return false;
+        return;
     for(std::map<int,SGNode *> :: iterator it = envelopes.begin(); it!=envelopes.end(); it++){
         if(it->second != NULL){
             it->second->node->setVisible(isVisible);
@@ -543,7 +545,7 @@ void RenderHelper::drawEnvelopes(std::map<int, SGNode*>& envelopes, int jointId)
 void RenderHelper::renderAndSaveImage(char *imagePath , int shaderType,bool isDisplayPrepared, bool removeWaterMark)
 {
     if(!renderingScene || !smgr || renderingScene->isRigMode)
-        return false;
+        return;
     
     if(!renderingScene->checkNodeSize())
         return;
@@ -760,12 +762,12 @@ void RenderHelper::rttShadowMap()
 bool RenderHelper::rttControlSelectionAnim(Vector2 touchPosition)
 {
     if(!renderingScene || !smgr)
-        return;
+        return false;
 
     if(renderingScene->shaderMGR->deviceType == METAL){
         bool displayPrepared = smgr->PrepareDisplay(SceneHelper::screenWidth, SceneHelper::screenHeight,false,true,false,Vector4(0,0,0,255));
         if(!displayPrepared)
-            return;
+            return false;
     }
     int controlStartIndex = (renderingScene->controlType == MOVE) ? X_MOVE : (renderingScene->controlType == ROTATE) ? X_ROTATE : X_SCALE;
     int controlEndIndex = (renderingScene->controlType == MOVE) ? Z_MOVE : (renderingScene->controlType == ROTATE) ? Z_ROTATE : Z_SCALE;

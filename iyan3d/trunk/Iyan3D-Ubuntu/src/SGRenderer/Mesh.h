@@ -52,6 +52,11 @@ public:
 		uvs = (Vec3fa*) malloc(numberOfTriangles*3*sizeof(Vec3fa));
 		normals = (Vec3fa*) malloc(numberOfTriangles*3*sizeof(Vec3fa));
 
+		if(material.emission > 0.0)
+			rtcSetMask(rtcScene, id, 0x0000FFFF);
+		else
+			rtcSetMask(rtcScene, id, 0xFFFF0000);
+
 		Vertex* vs = (Vertex*) rtcMapBuffer(rtcScene, id, RTC_VERTEX_BUFFER); 
 		for (unsigned int i = 0; i < numberOfTriangles; i++) {
 			for(int j = 0; j < 3; j++) {

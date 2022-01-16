@@ -6,8 +6,8 @@
 //  Copyright © 2015 Smackall Games. All rights reserved.
 //
 
-#include "SGAutoRigSceneManager.h"
-#include "SGEditorScene.h"
+#include "HeaderFiles/SGAutoRigSceneManager.h"
+#include "HeaderFiles/SGEditorScene.h"
 
 SGEditorScene* rigScene;
 

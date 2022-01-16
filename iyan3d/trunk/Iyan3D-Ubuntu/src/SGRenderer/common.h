@@ -141,7 +141,7 @@ double GetRandomValue() {
     return (double)rand() / RAND_MAX;
 }
 
-RTCRay getIntersection(RTCScene scene, Vec3fa o, Vec3fa d, double depth = 5000.0f) {
+RTCRay getIntersection(RTCScene scene, Vec3fa o, Vec3fa d, double depth = 5000.0f, int mask = 0xFFFFFFFF) {
     RTCRay ray;
     ray.org[0] = o.x;
     ray.org[1] = o.y;
@@ -155,7 +155,7 @@ RTCRay getIntersection(RTCScene scene, Vec3fa o, Vec3fa d, double depth = 5000.0
     ray.tfar = depth;
     ray.geomID = RTC_INVALID_GEOMETRY_ID;
     ray.primID = RTC_INVALID_GEOMETRY_ID;
-    ray.mask = -1;
+    ray.mask = mask;
     ray.time = 0;
 
     rtcIntersect(scene, ray);

@@ -101,6 +101,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/SGAnimationSceneHelper.cpp</locationURI>
 		</link>
 		<link>
+			<name>src/Iyan3dEngineFiles/SGAutoRigSceneManager.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/SGAutoRigSceneManager.cpp</locationURI>
+		</link>
+		<link>
 			<name>src/Iyan3dEngineFiles/SGCloudRenderingHelper.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/SGCloudRenderingHelper.cpp</locationURI>
@@ -124,6 +129,11 @@
 			<name>src/Iyan3dEngineFiles/SGNode.cpp</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/SGNode.cpp</locationURI>
+		</link>
+		<link>
+			<name>src/Iyan3dEngineFiles/SGOBJManager.cpp</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/Iyan3dEngineFiles/SGOBJManager.cpp</locationURI>
 		</link>
 		<link>
 			<name>src/Iyan3dEngineFiles/SGSceneLoader.cpp</name>
@@ -251,14 +261,14 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>src/SGEngine2/Font/Font2OBJ.cpp</name>
+			<name>src/SGEngine2/Font/TextMesh3d.cpp</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/SGEngine2/Font/Font2OBJ.cpp</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/SGEngine2/Font/TextMesh3d.cpp</locationURI>
 		</link>
 		<link>
-			<name>src/SGEngine2/Font/Font2OBJ.h</name>
+			<name>src/SGEngine2/Font/TextMesh3d.h</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/SGEngine2/Font/Font2OBJ.h</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/Iyan3D-Android/app/src/main/jni/SGEngine2/Font/TextMesh3d.h</locationURI>
 		</link>
 		<link>
 			<name>src/SGEngine2/Font/freeType</name>

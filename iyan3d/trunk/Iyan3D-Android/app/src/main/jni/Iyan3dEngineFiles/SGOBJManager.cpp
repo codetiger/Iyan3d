@@ -6,7 +6,7 @@
 //  Copyright © 2016 Smackall Games. All rights reserved.
 //
 
-#include "CSGRMeshFileLoader.h"
+#include "../../SGEngine2/Loaders/CSGRMeshFileLoader.h"
 #include "HeaderFiles/SGOBJManager.h"
 #include "HeaderFiles/SGEditorScene.h"
 
