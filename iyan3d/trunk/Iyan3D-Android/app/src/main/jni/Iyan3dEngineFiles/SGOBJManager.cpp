@@ -6,7 +6,11 @@
 //  Copyright © 2016 Smackall Games. All rights reserved.
 //
 
+#ifndef IOS
 #include "../../SGEngine2/Loaders/CSGRMeshFileLoader.h"
+#else
+#include "CSGRMeshFileLoader.h"
+#endif
 #include "HeaderFiles/SGOBJManager.h"
 #include "HeaderFiles/SGEditorScene.h"
 
