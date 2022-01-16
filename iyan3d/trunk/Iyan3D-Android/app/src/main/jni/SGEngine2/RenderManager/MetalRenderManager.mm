@@ -91,7 +91,7 @@ void MetalRenderManager::setUpDepthState(METAL_DEPTH_FUNCTION func,bool writeDep
         isEncodingEnded = false;
     }
 }
-void MetalRenderManager::setupRenderPassDescriptorForTexture(id <MTLTexture> texture,bool isDepthPass)
+void MetalRenderManager::setupRenderPassDescriptorForTexture(id <MTLTexture> texture,Vector4 color, bool isDepthPass)
 {
     if (_renderPassDescriptor == nil || isDepthPass)
         _renderPassDescriptor = [MTLRenderPassDescriptor renderPassDescriptor];
@@ -106,8 +106,8 @@ void MetalRenderManager::setupRenderPassDescriptorForTexture(id <MTLTexture> tex
             _renderPassDescriptor.colorAttachments[0].texture = texture;
             _renderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
         }
-        _renderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionLoad;
-        _renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(1.0f,1.0f,1.0f,1.0f);
+        _renderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
+        _renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(color.x,color.y,color.z,color.w);
     }
     MTLTextureDescriptor* desc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat: MTLPixelFormatDepth32Float width: texture.width height: texture.height mipmapped: NO];
     desc.textureType = colorTextureType;
@@ -158,6 +158,10 @@ void MetalRenderManager::draw3DLine(Vector3 start,Vector3 end,Material *material
     uint8_t *indexBufferPointer = (uint8_t *)[MTLBuffersMap[indexBufSize][bufIndex].buf contents];
     memcpy(indexBufferPointer,&indices[0],indexBufSize);
     drawPrimitives(MTLPrimitiveTypeLine,2,MTLIndexTypeUInt16,MTLBuffersMap[indexBufSize][bufIndex].buf,0);
+}
+void MetalRenderManager::clearDepthBuffer()
+{
+    setUpDepthState(CompareFunctionLessEqual,true,false);
 }
 void MetalRenderManager::draw2DImage(Texture *texture,Vector2 originCoord,Vector2 endCoord,bool isBGImage,Material *material,bool isRTT)
 {
@@ -272,7 +276,7 @@ bool MetalRenderManager::PrepareDisplay(int width,int height,bool clearColorBuf,
     renderingTexture = drawable.texture;
     if(clearColorBuf){
         isEncodingEnded = false;
-        setupRenderPassDescriptorForTexture(drawable.texture);
+        setupRenderPassDescriptorForTexture(drawable.texture,color);
         if(_renderPassDescriptor && CMDBuffer) {
             RenderCMDBuffer = [CMDBuffer renderCommandEncoderWithDescriptor:_renderPassDescriptor];
             [RenderCMDBuffer setCullMode:MTLCullModeBack];
@@ -451,7 +455,7 @@ void MetalRenderManager::setRenderTarget(Texture *renderTexture,bool clearBackBu
                 _renderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
             }
             _renderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
-            _renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(1.0f,1.0f,1.0f,1.0f);
+            _renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(color.x, color.y, color.z, color.w);
             
             MTLTextureDescriptor* desc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat: MTLPixelFormatDepth32Float width:((MTLTexture*)renderTexture)->texture.width height:((MTLTexture*)renderTexture)->texture.height mipmapped: NO];
             desc.sampleCount = sampleCount;

@@ -66,12 +66,14 @@ void RenderHelper::drawGrid()
             smgr->draw3DLine(bb.getEdgeByIndex(3), bb.getEdgeByIndex(4), Vector3(1.0,1.0,0.0), mat, SHADER_COLOR_mvp, SHADER_COLOR_vertexColor, SHADER_COLOR_transparency);
         }
     
-    for (int i = -20; i <= 20; i+= 5) {
-        smgr->draw3DLine(Vector3(i, 0, -20), Vector3(i, 0, 20), Vector3(0.6,0.6,1.0),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
-        smgr->draw3DLine(Vector3(-20, 0, i), Vector3(20, 0, i), Vector3(0.6,0.6,1.0),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
+    int gridSize = 100;
+    
+    for (int i = -gridSize; i <= gridSize; i+= 5) {
+        smgr->draw3DLine(Vector3(i, 0, -gridSize), Vector3(i, 0, gridSize), Vector3(0.6,0.6,1.0),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
+        smgr->draw3DLine(Vector3(-gridSize, 0, i), Vector3(gridSize, 0, i), Vector3(0.6,0.6,1.0),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
     }
-    smgr->draw3DLine(Vector3(-20, 0, 0), Vector3(20, 0, 0), Vector3(1.0,0.2,0.2),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
-    smgr->draw3DLine(Vector3(0, 0, -20), Vector3(0, 0, 20), Vector3(0.2,1.0,0.2),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
+    smgr->draw3DLine(Vector3(-gridSize, 0, 0), Vector3(gridSize, 0, 0), Vector3(1.0,0.2,0.2),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
+    smgr->draw3DLine(Vector3(0, 0, -gridSize), Vector3(0, 0, gridSize), Vector3(0.2,1.0,0.2),mat,SHADER_COLOR_mvp,SHADER_COLOR_vertexColor,SHADER_COLOR_transparency);
 }
 
 void RenderHelper::drawCircle()
@@ -329,7 +331,7 @@ void RenderHelper::drawCameraPreview()
     
     setRenderCameraOrientation();
     renderingScene->rotationCircle->node->setVisible(false);
-    smgr->setRenderTarget(renderingScene->previewTexture,true,true,false,Vector4(255,255,255,255));
+    smgr->setRenderTarget(renderingScene->previewTexture,true,true,false,Vector4(0.1,0.1,0.1,1.0));
     Vector4 camprevlay = renderingScene->getCameraPreviewLayout();
     for(unsigned long i = 1; i < renderingScene->nodes.size(); i++){
         if(renderingScene->nodes[i]->getType() == NODE_LIGHT || renderingScene->nodes[i]->getType() == NODE_ADDITIONAL_LIGHT)
@@ -337,7 +339,6 @@ void RenderHelper::drawCameraPreview()
         if(!(renderingScene->nodes[i]->props.isVisible))
             renderingScene->nodes[i]->node->setVisible(false);
     }
-    smgr->draw2DImage(renderingScene->bgTexture,Vector2(0,0),Vector2(SceneHelper::screenWidth ,SceneHelper::screenHeight ),true,smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
     setControlsVisibility(false);
     
     

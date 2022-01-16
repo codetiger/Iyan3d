@@ -57,7 +57,7 @@ private:
 
     void setupMetal();
     void setUpDepthState(METAL_DEPTH_FUNCTION func,bool writeDepth = true,bool setToRenderBuffer = false);
-    void setupRenderPassDescriptorForTexture(id <MTLTexture> texture,bool isDepthPass = false);
+    void setupRenderPassDescriptorForTexture(id <MTLTexture> texture, Vector4 color = Vector4(0.0,0.0,0.0,1.0), bool isDepthPass = false);
     void freeDynamicBuffers();
     void endEncoding();
     void setupMetalLayer();
@@ -85,6 +85,7 @@ public:
     void setActiveCamera(shared_ptr<CameraNode> camera);
     shared_ptr<CameraNode> getActiveCamera();
     void draw3DLine(Vector3 start,Vector3 end,Material *material);
+    void clearDepthBuffer();
     void draw2DImage(Texture *texture,Vector2 originCoord,Vector2 endCoord,bool isBGImage,Material *material,bool isRTT = false);
     bool PrepareDisplay(int width,int height,bool clearColorBuf = true,bool clearDepthBuf = true,bool isDepthPass = false,Vector4 color = Vector4(255,255,255,255));
     void endDisplay();

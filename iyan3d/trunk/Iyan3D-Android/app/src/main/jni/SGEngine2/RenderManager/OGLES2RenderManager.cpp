@@ -203,6 +203,10 @@ void OGLES2RenderManager::setActiveCamera(shared_ptr<CameraNode> camera){
 shared_ptr<CameraNode> OGLES2RenderManager::getActiveCamera(){
   return camera;
 }
+void OGLES2RenderManager::clearDepthBuffer()
+{
+    glClear(GL_DEPTH_BUFFER_BIT);
+}
 void OGLES2RenderManager::draw2DImage(Texture *texture,Vector2 originCoord,Vector2 endCoord,bool isBGImage,Material *material,bool isRTT)
 {
   glDepthFunc(GL_ALWAYS);
@@ -270,7 +274,7 @@ bool OGLES2RenderManager::PrepareDisplay(int width,int height,bool clearColorBuf
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
-  glClearColor(color.x / 255.0,color.y / 255.0,color.z / 255.0,color.w / 255.0);
+  glClearColor(color.x ,color.y ,color.z ,color.w);
   GLbitfield mask = 0;
   if(clearColorBuf)
       mask |= GL_COLOR_BUFFER_BIT;

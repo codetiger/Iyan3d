@@ -180,13 +180,10 @@ void SGEditorScene::renderAll()
         return;
     
     bool displayPrepared = smgr->PrepareDisplay(SceneHelper::screenWidth, SceneHelper::screenHeight, true, true, false,
-                                                Vector4(0, 0, 0, 255));
+                                                Vector4(0.1, 0.1, 0.1, 1.0));
     
     if(displayPrepared) {
         rotationCircle->node->setVisible(false);
-        smgr->draw2DImage(bgTexture, Vector2(0, 0), Vector2(SceneHelper::screenWidth,  SceneHelper::screenHeight), true,
-                          smgr->getMaterialByIndex(SHADER_DRAW_2D_IMAGE));
-        
         smgr->Render();
         
         renHelper->drawGrid();

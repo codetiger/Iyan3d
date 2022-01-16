@@ -56,6 +56,7 @@ public:
     void UnBindAttributes(Material *material);
     void useMaterialToRender(Material *material);
     void draw3DLine(Vector3 start,Vector3 end,Material *material);
+    void clearDepthBuffer();
     void draw2DImage(Texture *texture,Vector2 originCoord,Vector2 endCoord,bool isBGImage,Material *material,bool isRTT = false);
     shared_ptr<CameraNode> getActiveCamera();
     bool PrepareDisplay(int width,int height,bool clearColorBuf = true,bool clearDepthBuf = true,bool isDepthPass = false,Vector4 color = Vector4(255,255,255,255));

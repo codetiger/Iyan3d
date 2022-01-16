@@ -47,6 +47,7 @@ public:
     virtual shared_ptr<CameraNode> getActiveCamera() = 0;
     virtual void BindUniform(Material* mat,shared_ptr<Node> node,u16 uIndex,bool isFragmentData, int userValue = 0) = 0;
     virtual void draw3DLine(Vector3 start,Vector3 end,Material *material) = 0;
+    virtual void clearDepthBuffer() = 0;
     virtual void draw2DImage(Texture *texture,Vector2 originCoord,Vector2 endCoord,bool isBGImage,Material *material,bool isRTT = false) = 0;
     virtual bool PrepareDisplay(int width,int height,bool clearColorBuf = true,bool clearDepthBuf = true,bool isDepthPass = false,Vector4 color = Vector4(255,255,255,255)) = 0;
     virtual Texture* createRenderTargetTexture(string textureName ,TEXTURE_DATA_FORMAT format, TEXTURE_DATA_TYPE texelType, int width, int height) = 0;

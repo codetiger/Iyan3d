@@ -235,7 +235,7 @@ BOOL missingAlertShown;
     int fontSize = [[fontDetails objectForKey:@"fontSize"]intValue];
     float bevalValue = [[fontDetails objectForKey:@"bevelRadius"]floatValue];
     
-    [renderViewMan loadNodeInScene:ASSET_TEXT AssetId:assetId AssetName:assetName TextureName:(@"") Width:fontSize Height:bevalValue isTempNode:isTempNode More:fontDetails ActionType:assetAddType VertexColor:Vector4(-1)];
+    [renderViewMan loadNodeInScene:ASSET_TEXT_RIG AssetId:assetId AssetName:assetName TextureName:(@"") Width:fontSize Height:bevalValue isTempNode:isTempNode More:fontDetails ActionType:assetAddType VertexColor:Vector4(-1)];
 }
 
 - (void) importAdditionalLight{
