@@ -6,9 +6,11 @@
 //  Copyright (c) 2014 Smackall Games Pvt Ltd. All rights reserved.
 //
 
+
 #import "MTLTexture.h"
 #ifdef IOS
 #import "MetalHandler.h"
+#import <AVFoundation/AVFoundation.h>
 #endif
 
 
@@ -21,7 +23,8 @@ MTLTexture::~MTLTexture(){
 void* initMTLTexture(){
     return new MTLTexture();
 }
-bool MTLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType){
+bool MTLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType)
+{
     
     textureName = name;
     NSString *pathToTextureFile = [NSString stringWithFormat:@"%s",texturePath.c_str()];
@@ -50,6 +53,115 @@ bool MTLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT 
     CGContextRelease(context);
     return YES;
 }
+
+bool MTLTexture::loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType)
+{
+    textureName = videoFileName;
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* documentsDirectory = [paths objectAtIndex:0];
+    
+    NSString *videoFilePath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%s",videoFileName.c_str()]];
+    NSURL *videoURL = [NSURL fileURLWithPath:videoFilePath];
+    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
+    AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+    if(!gen)
+        return NULL;
+    
+    gen.appliesPreferredTrackTransform = YES;
+    gen.requestedTimeToleranceAfter =  kCMTimeZero;
+    gen.requestedTimeToleranceBefore =  kCMTimeZero;
+    
+    NSError *err = NULL;
+    double duration = [asset duration].value;
+    printf("\n Duraton %lf ", duration);
+    CMTime midpoint = CMTimeMake(0, 24);
+    
+    CGImageRef imageRef = [gen copyCGImageAtTime:midpoint actualTime:NULL error:&err];
+    
+    width = CGImageGetWidth(imageRef);
+    height = CGImageGetHeight(imageRef);
+    
+    printf("\n width %d ", width);
+
+    float bigSide = (width >= height) ? width : height;
+    float target = 0;
+    
+    if (bigSide <= 128)
+        target = 128;
+    else if (bigSide <= 256)
+        target = 256;
+    else if (bigSide <= 512)
+        target = 512;
+    else
+        target = 1024;
+    
+    width = height = target;
+    GLubyte* textureData = (GLubyte *)calloc(target * target * 4, sizeof(GLubyte));
+    CGContextRef spriteContext = CGBitmapContextCreate(textureData, target, target, 8, target * 4, CGImageGetColorSpace(imageRef), kCGImageAlphaPremultipliedLast);
+    CGContextDrawImage(spriteContext, CGRectMake(0, 0, target, target), imageRef);
+
+    MTLTextureDescriptor *texDesc = [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatRGBA8Unorm width:width height:height mipmapped:NO];
+    texture = [MetalHandler::getMTLDevice() newTextureWithDescriptor:texDesc];
+    if(!texture)
+        return NO;
+    [texture replaceRegion:MTLRegionMake2D(0, 0, width, height)
+               mipmapLevel:0
+                 withBytes:CGBitmapContextGetData(spriteContext)
+               bytesPerRow:4 * width];
+    
+    return YES;
+}
+
+void MTLTexture::updateTexture(string fileName, int frame)
+{
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* documentsDirectory = [paths objectAtIndex:0];
+    
+    NSString *videoFilePath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%s",fileName.c_str()]];
+    NSURL *videoURL = [NSURL fileURLWithPath:videoFilePath];
+    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
+    AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+    if(!gen)
+        return NULL;
+    
+    gen.appliesPreferredTrackTransform = YES;
+    gen.requestedTimeToleranceAfter =  kCMTimeZero;
+    gen.requestedTimeToleranceBefore =  kCMTimeZero;
+    
+    NSError *err = NULL;
+    double duration = [asset duration].value;
+    
+    CMTime midpoint = CMTimeMake(frame, 24);
+    
+    CGImageRef imageRef = [gen copyCGImageAtTime:midpoint actualTime:NULL error:&err];
+    
+    width = CGImageGetWidth(imageRef);
+    height = CGImageGetHeight(imageRef);
+    
+    float bigSide = (width >= height) ? width : height;
+    float target = 0;
+    
+    if (bigSide <= 128)
+        target = 128;
+    else if (bigSide <= 256)
+        target = 256;
+    else if (bigSide <= 512)
+        target = 512;
+    else
+        target = 1024;
+    
+    width = height = target;
+    GLubyte* textureData = (GLubyte *)calloc(target * target * 4, sizeof(GLubyte));
+    CGContextRef spriteContext = CGBitmapContextCreate(textureData, target, target, 8, target * 4, CGImageGetColorSpace(imageRef), kCGImageAlphaPremultipliedLast);
+    CGContextDrawImage(spriteContext, CGRectMake(0, 0, target, target), imageRef);
+    
+    [texture replaceRegion:MTLRegionMake2D(0, 0, width, height)
+               mipmapLevel:0
+                 withBytes:CGBitmapContextGetData(spriteContext)
+               bytesPerRow:4 * width];
+    
+}
+
 int MTLTexture::getBytesPerRow(int width,TEXTURE_DATA_FORMAT format){
     return width * getMTLPixelBytesForFormat(format);
 }

@@ -207,7 +207,8 @@ void SceneManager::setActiveCamera(shared_ptr<Node> node){
 shared_ptr<CameraNode> SceneManager::getActiveCamera(){
     return renderMan->getActiveCamera();
 }
-Texture* SceneManager::loadTexture(string textureName,string filePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE type){
+Texture* SceneManager::loadTexture(string textureName,string filePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE type)
+{
     Texture *newTex = NULL;
     #ifdef ANDROID
     newTex = new OGLTexture();
@@ -229,6 +230,32 @@ Texture* SceneManager::loadTexture(string textureName,string filePath,TEXTURE_DA
 
     return newTex;
 }
+
+Texture* SceneManager::loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE type)
+{
+    Texture *newTex = NULL;
+#ifdef ANDROID
+    newTex = new OGLTexture();
+#elif IOS
+    if(device == OPENGLES2)
+        newTex = new OGLTexture();
+    else if(device == METAL){
+#if !(TARGET_IPHONE_SIMULATOR)
+        newTex = (Texture*)initMTLTexture();
+#endif
+    }
+#endif
+    
+#ifdef UBUNTU
+    newTex = new DummyTexture();
+#endif
+    newTex->loadTextureFromVideo(videoFileName,format,type);
+    textures.push_back(newTex);
+    
+    return newTex;
+}
+
+
 shared_ptr<MeshNode> SceneManager::createNodeFromMesh(Mesh* mesh,string callbackFuncName,MESH_TYPE meshType,int matIndex){
     shared_ptr<MeshNode> node = make_shared<MeshNode>(); //shared_ptr<MeshNode>(new MeshNode());
     if(matIndex != NOT_EXISTS && mtlManger->materials->size())

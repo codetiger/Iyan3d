@@ -175,7 +175,8 @@ enum NODE_TYPE
     NODE_UNDEFINED = -1,
     NODE_BITS = 4,
     NODE_ADDITIONAL_LIGHT = 7,
-    NODE_TEXT = 8
+    NODE_TEXT = 8,
+    NODE_VIDEO = 9
 };
 
 enum Slidername

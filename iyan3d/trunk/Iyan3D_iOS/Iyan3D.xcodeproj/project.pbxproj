@@ -539,6 +539,8 @@
 		01F873471C3A84BF009AA31E /* Previous-frame_IPhone.png in Resources */ = {isa = PBXBuildFile; fileRef = 01F873431C3A84BF009AA31E /* Previous-frame_IPhone.png */; };
 		01F873491C3AAAFE009AA31E /* LoggedInViewControllerPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01F873481C3AAAFE009AA31E /* LoggedInViewControllerPhone.xib */; };
 		01F8734A1C3AAAFE009AA31E /* LoggedInViewControllerPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01F873481C3AAAFE009AA31E /* LoggedInViewControllerPhone.xib */; };
+		25095F391C5B631900CF7C68 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25095F381C5B631900CF7C68 /* AVFoundation.framework */; };
+		25095F3A1C5B632700CF7C68 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25095F381C5B631900CF7C68 /* AVFoundation.framework */; };
 		251BF4501C2C190400A5D41D /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 251BF44E1C2C190400A5D41D /* GoogleSignIn.bundle */; };
 		251BF4511C2C190400A5D41D /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 251BF44E1C2C190400A5D41D /* GoogleSignIn.bundle */; };
 		251BF4521C2C190400A5D41D /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 251BF44F1C2C190400A5D41D /* GoogleSignIn.framework */; };
@@ -2522,6 +2524,7 @@
 		01F873421C3A84BF009AA31E /* Next-frame_IPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Next-frame_IPhone.png"; sourceTree = "<group>"; };
 		01F873431C3A84BF009AA31E /* Previous-frame_IPhone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Previous-frame_IPhone.png"; sourceTree = "<group>"; };
 		01F873481C3AAAFE009AA31E /* LoggedInViewControllerPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoggedInViewControllerPhone.xib; sourceTree = "<group>"; };
+		25095F381C5B631900CF7C68 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		251BF44E1C2C190400A5D41D /* GoogleSignIn.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = GoogleSignIn.bundle; path = FrameWorks/GoogleSignIn.bundle; sourceTree = "<group>"; };
 		251BF44F1C2C190400A5D41D /* GoogleSignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleSignIn.framework; path = FrameWorks/GoogleSignIn.framework; sourceTree = "<group>"; };
 		251BF4541C2C191700A5D41D /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = FrameWorks/Crashlytics.framework; sourceTree = "<group>"; };
@@ -3901,6 +3904,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				25095F391C5B631900CF7C68 /* AVFoundation.framework in Frameworks */,
 				01C2B77E1C462CFB00384370 /* Social.framework in Frameworks */,
 				01C2B77C1C462CF300384370 /* Accounts.framework in Frameworks */,
 				253F536D1C20209D005AC97D /* GoogleMobileAds.framework in Frameworks */,
@@ -3939,6 +3943,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				25095F3A1C5B632700CF7C68 /* AVFoundation.framework in Frameworks */,
 				01C2B79E1C46554A00384370 /* Accounts.framework in Frameworks */,
 				01C2B79D1C46553500384370 /* Social.framework in Frameworks */,
 				251BF46C1C2C1BB000A5D41D /* Fabric.framework in Frameworks */,
@@ -5795,6 +5800,7 @@
 		C885D77D1876BE6100A45D71 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				25095F381C5B631900CF7C68 /* AVFoundation.framework */,
 				01C2B77D1C462CFB00384370 /* Social.framework */,
 				01C2B77B1C462CF300384370 /* Accounts.framework */,
 				251BF4631C2C1AD300A5D41D /* FreeType2_Sim.a */,

@@ -34,6 +34,11 @@ void SGSceneUpdater::setDataForFrame(int frame)
     
     bool lightChanged = false;
     for (unsigned long i = 0; i < updatingScene->nodes.size(); i++) {
+        
+        if(updatingScene->nodes[i]->getType() == NODE_VIDEO) {
+            Texture* nodeTex = updatingScene->nodes[i]->node->getTextureByIndex(1);
+            nodeTex->updateTexture(ConversionHelper::getStringForWString(updatingScene->nodes[i]->name), frame);
+        }
         Vector3 position = KeyHelper::getKeyInterpolationForFrame<int, SGPositionKey, Vector3>(frame, updatingScene->nodes[i]->positionKeys);
         Quaternion rotation = KeyHelper::getKeyInterpolationForFrame<int, SGRotationKey, Quaternion>(frame, updatingScene->nodes[i]->rotationKeys,true);
         Vector3 scale = KeyHelper::getKeyInterpolationForFrame<int, SGScaleKey, Vector3>(frame, updatingScene->nodes[i]->scaleKeys);
@@ -382,7 +387,8 @@ void SGSceneUpdater::resetMaterialTypes(bool isToonShader)
                     case NODE_OBJ:
                     case NODE_SGM:
                     case NODE_IMAGE:
-                    case NODE_TEXT:{
+                    case NODE_TEXT:
+                    case NODE_VIDEO:{
                         sgNode->node->setMaterial(smgr->getMaterialByIndex((isToonShader && sgNode->getType() != NODE_LIGHT) ? SHADER_TOON : commonType));
                         break;
                     }

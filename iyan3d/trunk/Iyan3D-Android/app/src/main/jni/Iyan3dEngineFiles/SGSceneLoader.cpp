@@ -190,7 +190,7 @@ SGNode* SGSceneLoader::loadNode(NODE_TYPE type,int assetId,string textureName,st
         currentScene->initLightCamera(sgnode->node->getPosition());
         addLight(sgnode);
 #endif
-    }else if(type == NODE_IMAGE){
+    }else if(type == NODE_IMAGE || type == NODE_VIDEO){
         sgnode->props.isLighting = false;
     } else if (type == NODE_RIG) {
         dynamic_pointer_cast<AnimatedMeshNode>(sgnode->node)->updateMeshCache(CHARACTER_RIG);

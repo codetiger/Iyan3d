@@ -58,6 +58,7 @@ public:
     shared_ptr<Node> loadSGMandOBJ(int assetId,NODE_TYPE objectType,SceneManager *smgr);
     shared_ptr<Node> loadSGR(int assetId,NODE_TYPE objectType,SceneManager *smgr);
     shared_ptr<Node> loadImage(string imageName,SceneManager *smgr , float aspectRatio = 1.0);
+    shared_ptr<Node> loadVideo(string videoFileName,SceneManager *smgr, float aspectRatio = 1.0);
     shared_ptr<Node> initLightSceneNode(SceneManager *smgr);
     
     void writeData(ofstream* filePointer);

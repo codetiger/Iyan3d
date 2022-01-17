@@ -36,13 +36,15 @@ void OGLTexture::removeTexture(){
         glDeleteTextures(1, &OGLTextureName);
     OGLTextureName = NULL;
 }
-bool OGLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType){
+bool OGLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType)
+{
     textureName = name;
     texelFormat = format;
     this->texelType = texelType;
 
-    unsigned char *imageData = PNGFileManager::read_png_file(texturePath.c_str() , width , height);
-    
+//    unsigned char *imageData = PNGFileManager::read_png_file(texturePath.c_str() , width , height);
+    unsigned char *imageData = loadPNGImage(texturePath , width , height);
+
     if(!imageData)
         return false;
     
@@ -54,8 +56,41 @@ bool OGLTexture::loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     free(imageData);
     return true;
+}
+
+bool OGLTexture::loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType)
+{
+    textureName = videoFileName;
+    texelFormat = format;
+    this->texelType = texelType;
+    
+    unsigned char *imageData = getImageDataFromVideo(videoFileName, 0, width, height);
+    
+    if(!imageData)
+        return false;
+    
+    glGenTextures(1, &OGLTextureName);
+    glBindTexture(GL_TEXTURE_2D, OGLTextureName);
+    glTexImage2D(GL_TEXTURE_2D, 0,getOGLTextureFormat(format), width, height, 0, getOGLTextureFormat(format), getOGLTextureType(texelType), imageData);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    free(imageData);
+    return true;
+}
+
+
+void OGLTexture::updateTexture(string fileName, int frame)
+{
+    unsigned char *imageData = getImageDataFromVideo(fileName, frame, width, height);
+    if(!imageData)
+        return false;
+
+    glBindTexture(GL_TEXTURE_2D, OGLTextureName);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, getOGLTextureFormat(texelFormat), getOGLTextureType(texelType), imageData);
+    free(imageData);
 
 }
+
 GLenum OGLTexture::getOGLTextureFormat(TEXTURE_DATA_FORMAT format){
     GLenum oglFormat = GL_RGBA;
     switch(format){

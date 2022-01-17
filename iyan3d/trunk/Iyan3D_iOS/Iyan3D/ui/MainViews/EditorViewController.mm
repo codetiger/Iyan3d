@@ -6,6 +6,8 @@
 //  Copyright © 2015 Smackall Games. All rights reserved.
 //
 
+#import <AVFoundation/AVFoundation.h>
+
 #import "EditorViewController.h"
 #import "FrameCellNew.h"
 #import "AppDelegate.h"
@@ -68,6 +70,7 @@
 #define ASSET_IMAGE 9
 #define ASSET_TEXT_RIG 10
 #define ASSET_TEXT 11
+#define ASSET_VIDEO 12
 #define ASSET_ADDITIONAL_LIGHT 900
 
 #define ADD_BUTTON_TAG 99
@@ -414,7 +417,8 @@ BOOL missingAlertShown;
     }
 }
 
-- (void) importAdditionalLight{
+- (void) importAdditionalLight
+{
     if(ShaderManager::lightPosition.size() < 5) {
         assetAddType = IMPORT_ASSET_ACTION;
         //editorScene->storeAddOrRemoveAssetAction(ACTION_NODE_ADDED, ASSET_ADDITIONAL_LIGHT + lightCount , "Light"+ to_string(lightCount));
@@ -425,6 +429,33 @@ BOOL missingAlertShown;
         UIAlertView* closeAlert = [[UIAlertView alloc] initWithTitle:@"Information" message:@"Scene cannot contain more than five lights." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [closeAlert show];
     }
+}
+
+- (Vector2) getVideoResolution:(string) fileName
+{
+    Vector2 res = Vector2(0.0, 0.0);
+    
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* documentsDirectory = [paths objectAtIndex:0];
+    
+    NSString *videoFilePath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%s",fileName.c_str()]];
+    if([[NSFileManager defaultManager] fileExistsAtPath:videoFilePath]) {
+        NSURL *videoURL = [NSURL fileURLWithPath:videoFilePath];
+        AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
+        AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+        
+        gen.appliesPreferredTrackTransform = YES;
+        
+        NSError *err = NULL;
+        CMTime midpoint = CMTimeMake(0, 24);
+        
+        CGImageRef imageRef = [gen copyCGImageAtTime:midpoint actualTime:NULL error:&err];
+        
+        res.x = CGImageGetWidth(imageRef);
+        res.y = CGImageGetHeight(imageRef);
+    }
+    return res;
+
 }
 
 -(void) addLightToScene:(NSString*)lightName assetId:(int)assetId

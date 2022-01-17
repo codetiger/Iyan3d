@@ -78,6 +78,12 @@ shared_ptr<Node> SGNode::loadNode(int assetId, std::string texturePath,NODE_TYPE
             node = loadImage(ConversionHelper::getStringForWString(objectName) + ".png", smgr , aspectRatio);
             break;
         }
+        case NODE_VIDEO:{
+            float aspectRatio = (float)objSpecificColor.x/(float)objSpecificColor.y;
+            props.vertexColor = Vector3(objSpecificColor.x,objSpecificColor.y,objSpecificColor.z);
+            node = loadVideo(ConversionHelper::getStringForWString(objectName), smgr , aspectRatio);
+            break;
+        }
         case NODE_TEXT_SKIN:{
             // 'width' here is font size and 'height' is bevel value
             textureName = texturePath;
@@ -435,6 +441,16 @@ shared_ptr<Node> SGNode::loadImage(string textureName,SceneManager *smgr, float 
     sprintf(textureFileName, "%s/%s", constants::CachesStoragePath.c_str(),textureName.c_str());
 #endif
     Texture *nodeTex = smgr->loadTexture(textureFileName,textureFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
+    Logger::log(INFO, "SGNODE", "aspectratio" + to_string(aspectRatio));
+    shared_ptr<PlaneMeshNode> planeNode = smgr->createPlaneNode("setUniforms" , aspectRatio);
+    planeNode->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));
+    planeNode->setTexture(nodeTex,1);
+    //delete [] textureFileName; //TODO TEST
+    return planeNode;
+}
+shared_ptr<Node> SGNode::loadVideo(string videoFileName,SceneManager *smgr, float aspectRatio)
+{
+    Texture *nodeTex = smgr->loadTextureFromVideo(videoFileName,TEXTURE_RGBA8,TEXTURE_BYTE);
     Logger::log(INFO, "SGNODE", "aspectratio" + to_string(aspectRatio));
     shared_ptr<PlaneMeshNode> planeNode = smgr->createPlaneNode("setUniforms" , aspectRatio);
     planeNode->setMaterial(smgr->getMaterialByIndex(SHADER_COMMON_L1));

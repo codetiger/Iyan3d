@@ -10,6 +10,8 @@
 #define __SGEngine2__MTLTexture__
 
 #include "../common/common.h"
+#include "../../RenderManager/ImageLoaderOBJCWrapper.h"
+
 #ifdef IOS
 #if !(TARGET_IPHONE_SIMULATOR)
     #import <QuartzCore/CAMetalLayer.h>
@@ -27,6 +29,8 @@ public:
     MTLTexture();
     ~MTLTexture();
     bool loadTexture(string name,string texturePath,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType);
+    bool loadTextureFromVideo(string videoFileName,TEXTURE_DATA_FORMAT format,TEXTURE_DATA_TYPE texelType);
+    void updateTexture(string fileName, int frame);
     int getBytesPerRow(int width,TEXTURE_DATA_FORMAT format);
     int getBytesPerRow();
     MTLPixelFormat getMTLPixelFormat(TEXTURE_DATA_FORMAT format);
