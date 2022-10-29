@@ -4681,8 +4681,7 @@
 				4E1CE08B290CD43500CEDC24 /* include */,
 				4E1CE0E4290CD43500CEDC24 /* src */,
 			);
-			name = freetype2;
-			path = freetype2/freetype2;
+			path = freetype2;
 			sourceTree = SOURCE_ROOT;
 		};
 		4E8B1D7A22E3FD6500AFB715 /* Frameworks */ = {
