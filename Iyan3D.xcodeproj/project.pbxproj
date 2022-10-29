@@ -4982,12 +4982,6 @@
 			attributes = {
 				LastUpgradeCheck = 1400;
 				ORGANIZATIONNAME = "Smackall Games";
-				TargetAttributes = {
-					C885D77A1876BE6100A45D71 = {
-						DevelopmentTeam = 3MT93EVK96;
-						ProvisioningStyle = Manual;
-					};
-				};
 			};
 			buildConfigurationList = C885D7761876BE6100A45D71 /* Build configuration list for PBXProject "Iyan3D" */;
 			compatibilityVersion = "Xcode 10.0";
@@ -6809,8 +6803,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMPRESS_PNG_FILES = NO;
 				DEVELOPMENT_TEAM = 3MT93EVK96;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6831,7 +6825,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.iyan3dpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Iyan 3d pro - dev";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -6841,8 +6835,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMPRESS_PNG_FILES = NO;
 				DEVELOPMENT_TEAM = 3MT93EVK96;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6863,7 +6857,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.smackall.iyan3dpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Iyan 3d pro - dev";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -202,8 +202,8 @@
 		4CBC1122A79D4F6C94E36CE3 /* StdOStreamLogStream.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = StdOStreamLogStream.h; path = code/StdOStreamLogStream.h; sourceTree = SOURCE_ROOT; };
 		4D82A29A8BBF44E69E026F84 /* importerdesc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = importerdesc.h; path = include/assimp/importerdesc.h; sourceTree = SOURCE_ROOT; };
 		4E9A56BD22E2E18500575D98 /* revision.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = revision.h; path = "../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/assimp-master/include/assimp/revision.h"; sourceTree = "<group>"; };
-		4E9A56BF22E375FB00575D98 /* scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = scene.cpp; path = "../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/assimp-master/code/scene.cpp"; sourceTree = "<group>"; };
-		4E9A56C122E3773E00575D98 /* CreateAnimMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CreateAnimMesh.cpp; path = "../../../../../../System/Volumes/Data/Users/harishankar/Development/Personal-dev/Iyan3d/assimp-master/code/CreateAnimMesh.cpp"; sourceTree = "<group>"; };
+		4E9A56BF22E375FB00575D98 /* scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = scene.cpp; path = code/scene.cpp; sourceTree = "<group>"; };
+		4E9A56C122E3773E00575D98 /* CreateAnimMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CreateAnimMesh.cpp; path = code/CreateAnimMesh.cpp; sourceTree = "<group>"; };
 		4EAB94EF1D6DBB3000B54096 /* SGMLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGMLoader.cpp; path = code/SGMLoader.cpp; sourceTree = "<group>"; };
 		4EAB94F01D6DBB3000B54096 /* SGMLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGMLoader.h; path = code/SGMLoader.h; sourceTree = "<group>"; };
 		4EBC24A11D6EEA1C00AE14DF /* Text3DLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Text3DLoader.cpp; path = code/Text3DLoader.cpp; sourceTree = "<group>"; };
@@ -986,7 +986,6 @@
 		9DE203BC835F4C81BCDF25CF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1100;
 				TargetAttributes = {
 					7F79227F1AB43AC3005A8E5D = {
@@ -1164,6 +1163,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MACH_O_TYPE = staticlib;
 				SDKROOT = iphoneos;
 			};
@@ -1507,6 +1507,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MACH_O_TYPE = staticlib;
 				SDKROOT = iphoneos;
 			};
@@ -1543,6 +1544,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MACH_O_TYPE = staticlib;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1579,6 +1581,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MACH_O_TYPE = staticlib;
 				SDKROOT = iphoneos;
 			};
